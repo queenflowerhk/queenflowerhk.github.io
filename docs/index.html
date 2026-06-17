@@ -1,24 +1,1579 @@
-<!doctype html>
-<html lang="en">
-
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
 <head>
-    <meta charset="hUTF-8" />
-    <link rel="icon" type="image/svg+xml" class="rounded-b-4xl w-8 text-white" href="/logo.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>福建花店 Fujian Florist - 專業帛事花籃 開張花牌 中西花圈</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Noto Serif TC', 'Playfair Display', 'serif'],
+                        sans: ['Noto Sans TC', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        rose: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                            800: '#9f1239',
+                            900: '#881337',
+                        },
+                        gold: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
-        /* Google font - Work Sans */
+        body { font-family: 'Noto Sans TC', 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Noto Serif TC', 'Playfair Display', serif; }
+        [lang="en"] h1, [lang="en"] h2, [lang="en"] h3, [lang="en"] h4 { font-family: 'Playfair Display', serif; }
+        
+        .floating-whatsapp {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        .product-image {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .cart-slide {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.4s ease-out forwards;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        
+        .category-pill {
+            transition: all 0.3s ease;
+        }
+        
+        .category-pill.active {
+            background-color: #b45309;
+            color: white;
+        }
+        
+        .quantity-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #b45309;
+            color: white;
+        }
+        
+        .overlay {
+            backdrop-filter: blur(4px);
+        }
+        
+        .lang-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn.active {
+            background-color: #b45309;
+            color: white;
+        }
+        
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #b45309; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #92400e; }
+        
+        .ribbon {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            z-index: 10;
+            overflow: hidden;
+            width: 100px;
+            height: 100px;
+            text-align: right;
+        }
+        
+        .ribbon span {
+            font-size: 10px;
+            font-weight: bold;
+            color: #fff;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 20px;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            width: 120px;
+            display: block;
+            background: #b45309;
+            box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+            position: absolute;
+            top: 22px;
+            right: -28px;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 30%, #fde68a 100%);
+        }
     </style>
-
-    <title>Picto - Personal portfolio</title>
-  <script type="module" crossorigin src="/assets/index-BzNJYXXp.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-BLIOM0Bi.css">
 </head>
+<body class="bg-stone-50 text-gray-800 antialiased">
 
-<body class="">
-    <div id="root" class=""></div>
-    <script type="module" src="https://unpkg.com/cally"></script>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-stone-200 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <i class="fas fa-leaf text-amber-700 text-2xl"></i>
+                    <div class="flex flex-col">
+                        <span class="text-2xl font-serif font-bold text-gray-900 leading-none" data-i18n="brand_name">福建花店</span>
+                        <span class="text-xs text-amber-700 font-sans tracking-wider" data-i18n="brand_en">Fujian Florist</span>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#ceremonial" class="text-amber-800 hover:text-amber-900 transition-colors font-medium" data-i18n="nav_ceremonial">喜慶花牌</a>
+                    <a href="#funeral" class="text-gray-600 hover:text-gray-900 transition-colors font-medium" data-i18n="nav_funeral">帛事花籃</a>
+                    <a href="#wreaths" class="text-gray-600 hover:text-gray-900 transition-colors font-medium" data-i18n="nav_wreaths">中西花圈</a>
+                    <a href="#opening" class="text-gray-600 hover:text-gray-900 transition-colors font-medium" data-i18n="nav_opening">開張花籃</a>
+                    <a href="#association" class="text-gray-600 hover:text-gray-900 transition-colors font-medium" data-i18n="nav_association">社團花牌</a>
+                    <a href="#bouquets" class="text-gray-600 hover:text-amber-700 transition-colors font-medium" data-i18n="nav_bouquets">鮮花花束</a>
+                    <a href="#about" class="text-gray-600 hover:text-gray-900 transition-colors font-medium" data-i18n="nav_about">關於我們</a>
+                </div>
+
+
+                <div class="flex items-center space-x-3">
+                    <div class="flex items-center bg-gray-100 rounded-full p-1 mr-2">
+                        <button onclick="setLanguage('zh')" id="lang-zh" class="lang-btn active px-3 py-1 rounded-full text-sm font-medium">繁</button>
+                        <button onclick="setLanguage('en')" id="lang-en" class="lang-btn px-3 py-1 rounded-full text-sm font-medium">EN</button>
+                    </div>
+                    <button class="p-2 hover:bg-amber-50 rounded-full transition-colors relative" onclick="toggleCart()">
+                        <i class="fas fa-shopping-bag text-xl text-gray-700"></i>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-amber-700 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+                    </button>
+                    <button class="md:hidden p-2" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-xl text-gray-700"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-200">
+            <div class="px-4 py-4 space-y-3">
+                <a href="#ceremonial" class="block text-amber-800 font-semibold py-2" data-i18n="nav_ceremonial">喜慶花牌</a>
+                <a href="#funeral" class="block text-gray-600 hover:text-gray-900 py-2" data-i18n="nav_funeral">帛事花籃</a>
+                <a href="#wreaths" class="block text-gray-600 hover:text-gray-900 py-2" data-i18n="nav_wreaths">中西花圈</a>
+                <a href="#opening" class="block text-gray-600 hover:text-gray-900 py-2" data-i18n="nav_opening">開張花籃</a>
+                <a href="#association" class="block text-gray-600 hover:text-gray-900 py-2" data-i18n="nav_association">社團花牌</a>
+                <a href="#bouquets" class="block text-gray-600 hover:text-amber-700 py-2" data-i18n="nav_bouquets">鮮花花束</a>
+                <a href="#about" class="block text-gray-600 hover:text-gray-900 py-2" data-i18n="nav_about">關於我們</a>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center pt-20 relative overflow-hidden">
+        <div class="absolute top-20 right-0 w-96 h-96 bg-amber-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+        <div class="absolute bottom-20 left-0 w-96 h-96 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center space-y-8 fade-in max-w-4xl mx-auto">
+                <div class="inline-block px-4 py-2 bg-amber-100 text-amber-800 rounded-full text-sm font-semibold tracking-wide uppercase border border-amber-200" data-i18n="hero_badge">
+                    專業喜慶帛事花藝服務
+                </div>
+                <h1 class="text-5xl lg:text-7xl font-serif font-bold text-gray-900 leading-tight">
+                    <span data-i18n="hero_title_1">喜事白事</span><span class="text-amber-700"> · </span><span data-i18n="hero_title_2">一站俱全</span>
+                </h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed" data-i18n="hero_desc">
+                    福建花店專營各類喜慶花牌、帛事花籃、中西花圈、開張花籃及社團花牌。三十年經驗，信譽保證，即日送達。
+                </p>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
+                    <a href="#ceremonial" class="group bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-amber-200 hover:border-amber-400 hover:shadow-xl transition-all text-center">
+                        <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-colors">
+                            <i class="fas fa-gift text-amber-700 text-2xl"></i>
+                        </div>
+                        <h3 class="font-serif font-bold text-gray-900 mb-1" data-i18n="cat_ceremonial">喜慶花牌</h3>
+                        <p class="text-sm text-gray-500" data-i18n="cat_ceremonial_desc">祝壽賀喜 婚禮慶典</p>
+                    </a>
+                    
+                    <a href="#funeral" class="group bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-200 hover:border-gray-400 hover:shadow-xl transition-all text-center">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-gray-200 transition-colors">
+                            <i class="fas fa-dove text-gray-600 text-2xl"></i>
+                        </div>
+                        <h3 class="font-serif font-bold text-gray-900 mb-1" data-i18n="cat_funeral">帛事花籃</h3>
+                        <p class="text-sm text-gray-500" data-i18n="cat_funeral_desc">白事悼念 致哀花圈</p>
+                    </a>
+                    
+                    <a href="#opening" class="group bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-amber-200 hover:border-amber-400 hover:shadow-xl transition-all text-center">
+                        <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-colors">
+                            <i class="fas fa-store text-amber-700 text-2xl"></i>
+                        </div>
+                        <h3 class="font-serif font-bold text-gray-900 mb-1" data-i18n="cat_opening">開張花籃</h3>
+                        <p class="text-sm text-gray-500" data-i18n="cat_opening_desc">開業誌慶 生意興隆</p>
+                    </a>
+                    
+                    <a href="#association" class="group bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-amber-200 hover:border-amber-400 hover:shadow-xl transition-all text-center">
+                        <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-colors">
+                            <i class="fas fa-users text-amber-700 text-2xl"></i>
+                        </div>
+                        <h3 class="font-serif font-bold text-gray-900 mb-1" data-i18n="cat_association">社團花牌</h3>
+                        <p class="text-sm text-gray-500" data-i18n="cat_association_desc">同鄉會館 商會慶典</p>
+                    </a>
+                </div>
+
+
+                <div class="flex flex-wrap justify-center gap-4 pt-8">
+                    <button onclick="document.getElementById('ceremonial').scrollIntoView({behavior: 'smooth'})" class="px-8 py-4 bg-amber-700 text-white rounded-full font-semibold hover:bg-amber-800 transition-all hover:shadow-lg hover:shadow-amber-200 transform hover:-translate-y-1" data-i18n="btn_shop">
+                        立即選購
+                    </button>
+                    <a href="https://wa.me/85291463455?text=你好福建花店！我想查詢花牌/花籃價錢及訂購。" target="_blank" class="px-8 py-4 border-2 border-amber-700 text-amber-700 rounded-full font-semibold hover:bg-amber-700 hover:text-white transition-all flex items-center gap-2">
+                        <i class="fab fa-whatsapp"></i>
+                        <span data-i18n="btn_whatsapp">WhatsApp 查詢</span>
+                    </a>
+                </div>
+
+
+                <div class="flex items-center justify-center space-x-8 pt-4 text-sm text-gray-500">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-check-circle text-amber-600"></i>
+                        <span data-i18n="tag_1">即日送達</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-check-circle text-amber-600"></i>
+                        <span data-i18n="tag_2">免費代寫輓聯</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-check-circle text-amber-600"></i>
+                        <span data-i18n="tag_3">三十年經驗</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 喜慶花牌 / Ceremonial Plaques -->
+    <section id="ceremonial" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center space-x-2 mb-4">
+                    <span class="w-12 h-1 bg-amber-600"></span>
+                    <span class="text-amber-700 font-semibold tracking-widest uppercase" data-i18n="section_ceremonial_sub">Red Celebrations</span>
+                    <span class="w-12 h-1 bg-amber-600"></span>
+                </div>
+                <h2 class="text-4xl font-serif font-bold text-gray-900 mb-4" data-i18n="section_ceremonial_title">喜慶花牌 · 紅事花籃</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto" data-i18n="section_ceremonial_desc">婚嫁喜慶、壽辰祝賀、滿月之喜，以鮮豔奪目的花牌傳達最誠摯的祝福。</p>
+            </div>
+
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="ceremonial-grid"></div>
+        </div>
+    </section>
+
+
+    <!-- 帛事花籃 / Funeral Section -->
+    <section id="funeral" class="py-20 bg-stone-100 border-t-4 border-gray-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center space-x-2 mb-4">
+                    <i class="fas fa-dove text-gray-500 text-xl"></i>
+                    <span class="text-sm font-semibold text-gray-500 uppercase tracking-widest" data-i18n="funeral_badge">With Deepest Sympathy</span>
+                </div>
+                <h2 class="text-4xl font-serif font-bold text-gray-800 mb-4" data-i18n="funeral_title">帛事花籃 · 白事花圈</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto leading-relaxed" data-i18n="funeral_desc">
+                    在失去摯愛的時刻，以莊重肅穆的花藝表達最深切的哀悼。我們提供各式帛事花籃、西式花圈、中式輓聯花牌，免費代寫輓聯，即日送達殯儀館。
+                </p>
+            </div>
+
+
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 text-center">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-clock text-gray-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-bold text-gray-800 mb-2" data-i18n="funeral_service_1_title">即日送達殯儀館</h3>
+                    <p class="text-gray-600 text-sm" data-i18n="funeral_service_1_desc">明白時間緊迫，我們提供即日送達各殯儀館、教堂服務，並以最大的謹慎處理。</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 text-center">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-pen-fancy text-gray-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-bold text-gray-800 mb-2" data-i18n="funeral_service_2_title">免費代寫輓聯</h3>
+                    <p class="text-gray-600 text-sm" data-i18n="funeral_service_2_desc">專業書法代寫輓聯、悼詞，以傳統中式格式表達對先人的敬意與懷念。</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 text-center">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-leaf text-gray-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-serif font-bold text-gray-800 mb-2" data-i18n="funeral_service_3_title">白百合菊花專家</h3>
+                    <p class="text-gray-600 text-sm" data-i18n="funeral_service_3_desc">傳統白事花卉，白百合象徵靈魂純潔，白菊表達哀思，以虔誠敬意編排。</p>
+                </div>
+            </div>
+
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-serif font-bold text-gray-800 mb-6 text-center" data-i18n="funeral_products_title">帛事花藝作品</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="funeral-products-grid"></div>
+
+
+            <div class="mt-16 bg-gray-800 rounded-3xl p-8 md:p-12 text-center text-white">
+                <h3 class="text-3xl font-serif font-bold mb-4" data-i18n="funeral_contact_title">在這艱難時刻需要協助嗎？</h3>
+                <p class="text-gray-300 mb-8 max-w-2xl mx-auto" data-i18n="funeral_contact_desc">
+                    我們富有同理心的團隊隨時為您協助選擇適當的花藝作品。提供謹慎諮詢，可直接與殯儀館協調安排。
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="https://wa.me/85291463455?text=你好福建花店！我需要在這艱難時刻協助安排帛事花卉。請幫助我選擇適當的悼念花藝作品。" target="_blank" class="inline-flex items-center justify-center px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-full font-semibold transition-all hover:shadow-lg">
+                        <i class="fab fa-whatsapp mr-2 text-xl"></i>
+                        <span data-i18n="funeral_whatsapp">WhatsApp 與我們聯絡</span>
+                    </a>
+                    <a href="tel:+85291463455" class="inline-flex items-center justify-center px-8 py-4 bg-white text-gray-800 hover:bg-gray-100 rounded-full font-semibold transition-all">
+                        <i class="fas fa-phone mr-2"></i>
+                        <span data-i18n="funeral_call">直接致電我們</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 中西花圈 / Chinese & Western Wreaths -->
+    <section id="wreaths" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center space-x-2 mb-4">
+                    <span class="w-12 h-1 bg-amber-600"></span>
+                    <span class="text-amber-700 font-semibold tracking-widest uppercase">Chinese & Western Styles</span>
+                    <span class="w-12 h-1 bg-amber-600"></span>
+                </div>
+                <h2 class="text-4xl font-serif font-bold text-gray-900 mb-4" data-i18n="section_wreaths_title">中西花圈 · 圓型花牌</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto" data-i18n="section_wreaths_desc">傳統中式花圈配以輓聯，或西式圓型花環，各具特色，表達不同文化背景的悼念情懷。</p>
+            </div>
+
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="relative rounded-2xl overflow-hidden group cursor-pointer h-80">
+                    <img src="https://images.unsplash.com/photo-1490750967868-88aa4f44f562?w=800&auto=format&fit=crop&q=80" alt="Chinese Wreath" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-8 left-8 text-white">
+                        <h3 class="text-3xl font-serif font-bold mb-2">中式花圈</h3>
+                        <p class="text-gray-200 mb-4">傳統圓型花圈，配以黑色或白色輓聯帶，莊重肅穆</p>
+                        <span class="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm">由 $150 起</span>
+                    </div>
+                </div>
+                <div class="relative rounded-2xl overflow-hidden group cursor-pointer h-80">
+                    <img src="https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=800&auto=format&fit=crop&q=80" alt="Western Wreath" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-8 left-8 text-white">
+                        <h3 class="text-3xl font-serif font-bold mb-2">西式花環</h3>
+                        <p class="text-gray-200 mb-4">圓型花環設計，以白百合、玫瑰、康乃馨編織，優雅莊嚴</p>
+                        <span class="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm">由 $180 起</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="wreaths-grid"></div>
+        </div>
+    </section>
+
+
+    <!-- 開張花籃 / Grand Opening Baskets -->
+    <section id="opening" class="py-20 bg-amber-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center space-x-2 mb-4">
+                    <span class="w-12 h-1 bg-amber-600"></span>
+                    <span class="text-amber-700 font-semibold tracking-widest uppercase">Grand Opening</span>
+                    <span class="w-12 h-1 bg-amber-600"></span>
+                </div>
+                <h2 class="text-4xl font-serif font-bold text-gray-900 mb-4" data-i18n="section_opening_title">開張花籃 · 開業誌慶</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto" data-i18n="section_opening_desc">生意興隆、財源廣進！各式高貴開張花籃，配以紅掌、百合、向日葵，為新店開業增添喜慶氣氛。</p>
+            </div>
+
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="opening-grid"></div>
+        </div>
+    </section>
+
+
+    <!-- 社團花牌 / Association Plaques -->
+    <section id="association" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center space-x-2 mb-4">
+                    <span class="w-12 h-1 bg-amber-600"></span>
+                    <span class="text-amber-700 font-semibold tracking-widest uppercase">Association & Clubs</span>
+                    <span class="w-12 h-1 bg-amber-600"></span>
+                </div>
+                <h2 class="text-4xl font-serif font-bold text-gray-900 mb-4" data-i18n="section_association_title">社團花牌 · 同鄉會館</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto" data-i18n="section_association_desc">同鄉會、商會、宗親會、體育會等各類社團慶典花牌。大氣磅礴，彰顯團體氣派。</p>
+            </div>
+
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-stone-50 rounded-2xl p-8 border border-stone-200">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-building text-amber-700 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-serif font-bold text-gray-900 mb-2">同鄉會 / 宗親會</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed">為同鄉會館、宗親會慶典、祭祖大典提供傳統中式大型花牌，配以金色賀詞，氣派非凡。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-stone-50 rounded-2xl p-8 border border-stone-200">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-handshake text-amber-700 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-serif font-bold text-gray-900 mb-2">商會 / 貿易協會</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed">商會就職典禮、週年慶典、商貿展覽開幕等場合，提供高雅商務花牌，體現專業形象。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-stone-50 rounded-2xl p-8 border border-stone-200">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-running text-amber-700 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-serif font-bold text-gray-900 mb-2">體育會 / 文娛團體</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed">體育會就職、文娛團體演出慶祝、武館開幕等，提供活力四射的彩色花牌。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-stone-50 rounded-2xl p-8 border border-stone-200">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-14 h-14 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-graduation-cap text-amber-700 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-serif font-bold text-gray-900 mb-2">校友會 / 教育機構</h3>
+                            <p class="text-gray-600 text-sm leading-relaxed">校慶、校友會活動、教育機構開幕等，提供文雅大方的書卷氣息花牌。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="association-grid"></div>
+        </div>
+    </section>
+
+
+    <!-- 鮮花花束 / Fresh Bouquets (Secondary) -->
+    <section id="bouquets" class="py-20 bg-stone-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
+                <div>
+                    <h2 class="text-4xl font-serif font-bold text-gray-900 mb-2" data-i18n="bouquets_title">鮮花花束</h2>
+                    <p class="text-gray-600" data-i18n="bouquets_desc">日常送花、節日禮物、家居擺設</p>
+                </div>
+                
+                <div class="flex flex-wrap gap-2" id="category-filters">
+                    <button onclick="filterProducts('all')" class="category-pill active px-6 py-2 rounded-full border border-gray-300 text-sm font-medium" data-i18n="filter_all">全部</button>
+                    <button onclick="filterProducts('birthday')" class="category-pill px-6 py-2 rounded-full border border-gray-300 text-sm font-medium" data-i18n="filter_birthday">生日</button>
+                    <button onclick="filterProducts('sympathy')" class="category-pill px-6 py-2 rounded-full border border-gray-300 text-sm font-medium" data-i18n="filter_sympathy">慰問</button>
+                    <button onclick="filterProducts('plants')" class="category-pill px-6 py-2 rounded-full border border-gray-300 text-sm font-medium" data-i18n="filter_plants">盆栽</button>
+                </div>
+            </div>
+
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="products-grid"></div>
+        </div>
+    </section>
+
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <div class="grid grid-cols-2 gap-4">
+                        <img src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=400&auto=format&fit=crop&q=80" alt="Florist at work" class="rounded-2xl shadow-lg w-full h-64 object-cover">
+                        <img src="https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=400&auto=format&fit=crop&q=80" alt="Flower shop" class="rounded-2xl shadow-lg w-full h-64 object-cover mt-8">
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 bg-amber-700 text-white p-6 rounded-2xl shadow-xl">
+                        <div class="text-3xl font-bold">30+</div>
+                        <div class="text-sm opacity-90" data-i18n="about_years">年專業<br>經驗</div>
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <h2 class="text-4xl font-serif font-bold text-gray-900" data-i18n="about_title">福建花店<br>喜事白事 · 一站俱全</h2>
+                    <p class="text-gray-600 leading-relaxed" data-i18n="about_desc_1">
+                        福建花店創立於九十年代，專營各類喜慶花牌、帛事花籃、開張花籃及社團花牌。我們深明紅白二事對華人社會的重要性，每一件花藝作品都承載著深厚的文化意義與情感。
+                    </p>
+                    <p class="text-gray-600 leading-relaxed" data-i18n="about_desc_2">
+                        我們提供免費代寫輓聯、賀詞服務，並與各大殯儀館、會館保持緊密合作，確保花牌準時送達。三十年來，我們以誠信、專業、細心服務無數家庭與社團。
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-6 pt-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-truck text-amber-700"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900" data-i18n="feature_1_title">即日送達</h4>
+                                <p class="text-sm text-gray-500" data-i18n="feature_1_desc">殯儀館會館</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-pen-fancy text-amber-700"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900" data-i18n="feature_2_title">免費輓聯</h4>
+                                <p class="text-sm text-gray-500" data-i18n="feature_2_desc">專業書法代寫</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-medal text-amber-700"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900" data-i18n="feature_3_title">三十年信譽</h4>
+                                <p class="text-sm text-gray-500" data-i18n="feature_3_desc">老字號保證</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-hand-holding-heart text-amber-700"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900" data-i18n="feature_4_title">貼心服務</h4>
+                                <p class="text-sm text-gray-500" data-i18n="feature_4_desc">全程協助安排</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Contact / Footer -->
+    <footer id="contact" class="bg-gray-900 text-white pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-leaf text-amber-500 text-2xl"></i>
+                        <div class="flex flex-col">
+                            <span class="text-2xl font-serif font-bold" data-i18n="brand_name">福建花店</span>
+                            <span class="text-xs text-amber-500 tracking-wider" data-i18n="brand_en">Fujian Florist</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed" data-i18n="footer_desc">專營喜慶花牌、帛事花籃、開張花籃、社團花牌。三十年老字號，信譽保證。</p>
+                    <div class="flex space-x-4">
+                        <a href="https://wa.me/85291463455" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-amber-600 transition-colors"><i class="fab fa-weixin"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4" data-i18n="footer_services">服務項目</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#ceremonial" class="hover:text-amber-400 transition-colors">喜慶花牌</a></li>
+                        <li><a href="#funeral" class="hover:text-amber-400 transition-colors">帛事花籃</a></li>
+                        <li><a href="#wreaths" class="hover:text-amber-400 transition-colors">中西花圈</a></li>
+                        <li><a href="#opening" class="hover:text-amber-400 transition-colors">開張花籃</a></li>
+                        <li><a href="#association" class="hover:text-amber-400 transition-colors">社團花牌</a></li>
+                        <li><a href="#bouquets" class="hover:text-amber-400 transition-colors">鮮花花束</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4" data-i18n="footer_contact">聯絡我們</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li class="flex items-center space-x-3">
+                            <i class="fas fa-map-marker-alt text-amber-500"></i>
+                            <span>九龍紅磡曲街2N號興利大廈地下西鋪</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fas fa-phone text-amber-500"></i>
+                            <span>+852 9146 3455</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fab fa-whatsapp text-amber-500"></i>
+                            <span>WhatsApp: +852 9146 3455</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fas fa-clock text-amber-500"></i>
+                            <span data-i18n="footer_hours">每日營業：上午7時至晚上9時</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4" data-i18n="footer_area">服務地區</h4>
+                    <p class="text-gray-400 mb-4 text-sm leading-relaxed">
+                        全港各區殯儀館、會館、教堂、酒店及商業大廈。包括：萬國殯儀館、世界殯儀館、紅磡殯儀館、九龍殯儀館等。
+                    </p>
+                    <div class="flex">
+                        <input type="email" placeholder="您的電郵" class="flex-1 px-4 py-3 bg-gray-800 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-amber-600 text-white">
+                        <button class="px-6 py-3 bg-amber-700 rounded-r-lg hover:bg-amber-800 transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
+                <p> 2024 福建花店 Fujian Florist. 版權所有。</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition-colors" data-i18n="footer_privacy">私隱政策</a>
+                    <a href="#" class="hover:text-white transition-colors" data-i18n="footer_terms">服務條款</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/50 overlay z-50 hidden" onclick="toggleCart()"></div>
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-50 transform translate-x-full cart-slide overflow-y-auto">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center sticky top-0 bg-white z-10">
+            <h2 class="text-2xl font-serif font-bold text-gray-900" data-i18n="cart_title">您的購物車</h2>
+            <button onclick="toggleCart()" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors">
+                <i class="fas fa-times text-xl text-gray-600"></i>
+            </button>
+        </div>
+        
+        <div id="cart-items" class="p-6 space-y-6">
+            <div class="text-center py-12 text-gray-400">
+                <i class="fas fa-shopping-basket text-6xl mb-4 opacity-30"></i>
+                <p data-i18n="cart_empty">購物車是空的</p>
+                <button onclick="toggleCart(); document.getElementById('ceremonial').scrollIntoView({behavior: 'smooth'})" class="mt-4 text-amber-700 font-semibold hover:underline" data-i18n="cart_start">開始選購</button>
+            </div>
+        </div>
+        
+        <div id="cart-footer" class="border-t border-gray-100 p-6 space-y-4 hidden">
+            <div class="flex justify-between text-lg font-semibold">
+                <span data-i18n="cart_subtotal">小計</span>
+                <span id="cart-total">$0</span>
+            </div>
+            <p class="text-sm text-gray-500" data-i18n="cart_shipping">結帳時計算運費</p>
+            <button class="w-full py-4 bg-amber-700 text-white rounded-xl font-semibold hover:bg-amber-800 transition-all hover:shadow-lg" data-i18n="cart_checkout">
+                前往結帳
+            </button>
+            <button onclick="toggleCart(); document.getElementById('ceremonial').scrollIntoView({behavior: 'smooth'})" class="w-full py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:border-amber-700 hover:text-amber-700 transition-all" data-i18n="cart_continue">
+                繼續選購
+            </button>
+        </div>
+    </div>
+
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/85291463455?text=你好福建花店！我想查詢花牌/花籃價錢及訂購。" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       class="fixed bottom-6 right-6 z-40 bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-300 floating-whatsapp flex items-center space-x-2 group">
+        <div class="relative">
+            <i class="fab fa-whatsapp text-3xl"></i>
+            <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-green-500"></span>
+        </div>
+        <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 whitespace-nowrap font-semibold" data-i18n="whatsapp_chat">WhatsApp 查詢</span>
+    </a>
+
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-24 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-6 py-3 rounded-full shadow-lg z-50 transition-all duration-300 opacity-0 translate-y-4 pointer-events-none flex items-center space-x-2">
+        <i class="fas fa-check-circle text-green-400"></i>
+        <span id="toast-message" data-i18n="toast_added">已加入購物車！</span>
+    </div>
+
+
+    <script>
+        const translations = {
+            zh: {
+                brand_name: "福建花店",
+                brand_en: "Fujian Florist",
+                nav_ceremonial: "喜慶花牌",
+                nav_funeral: "帛事花籃",
+                nav_wreaths: "中西花圈",
+                nav_opening: "開張花籃",
+                nav_association: "社團花牌",
+                nav_bouquets: "鮮花花束",
+                nav_about: "關於我們",
+                hero_badge: "專業喜慶帛事花藝服務",
+                hero_title_1: "喜事白事",
+                hero_title_2: "一站俱全",
+                hero_desc: "福建花店專營各類喜慶花牌、帛事花籃、中西花圈、開張花籃及社團花牌。三十年經驗，信譽保證，即日送達。",
+                btn_shop: "立即選購",
+                btn_whatsapp: "WhatsApp 查詢",
+                tag_1: "即日送達",
+                tag_2: "免費代寫輓聯",
+                tag_3: "三十年經驗",
+                cat_ceremonial: "喜慶花牌",
+                cat_ceremonial_desc: "祝壽賀喜 婚禮慶典",
+                cat_funeral: "帛事花籃",
+                cat_funeral_desc: "白事悼念 致哀花圈",
+                cat_opening: "開張花籃",
+                cat_opening_desc: "開業誌慶 生意興隆",
+                cat_association: "社團花牌",
+                cat_association_desc: "同鄉會館 商會慶典",
+                section_ceremonial_sub: "Red Celebrations",
+                section_ceremonial_title: "喜慶花牌 · 紅事花籃",
+                section_ceremonial_desc: "婚嫁喜慶、壽辰祝賀、滿月之喜，以鮮豔奪目的花牌傳達最誠摯的祝福。",
+                section_wreaths_title: "中西花圈 · 圓型花牌",
+                section_wreaths_desc: "傳統中式花圈配以輓聯，或西式圓型花環，各具特色，表達不同文化背景的悼念情懷。",
+                section_opening_title: "開張花籃 · 開業誌慶",
+                section_opening_desc: "生意興隆、財源廣進！各式高貴開張花籃，配以紅掌、百合、向日葵，為新店開業增添喜慶氣氛。",
+                section_association_title: "社團花牌 · 同鄉會館",
+                section_association_desc: "同鄉會、商會、宗親會、體育會等各類社團慶典花牌。大氣磅礴，彰顯團體氣派。",
+                funeral_badge: "With Deepest Sympathy",
+                funeral_title: "帛事花籃 · 白事花圈",
+                funeral_desc: "在失去摯愛的時刻，以莊重肅穆的花藝表達最深切的哀悼。我們提供各式帛事花籃、西式花圈、中式輓聯花牌，免費代寫輓聯，即日送達殯儀館。",
+                funeral_service_1_title: "即日送達殯儀館",
+                funeral_service_1_desc: "明白時間緊迫，我們提供即日送達各殯儀館、教堂服務，並以最大的謹慎處理。",
+                funeral_service_2_title: "免費代寫輓聯",
+                funeral_service_2_desc: "專業書法代寫輓聯、悼詞，以傳統中式格式表達對先人的敬意與懷念。",
+                funeral_service_3_title: "白百合菊花專家",
+                funeral_service_3_desc: "傳統白事花卉，白百合象徵靈魂純潔，白菊表達哀思，以虔誠敬意編排。",
+                funeral_products_title: "悼念花藝作品",
+                funeral_contact_title: "在這艱難時刻需要協助嗎？",
+                funeral_contact_desc: "我們富有同理心的團隊隨時為您協助選擇適當的花藝作品。提供謹慎諮詢，可直接與殯儀館協調安排。",
+                funeral_whatsapp: "WhatsApp 與我們聯絡",
+                funeral_call: "直接致電我們",
+                bouquets_title: "鮮花花束",
+                bouquets_desc: "日常送花、節日禮物、家居擺設",
+                filter_all: "全部",
+                filter_birthday: "生日",
+                filter_sympathy: "慰問",
+                filter_plants: "盆栽",
+                about_title: "福建花店\n喜事白事 · 一站俱全",
+                about_desc_1: "福建花店創立於九十年代，專營各類喜慶花牌、帛事花籃、開張花籃及社團花牌。我們深明紅白二事對華人社會的重要性，每一件花藝作品都承載著深厚的文化意義與情感。",
+                about_desc_2: "我們提供免費代寫輓聯、賀詞服務，並與各大殯儀館、會館保持緊密合作，確保花牌準時送達。三十年來，我們以誠信、專業、細心服務無數家庭與社團。",
+                about_years: "年專業\n經驗",
+                feature_1_title: "即日送達",
+                feature_1_desc: "殯儀館會館",
+                feature_2_title: "免費輓聯",
+                feature_2_desc: "專業書法代寫",
+                feature_3_title: "三十年信譽",
+                feature_3_desc: "老字號保證",
+                feature_4_title: "貼心服務",
+                feature_4_desc: "全程協助安排",
+                footer_desc: "專營喜慶花牌、帛事花籃、開張花籃、社團花牌。三十年老字號，信譽保證。",
+                footer_services: "服務項目",
+                footer_contact: "聯絡我們",
+                footer_hours: "每日營業：上午7時至晚上9時",
+                footer_area: "服務地區",
+                footer_privacy: "私隱政策",
+                footer_terms: "服務條款",
+                cart_title: "您的購物車",
+                cart_empty: "購物車是空的",
+                cart_start: "開始選購",
+                cart_subtotal: "小計",
+                cart_shipping: "結帳時計算運費",
+                cart_checkout: "前往結帳",
+                cart_continue: "繼續選購",
+                whatsapp_chat: "WhatsApp 查詢",
+                toast_added: "已加入購物車！"
+            },
+            en: {
+                brand_name: "Fujian Florist",
+                brand_en: "福建花店",
+                nav_ceremonial: "Ceremonial",
+                nav_funeral: "Funeral",
+                nav_wreaths: "Wreaths",
+                nav_opening: "Grand Opening",
+                nav_association: "Associations",
+                nav_bouquets: "Bouquets",
+                nav_about: "About",
+                hero_badge: "Professional Ceremonial & Funeral Florist",
+                hero_title_1: "Red & White",
+                hero_title_2: "All in One Place",
+                hero_desc: "Fujian Florist specializes in ceremonial plaques, funeral baskets, Chinese/Western wreaths, grand opening baskets, and association plaques. 30 years of experience, guaranteed reliability, same-day delivery.",
+                btn_shop: "Shop Now",
+                btn_whatsapp: "WhatsApp Inquiry",
+                tag_1: "Same-Day Delivery",
+                tag_2: "Free Eulogy Writing",
+                tag_3: "30 Years Experience",
+                cat_ceremonial: "Ceremonial Plaques",
+                cat_ceremonial_desc: "Weddings & Celebrations",
+                cat_funeral: "Funeral Baskets",
+                cat_funeral_desc: "Memorial & Condolence",
+                cat_opening: "Grand Opening",
+                cat_opening_desc: "Business Celebrations",
+                cat_association: "Association Plaques",
+                cat_association_desc: "Clubs & Societies",
+                section_ceremonial_sub: "Red Celebrations",
+                section_ceremonial_title: "Ceremonial Plaques & Baskets",
+                section_ceremonial_desc: "Weddings, birthdays, full moon celebrations - express your sincerest blessings with vibrant floral plaques.",
+                section_wreaths_title: "Chinese & Western Wreaths",
+                section_wreaths_desc: "Traditional Chinese wreaths with eulogy ribbons, or Western circular wreaths - each expressing condolences in their unique cultural way.",
+                section_opening_title: "Grand Opening Baskets",
+                section_opening_desc: "Prosperity and abundance! Elegant opening baskets with anthuriums, lilies, and sunflowers to celebrate new business ventures.",
+                section_association_title: "Association Plaques",
+                section_association_desc: "Hometown associations, chambers of commerce, clan associations, sports clubs - grand plaques that showcase organizational prestige.",
+                funeral_badge: "With Deepest Sympathy",
+                funeral_title: "Funeral & Memorial Flowers",
+                funeral_desc: "In times of loss, express your deepest condolences with dignified floral arrangements. We offer funeral baskets, Western wreaths, Chinese eulogy plaques, free calligraphy service, and same-day delivery to funeral homes.",
+                funeral_service_1_title: "Same-Day to Funeral Homes",
+                funeral_service_1_desc: "Understanding the urgency, we provide same-day delivery to all funeral homes and churches with utmost care.",
+                funeral_service_2_title: "Free Eulogy Calligraphy",
+                funeral_service_2_desc: "Professional calligraphy for eulogy ribbons and memorial messages in traditional Chinese format.",
+                funeral_service_3_title: "White Lily Specialists",
+                funeral_service_3_desc: "Traditional funeral flowers - white lilies symbolize pure souls, white chrysanthemums express grief, arranged with reverence.",
+                funeral_products_title: "Memorial Arrangements",
+                funeral_contact_title: "Need Assistance During This Difficult Time?",
+                funeral_contact_desc: "Our compassionate team is available to help you select appropriate arrangements. We offer discreet consultation and can coordinate directly with funeral directors.",
+                funeral_whatsapp: "Contact Us on WhatsApp",
+                funeral_call: "Call Us Directly",
+                bouquets_title: "Fresh Bouquets",
+                bouquets_desc: "Daily gifts, holidays, home decoration",
+                filter_all: "All",
+                filter_birthday: "Birthday",
+                filter_sympathy: "Sympathy",
+                filter_plants: "Plants",
+                about_title: "Fujian Florist\nRed & White Affairs · All in One",
+                about_desc_1: "Established in the 1990s, Fujian Florist specializes in ceremonial plaques, funeral baskets, grand opening baskets, and association plaques. We understand the cultural significance of red and white affairs in Chinese society.",
+                about_desc_2: "We offer free eulogy and congratulatory message writing, working closely with major funeral homes and associations to ensure timely delivery. For 30 years, we've served countless families and organizations with integrity.",
+                about_years: "Years of\nExperience",
+                feature_1_title: "Same-Day Delivery",
+                feature_1_desc: "Funeral homes & halls",
+                feature_2_title: "Free Calligraphy",
+                feature_2_desc: "Professional writing",
+                feature_3_title: "30 Years Trusted",
+                feature_3_desc: "Established reputation",
+                feature_4_title: "Attentive Service",
+                feature_4_desc: "Full arrangement support",
+                footer_desc: "Specializing in ceremonial plaques, funeral baskets, opening baskets, and association plaques. 30 years of trusted service.",
+                footer_services: "Services",
+                footer_contact: "Contact",
+                footer_hours: "Daily: 7AM - 9PM",
+                footer_area: "Service Areas",
+                footer_privacy: "Privacy Policy",
+                footer_terms: "Terms of Service",
+                cart_title: "Your Cart",
+                cart_empty: "Your cart is empty",
+                cart_start: "Start Shopping",
+                cart_subtotal: "Subtotal",
+                cart_shipping: "Shipping calculated at checkout",
+                cart_checkout: "Proceed to Checkout",
+                cart_continue: "Continue Shopping",
+                whatsapp_chat: "Chat with Us",
+                toast_added: "Added to cart!"
+            }
+        };
+
+
+        let currentLang = 'zh';
+
+
+        // Product Data - Ceremonial (Red)
+        const ceremonialProducts = [
+            {
+                id: 201,
+                name: "Double Happiness Wedding Plaque",
+                name_zh: "雙喜婚慶花牌",
+                price: 388,
+                category: "ceremonial",
+                image: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&auto=format&fit=crop&q=80",
+                description: "Large red and gold floral plaque with double happiness symbol",
+                description_zh: "大型紅金雙喜花牌，配以牡丹和百合"
+            },
+            {
+                id: 202,
+                name: "Longevity Peach Celebration",
+                name_zh: "壽桃賀壽花籃",
+                price: 298,
+                category: "ceremonial",
+                image: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=600&auto=format&fit=crop&q=80",
+                description: "Elegant longevity celebration basket with peach blossoms",
+                description_zh: "高雅壽辰花籃，配以桃花和康乃馨"
+            },
+            {
+                id: 203,
+                name: "Full Moon Baby Basket",
+                name_zh: "滿月之喜花籃",
+                price: 228,
+                category: "ceremonial",
+                image: "https://images.unsplash.com/photo-1490750967868-88aa4f44f562?w=600&auto=format&fit=crop&q=80",
+                description: "Pink and white baby full moon celebration arrangement",
+                description_zh: "粉白滿月慶祝花籃，配以玫瑰和滿天星"
+            },
+            {
+                id: 204,
+                name: "Prosperity New Year Plaque",
+                name_zh: "迎春接福花牌",
+                price: 458,
+                category: "ceremonial",
+                image: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=600&auto=format&fit=crop&q=80",
+                description: "Grand Chinese New Year floral plaque with gold accents",
+                description_zh: "大型春節花牌，金色裝飾，富貴吉祥"
+            },
+            {
+                id: 205,
+                name: "Engagement Blessing Stand",
+                name_zh: "訂婚誌慶花牌",
+                price: 328,
+                category: "ceremonial",
+                image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&auto=format&fit=crop&q=80",
+                description: "Romantic engagement celebration floral stand",
+                description_zh: "浪漫訂婚慶祝立式花牌，紅玫瑰為主"
+            },
+            {
+                id: 206,
+                name: "Housewarming Blessing",
+                name_zh: "喬遷之喜花籃",
+                price: 268,
+                category: "ceremonial",
+                image: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=600&auto=format&fit=crop&q=80",
+                description: "Housewarming congratulatory basket with orchids",
+                description_zh: "喬遷祝賀花籃，配以蘭花和綠植"
+            }
+        ];
+
+
+        // Funeral Products
+        const funeralProducts = [
+            {
+                id: 101,
+                name: "Traditional White Wreath",
+                name_zh: "傳統白花圈",
+                price: 180,
+                category: "funeral",
+                image: "https://images.unsplash.com/photo-1490750967868-88aa4f44f562?w=600&auto=format&fit=crop&q=80",
+                description: "White chrysanthemums with eulogy ribbon",
+                description_zh: "白菊花花圈，配以黑色輓聯帶"
+            },
+            {
+                id: 102,
+                name: "Standing Spray - Grace",
+                name_zh: "立式花牌 - 恩典",
+                price: 220,
+                category: "funeral",
+                image: "https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=600&auto=format&fit=crop&q=80",
+                description: "Elegant standing spray with white lilies and gladiolus",
+                description_zh: "優雅立式花牌，白百合和劍蘭"
+            },
+            {
+                id: 103,
+                name: "Serenity Casket Spray",
+                name_zh: "寧靜棺面花",
+                price: 350,
+                category: "funeral",
+                image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=600&auto=format&fit=crop&q=80",
+                description: "Full casket spray with white roses, lilies, and orchids",
+                description_zh: "全棺面花飾，白玫瑰、百合和蘭花"
+            },
+            {
+                id: 104,
+                name: "Memorial Cross",
+                name_zh: "悼念十字架",
+                price: 195,
+                category: "funeral",
+                image: "https://images.unsplash.com/photo-1518882605630-8eb565f5e673?w=600&auto=format&fit=crop&q=80",
+                description: "Floral cross with white chrysanthemums",
+                description_zh: "白菊花組成的花卉十字架"
+            }
+        ];
+
+
+        // Wreath Products
+        const wreathProducts = [
+            {
+                id: 301,
+                name: "Chinese Round Wreath - Small",
+                name_zh: "中式圓型花圈 - 小",
+                price: 150,
+                category: "wreath",
+                image: "https://images.unsplash.com/photo-1490750967868-88aa4f44f562?w=600&auto=format&fit=crop&q=80",
+                description: "Traditional Chinese circular wreath, 2 feet diameter",
+                description_zh: "傳統中式圓型花圈，直徑2呎"
+            },
+            {
+                id: 302,
+                name: "Chinese Round Wreath - Large",
+                name_zh: "中式圓型花圈 - 大",
+                price: 280,
+                category: "wreath",
+                image: "https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=600&auto=format&fit=crop&q=80",
+                description: "Traditional Chinese circular wreath, 3 feet diameter with calligraphy",
+                description_zh: "傳統中式圓型花圈，直徑3呎，附書法輓聯"
+            },
+            {
+                id: 303,
+                name: "Western Circular Wreath",
+                name_zh: "西式圓型花環",
+                price: 200,
+                category: "wreath",
+                image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=600&auto=format&fit=crop&q=80",
+                description: "Elegant Western style circular wreath with mixed white flowers",
+                description_zh: "優雅西式圓型花環，白色混合花卉"
+            },
+            {
+                id: 304,
+                name: "Heart-Shaped Wreath",
+                name_zh: "心型悼念花圈",
+                price: 240,
+                category: "wreath",
+                image: "https://images.unsplash.com/photo-1518882605630-8eb565f5e673?w=600&auto=format&fit=crop&q=80",
+                description: "Heart-shaped memorial wreath with roses and carnations",
+                description_zh: "心型紀念花圈，玫瑰和康乃馨"
+            }
+        ];
+
+
+        // Opening Products
+        const openingProducts = [
+            {
+                id: 401,
+                name: "Prosperity Opening Basket - Single",
+                name_zh: "開張花籃 - 單個",
+                price: 188,
+                category: "opening",
+                image: "https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=600&auto=format&fit=crop&q=80",
+                description: "Single grand opening basket with red anthuriums and lilies",
+                description_zh: "單個開張花籃，紅掌和百合"
+            },
+            {
+                id: 402,
+                name: "Prosperity Opening Basket - Pair",
+                name_zh: "開張花籃 - 一對",
+                price: 358,
+                category: "opening",
+                image: "https://images.unsplash.com/photo-1468327768560-75b778cbb551?w=600&auto=format&fit=crop&q=80",
+                description: "Matching pair of opening baskets for grand display",
+                description_zh: "開張花籃一對，氣派大方"
+            },
+            {
+                id: 403,
+                name: "Deluxe Opening Plaque",
+                name_zh: "豪華開張花牌",
+                price: 488,
+                category: "opening",
+                image: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=600&auto=format&fit=crop&q=80",
+                description: "Large standing plaque with golden prosperity characters",
+                description_zh: "大型立式花牌，金色招財字樣"
+            },
+            {
+                id: 404,
+                name: "Orchid Prosperity Stand",
+                name_zh: "蘭花開業誌慶",
+                price: 528,
+                category: "opening",
+                image: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=600&auto=format&fit=crop&q=80",
+                description: "Premium orchid arrangement for business openings",
+                description_zh: "高貴蘭花開業擺設，持久典雅"
+            }
+        ];
+
+
+        // Association Products
+        const associationProducts = [
+            {
+                id: 501,
+                name: "Hometown Association Plaque",
+                name_zh: "同鄉會慶典花牌",
+                price: 688,
+                category: "association",
+                image: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&auto=format&fit=crop&q=80",
+                description: "Grand plaque for hometown association celebrations",
+                description_zh: "同鄉會慶典大型花牌，氣派非凡"
+            },
+            {
+                id: 502,
+                name: "Chamber of Commerce Stand",
+                name_zh: "商會就職花牌",
+                price: 788,
+                category: "association",
+                image: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=600&auto=format&fit=crop&q=80",
+                description: "Elegant stand for chamber of commerce ceremonies",
+                description_zh: "商會就職典禮高雅花牌"
+            },
+            {
+                id: 503,
+                name: "Clan Association Plaque",
+                name_zh: "宗親會祭祖花牌",
+                price: 588,
+                category: "association",
+                image: "https://images.unsplash.com/photo-1490750967868-88aa4f44f562?w=600&auto=format&fit=crop&q=80",
+                description: "Traditional plaque for clan association ancestor worship",
+                description_zh: "宗親會祭祖傳統花牌，莊重肅穆"
+            }
+        ];
+
+
+        // Fresh Bouquets - Removed romance category
+        const products = [
+            {
+                id: 2,
+                name: "Sunset Garden",
+                name_zh: "落日花園",
+                price: 89,
+                category: "birthday",
+                image: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=600&auto=format&fit=crop&q=80",
+                description: "Vibrant mix of sunflowers, daisies, and tulips",
+                description_zh: "向日葵、雛菊和鬱金香的鮮豔混搭"
+            },
+            {
+                id: 3,
+                name: "Pure Elegance",
+                name_zh: "純淨優雅",
+                price: 95,
+                category: "sympathy",
+                image: "https://images.unsplash.com/photo-1490750967868-88aa4f44f562?w=600&auto=format&fit=crop&q=80",
+                description: "White lilies and orchids with eucalyptus",
+                description_zh: "白百合和蘭花配尤加利葉"
+            },
+            {
+                id: 5,
+                name: "Tropical Breeze",
+                name_zh: "熱帶微風",
+                price: 85,
+                category: "birthday",
+                image: "https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=600&auto=format&fit=crop&q=80",
+                description: "Exotic birds of paradise and heliconia",
+                description_zh: "異國天堂鳥和赫蕉花"
+            },
+            {
+                id: 6,
+                name: "Monstera Delight",
+                name_zh: "龜背竹盆栽",
+                price: 45,
+                category: "plants",
+                image: "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=600&auto=format&fit=crop&q=80",
+                description: "Lush monstera in a ceramic pot",
+                description_zh: "陶瓷盆中的茂盛龜背竹"
+            },
+            {
+                id: 7,
+                name: "Lavender Fields",
+                name_zh: "薰衣草田園",
+                price: 55,
+                category: "sympathy",
+                image: "https://images.unsplash.com/photo-1468327768560-75b778cbb551?w=600&auto=format&fit=crop&q=80",
+                description: "Fragrant lavender bouquet with wheat",
+                description_zh: "芳香薰衣草花束配小麥"
+            },
+            {
+                id: 8,
+                name: "Golden Hour",
+                name_zh: "黃金時刻",
+                price: 75,
+                category: "birthday",
+                image: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=600&auto=format&fit=crop&q=80",
+                description: "Yellow roses and chrysanthemums",
+                description_zh: "黃玫瑰和菊花"
+            }
+        ];
+
+
+        let cart = [];
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCeremonialProducts();
+            renderFuneralProducts();
+            renderWreathProducts();
+            renderOpeningProducts();
+            renderAssociationProducts();
+            renderProducts('all');
+            updateCartUI();
+            setLanguage('zh');
+            
+            window.addEventListener('scroll', () => {
+                const navbar = document.getElementById('navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-md');
+                } else {
+                    navbar.classList.remove('shadow-md');
+                }
+            });
+        });
+
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('lang-zh').classList.toggle('active', lang === 'zh');
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en';
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+            
+            renderCeremonialProducts();
+            renderFuneralProducts();
+            renderWreathProducts();
+            renderOpeningProducts();
+            renderAssociationProducts();
+            renderProducts(document.querySelector('.category-pill.active')?.getAttribute('onclick')?.match(/'([^']+)'/)?.[1] || 'all');
+            updateCartUI();
+        }
+
+
+        function renderCeremonialProducts() {
+            const grid = document.getElementById('ceremonial-grid');
+            grid.innerHTML = ceremonialProducts.map((product, index) => `
+                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl group fade-in relative" style="animation-delay: ${index * 0.1}s">
+                    <div class="ribbon"><span>喜慶</span></div>
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="${product.image}" alt="${currentLang === 'zh' ? product.name_zh : product.name}" class="product-image w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+                        <button onclick="addToCart(${product.id})" class="absolute bottom-4 right-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-amber-700 hover:bg-amber-700 hover:text-white transition-all transform translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-serif font-bold text-gray-900 mb-1">${currentLang === 'zh' ? product.name_zh : product.name}</h3>
+                        <p class="text-sm text-gray-500 mb-3">${currentLang === 'zh' ? product.description_zh : product.description}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-amber-700">$${product.price}</span>
+                            <button onclick="addToCart(${product.id})" class="text-sm font-semibold text-gray-600 hover:text-amber-700 transition-colors underline decoration-2 underline-offset-4 hover:decoration-amber-700">
+                                ${currentLang === 'zh' ? '加入購物車' : 'Add to Cart'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+
+        function renderFuneralProducts() {
+            const grid = document.getElementById('funeral-products-grid');
+            grid.innerHTML = funeralProducts.map((product, index) => `
+                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl group fade-in border border-gray-200" style="animation-delay: ${index * 0.1}s">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="${product.image}" alt="${currentLang === 'zh' ? product.name_zh : product.name}" class="product-image w-full h-full object-cover filter grayscale-[20%]">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+                        <button onclick="addToCart(${product.id})" class="absolute bottom-4 right-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:bg-gray-700 hover:text-white transition-all transform translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <div class="absolute top-4 left-4">
+                            <span class="px-3 py-1 bg-gray-700 text-white rounded-full text-xs font-semibold">帛事</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-serif font-bold text-gray-800 mb-1">${currentLang === 'zh' ? product.name_zh : product.name}</h3>
+                        <p class="text-sm text-gray-500 mb-3">${currentLang === 'zh' ? product.description_zh : product.description}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-gray-700">$${product.price}</span>
+                            <button onclick="addToCart(${product.id})" class="text-sm font-semibold text-gray-600 hover:text-gray-800 transition-colors underline decoration-2 underline-offset-4 hover:decoration-gray-600">
+                                ${currentLang === 'zh' ? '加入購物車' : 'Add to Cart'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+
+        function renderWreathProducts() {
+            const grid = document.getElementById('wreaths-grid');
+            if (!grid) return;
+            grid.innerHTML = wreathProducts.map((product, index) => `
+                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl group fade-in border border-gray-200" style="animation-delay: ${index * 0.1}s">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="${product.image}" alt="${currentLang === 'zh' ? product.name_zh : product.name}" class="product-image w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+                        <button onclick="addToCart(${product.id})" class="absolute bottom-4 right-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-gray-600 hover:bg-gray-700 hover:text-white transition-all transform translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-serif font-bold text-gray-800 mb-1">${currentLang === 'zh' ? product.name_zh : product.name}</h3>
+                        <p class="text-sm text-gray-500 mb-3">${currentLang === 'zh' ? product.description_zh : product.description}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-gray-700">$${product.price}</span>
+                            <button onclick="addToCart(${product.id})" class="text-sm font-semibold text-gray-600 hover:text-gray-800 transition-colors underline decoration-2 underline-offset-4 hover:decoration-gray-600">
+                                ${currentLang === 'zh' ? '加入購物車' : 'Add to Cart'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+
+        function renderOpeningProducts() {
+            const grid = document.getElementById('opening-grid');
+            if (!grid) return;
+            grid.innerHTML = openingProducts.map((product, index) => `
+                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl group fade-in relative" style="animation-delay: ${index * 0.1}s">
+                    <div class="ribbon"><span>開張</span></div>
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="${product.image}" alt="${currentLang === 'zh' ? product.name_zh : product.name}" class="product-image w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+                        <button onclick="addToCart(${product.id})" class="absolute bottom-4 right-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-amber-700 hover:bg-amber-700 hover:text-white transition-all transform translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-serif font-bold text-gray-900 mb-1">${currentLang === 'zh' ? product.name_zh : product.name}</h3>
+                        <p class="text-sm text-gray-500 mb-3">${currentLang === 'zh' ? product.description_zh : product.description}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-amber-700">$${product.price}</span>
+                            <button onclick="addToCart(${product.id})" class="text-sm font-semibold text-gray-600 hover:text-amber-700 transition-colors underline decoration-2 underline-offset-4 hover:decoration-amber-700">
+                                ${currentLang === 'zh' ? '加入購物車' : 'Add to Cart'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+
+        function renderAssociationProducts() {
+            const grid = document.getElementById('association-grid');
+            if (!grid) return;
+            grid.innerHTML = associationProducts.map((product, index) => `
+                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl group fade-in relative" style="animation-delay: ${index * 0.1}s">
+                    <div class="ribbon"><span>社團</span></div>
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="${product.image}" alt="${currentLang === 'zh' ? product.name_zh : product.name}" class="product-image w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+                        <button onclick="addToCart(${product.id})" class="absolute bottom-4 right-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-amber-700 hover:bg-amber-700 hover:text-white transition-all transform translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-serif font-bold text-gray-900 mb-1">${currentLang === 'zh' ? product.name_zh : product.name}</h3>
+                        <p class="text-sm text-gray-500 mb-3">${currentLang === 'zh' ? product.description_zh : product.description}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-amber-700">$${product.price}</span>
+                            <button onclick="addToCart(${product.id})" class="text-sm font-semibold text-gray-600 hover:text-amber-700 transition-colors underline decoration-2 underline-offset-4 hover:decoration-amber-700">
+                                ${currentLang === 'zh' ? '加入購物車' : 'Add to Cart'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+
+        function renderProducts(category) {
+            const grid = document.getElementById('products-grid');
+            const filtered = category === 'all' ? products : products.filter(p => p.category === category);
+            
+            grid.innerHTML = filtered.map((product, index) => `
+                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl group fade-in" style="animation-delay: ${index * 0.1}s">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="${product.image}" alt="${currentLang === 'zh' ? product.name_zh : product.name}" class="product-image w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+                        <button onclick="addToCart(${product.id})" class="absolute bottom-4 right-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-amber-700 hover:bg-amber-700 hover:text-white transition-all transform translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <div class="absolute top-4 left-4">
+                            <span class="px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-semibold uppercase tracking-wider text-gray-700">${product.category}</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-serif font-bold text-gray-900 mb-1">${currentLang === 'zh' ? product.name_zh : product.name}</h3>
+                        <p class="text-sm text-gray-500 mb-3">${currentLang === 'zh' ? product.description_zh : product.description}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-2xl font-bold text-amber-700">$${product.price}</span>
+                            <button onclick="addToCart(${product.id})" class="text-sm font-semibold text-gray-600 hover:text-amber-700 transition-colors underline decoration-2 underline-offset-4 hover:decoration-amber-700">
+                                ${currentLang === 'zh' ? '加入購物車' : 'Add to Cart'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+
+        function filterProducts(category) {
+            document.querySelectorAll('.category-pill').forEach(pill => {
+                pill.classList.remove('active');
+                if (pill.textContent.toLowerCase() === category || (category === 'all' && (pill.textContent === '全部' || pill.textContent === 'All'))) {
+                    pill.classList.add('active');
+                }
+            });
+            renderProducts(category);
+        }
+
+
+        function addToCart(productId) {
+            const allProducts = [...ceremonialProducts, ...funeralProducts, ...wreathProducts, ...openingProducts, ...associationProducts, ...products];
+            const product = allProducts.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            
+            updateCartUI();
+            showToast(currentLang === 'zh' ? '已加入購物車！' : 'Added to cart!');
+        }
+
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartUI();
+                }
+            }
+        }
+
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cart-count');
+            const cartItems = document.getElementById('cart-items');
+            const cartFooter = document.getElementById('cart-footer');
+            const cartTotal = document.getElementById('cart-total');
+            
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            if (totalItems > 0) {
+                cartCount.textContent = totalItems;
+                cartCount.classList.remove('hidden');
+            } else {
+                cartCount.classList.add('hidden');
+            }
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center py-12 text-gray-400">
+                        <i class="fas fa-shopping-basket text-6xl mb-4 opacity-30"></i>
+                        <p>${currentLang === 'zh' ? '購物車是空的' : 'Your cart is empty'}</p>
+                        <button onclick="toggleCart(); document.getElementById('ceremonial').scrollIntoView({behavior: 'smooth'})" class="mt-4 text-amber-700 font-semibold hover:underline">${currentLang === 'zh' ? '開始選購' : 'Start Shopping'}</button>
+                    </div>
+                `;
+                cartFooter.classList.add('hidden');
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="flex gap-4 slide-in-right">
+                        <img src="${item.image}" alt="${currentLang === 'zh' ? item.name_zh : item.name}" class="w-24 h-24 object-cover rounded-xl">
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="font-serif font-bold text-gray-900">${currentLang === 'zh' ? item.name_zh : item.name}</h4>
+                                <button onclick="removeFromCart(${item.id})" class="text-gray-400 hover:text-red-500 transition-colors">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                            <p class="text-sm text-gray-500 mb-3">${currentLang === 'zh' ? item.description_zh : item.description}</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center border border-gray-200 rounded-lg">
+                                    <button onclick="updateQuantity(${item.id}, -1)" class="quantity-btn w-8 h-8 flex items-center justify-center text-gray-600 rounded-l-lg">-</button>
+                                    <span class="w-10 text-center font-semibold text-sm">${item.quantity}</span>
+                                    <button onclick="updateQuantity(${item.id}, 1)" class="quantity-btn w-8 h-8 flex items-center justify-center text-gray-600 rounded-r-lg">+</button>
+                                </div>
+                                <span class="font-bold text-amber-700">$${item.price * item.quantity}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                cartFooter.classList.remove('hidden');
+                cartTotal.textContent = `$${totalPrice}`;
+            }
+        }
+
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            
+            if (sidebar.classList.contains('translate-x-full')) {
+                sidebar.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                sidebar.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            toastMessage.textContent = message;
+            toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+            }, 3000);
+        }
+    </script>
 </body>
-
 </html>
