@@ -1,0 +1,7 @@
+schema_version: 1
+module_path: error_handling
+title: No error handling system (static site)
+scope: []
+source_files: []
+depends_on: []
+related_to: []

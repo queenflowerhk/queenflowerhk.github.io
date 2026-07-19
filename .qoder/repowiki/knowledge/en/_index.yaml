@@ -1,0 +1,67 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: en-US
+branch: main
+nodes_managed: true
+exported_at: "2026-07-19T14:35:00Z"
+modules:
+    "":
+        dir_name: Fujian Florist Marketing Site (GitHub Pages)
+        title: Fujian Florist Marketing Site (GitHub Pages)
+        scope:
+            - README.md
+            - docs/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    build_system:
+        dir_name: No build system — static site served directly from docs_
+        title: No build system — static site served directly from docs/
+        scope: []
+        source_files:
+            - docs/index.html
+            - docs/.nojekyll
+        children: []
+        depends_on: []
+        related_to: []
+    configuration_system:
+        dir_name: No configuration system — static single-page site
+        title: No configuration system — static single-page site
+        scope: []
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    dependency_management:
+        dir_name: No dependency management system
+        title: No dependency management system
+        scope: []
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    error_handling:
+        dir_name: No error handling system (static site)
+        title: No error handling system (static site)
+        scope: []
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    frontend_style:
+        dir_name: No Frontend Style System — Static HTML Site
+        title: No Frontend Style System — Static HTML Site
+        scope: []
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    logging_system:
+        dir_name: No logging system — static marketing site
+        title: No logging system — static marketing site
+        scope: []
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []

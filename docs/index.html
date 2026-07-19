@@ -761,11 +761,7 @@
                             <i class="fas fa-map-marker-alt text-amber-500"></i>
                             <span>九龍紅磡曲街2N號興利大廈地下西鋪</span>
                         </li>
-                        <li class="flex items-center space-x-3">
-                            <i class="fas fa-envelope text-amber-500"></i>
-                            <a href="mailto:hello@fujianflorist.com"
-                                class="hover:text-amber-400 transition-colors">hello@fujianflorist.com</a>
-                        </li>
+
                         <li class="flex items-center space-x-3">
                             <i class="fas fa-phone text-amber-500"></i>
                             <span>+852 2334 9706</span>
@@ -850,10 +846,10 @@
                 </div>
             </div>
             <p class="text-sm text-gray-500" data-i18n="cart_preorder">需提前3個工作天預訂。急單需$800起。</p>
-            <a id="checkout-email-link" href="#"
-                class="block w-full py-4 bg-amber-700 text-white rounded-xl font-semibold hover:bg-amber-800 transition-all hover:shadow-lg text-center"
-                data-i18n="cart_checkout">
-                前往結帳
+            <a id="checkout-whatsapp-link" href="#"
+                class="block w-full py-4 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition-all hover:shadow-lg text-center flex items-center justify-center gap-2">
+                <i class="fab fa-whatsapp text-xl"></i>
+                <span data-i18n="cart_checkout">WhatsApp 訂購</span>
             </a>
             <button onclick="toggleCart(); document.getElementById('ceremonial').scrollIntoView({behavior: 'smooth'})"
                 class="w-full py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:border-amber-700 hover:text-amber-700 transition-all"
@@ -968,14 +964,14 @@
                 footer_desc: "專營喜慶花牌、帛事花牌、開張花牌、社團花牌、畢業花牌及寵物花牌。三十年老字號，信譽保證。",
                 footer_services: "服務項目",
                 footer_contact: "聯絡我們",
-                footer_hours: "每日營業：上午7時至晚上9時",
+                footer_hours: "每日營業：上午9時至晚上7時",
                 footer_delivery: "送貨資訊",
                 cart_title: "您的購物車",
                 cart_empty: "購物車是空的",
                 cart_start: "開始選購",
                 cart_subtotal: "小計",
                 cart_preorder: "需提前3個工作天預訂。急單需$800起。",
-                cart_checkout: "前往結帳",
+                cart_checkout: "WhatsApp 訂購",
                 cart_continue: "繼續選購",
                 whatsapp_chat: "WhatsApp 查詢",
                 toast_added: "已加入購物車！"
@@ -1071,7 +1067,7 @@
                 cart_start: "Start Shopping",
                 cart_subtotal: "Subtotal",
                 cart_preorder: "3 working days pre-order required. Urgent orders $800+.",
-                cart_checkout: "Proceed to Checkout",
+                cart_checkout: "Order via WhatsApp",
                 cart_continue: "Continue Shopping",
                 whatsapp_chat: "Chat with Us",
                 toast_added: "Added to cart!"
@@ -1393,6 +1389,7 @@
                         </button>
                     </div>
                     <div class="p-6">
+                        <p class="text-xs text-gray-400 mb-1">${currentLang === 'zh' ? '產品編號' : 'Product No.'}: ${product.id}</p>
                         <h3 class="text-xl font-serif font-bold text-gray-900 mb-1">${currentLang === 'zh' ? product.name_zh : product.name}</h3>
                         <p class="text-sm text-gray-500 mb-3">${currentLang === 'zh' ? product.description_zh : product.description}</p>
                         <div class="flex items-center justify-between">
@@ -1478,29 +1475,22 @@
             }
         }
 
-        function generateEmailLink() {
-            const subject = currentLang === 'zh'
-                ? '【福建花店】訂單查詢 - 有意訂購花牌'
-                : '[Fujian Florist] Order Inquiry - Interested in Placing Order';
-
-            let body = currentLang === 'zh' ? '您好福建花店，\n\n我有意訂購以下花牌：\n\n' : 'Hello Fujian Florist,\n\nI am interested in ordering the following plaques:\n\n';
+        function generateWhatsAppLink() {
+            let message = currentLang === 'zh' ? '您好福建花店，我有意訂購以下花牌：\n\n' : 'Hello Fujian Florist, I would like to order the following plaques:\n\n';
 
             let total = 0;
             cart.forEach(item => {
                 const name = currentLang === 'zh' ? item.name_zh : item.name;
-                const line = currentLang === 'zh'
-                    ? `• ${name} x ${item.quantity} - $${item.price * item.quantity}\n`
-                    : `• ${name} x ${item.quantity} - $${item.price * item.quantity}\n`;
-                body += line;
+                const line = `[${currentLang === 'zh' ? '產品編號' : 'Product No.'}: ${item.id}] ${name} x ${item.quantity} - $${item.price * item.quantity}\n`;
+                message += line;
                 total += item.price * item.quantity;
             });
 
-            body += currentLang === 'zh'
-                ? `\n總計：$${total}\n\n請與我聯絡確認訂單詳情。\n\n謝謝！`
-                : `\nTotal: $${total}\n\nPlease contact me to confirm order details.\n\nThank you!`;
+            message += currentLang === 'zh'
+                ? `\n總計：$${total}\n\n請與我聯絡確認訂單詳情。謝謝！`
+                : `\nTotal: $${total}\n\nPlease contact me to confirm order details. Thank you!`;
 
-            const mailtoLink = `mailto:hello@fujianflorist.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            return mailtoLink;
+            return `https://wa.me/85291463455?text=${encodeURIComponent(message)}`;
         }
 
         function updateCartUI() {
@@ -1508,7 +1498,7 @@
             const cartItems = document.getElementById('cart-items');
             const cartFooter = document.getElementById('cart-footer');
             const cartTotal = document.getElementById('cart-total');
-            const checkoutLink = document.getElementById('checkout-email-link');
+            const checkoutLink = document.getElementById('checkout-whatsapp-link');
 
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -1535,7 +1525,7 @@
                         <img src="${item.image}" alt="${currentLang === 'zh' ? item.name_zh : item.name}" class="w-24 h-24 object-cover rounded-xl">
                         <div class="flex-1">
                             <div class="flex justify-between items-start mb-1">
-                                <h4 class="font-serif font-bold text-gray-900">${currentLang === 'zh' ? item.name_zh : item.name}</h4>
+                                <h4 class="font-serif font-bold text-gray-900"><span class="text-xs text-gray-400 font-sans font-normal">[${currentLang === 'zh' ? '產品編號' : 'Product No.'}: ${item.id}]</span> ${currentLang === 'zh' ? item.name_zh : item.name}</h4>
                                 <button onclick="removeFromCart(${item.id})" class="text-gray-400 hover:text-red-500 transition-colors">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
@@ -1555,9 +1545,9 @@
                 cartFooter.classList.remove('hidden');
                 cartTotal.textContent = `$${totalPrice}`;
 
-                // Update checkout email link
+                // Update checkout WhatsApp link
                 if (checkoutLink) {
-                    checkoutLink.href = generateEmailLink();
+                    checkoutLink.href = generateWhatsAppLink();
                 }
             }
         }

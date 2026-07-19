@@ -1,0 +1,1 @@
+Static HTML5 served by GitHub Pages; Tailwind CSS loaded from `cdn.tailwindcss.com` with an inline config; Google Fonts (Noto Serif TC / Noto Sans TC / Playfair Display / Inter); Font Awesome 6.4.0; vanilla JavaScript only — no bundler, no framework.
