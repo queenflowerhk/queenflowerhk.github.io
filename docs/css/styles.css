@@ -1,0 +1,146 @@
+body {
+    font-family: 'Noto Sans TC', 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Noto Serif TC', 'Playfair Display', serif;
+}
+
+[lang="en"] h1,
+[lang="en"] h2,
+[lang="en"] h3,
+[lang="en"] h4 {
+    font-family: 'Playfair Display', serif;
+}
+
+.floating-whatsapp {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.product-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+.product-image {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cart-slide {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in-right {
+    animation: slideInRight 0.4s ease-out forwards;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+.category-pill {
+    transition: all 0.3s ease;
+}
+
+.category-pill.active {
+    background-color: #b45309;
+    color: white;
+}
+
+.quantity-btn {
+    transition: all 0.2s ease;
+}
+
+.quantity-btn:hover {
+    background-color: #b45309;
+    color: white;
+}
+
+.overlay {
+    backdrop-filter: blur(4px);
+}
+
+.lang-btn {
+    transition: all 0.3s ease;
+}
+
+.lang-btn.active {
+    background-color: #b45309;
+    color: white;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #b45309;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #92400e;
+}
+
+.ribbon {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    z-index: 10;
+    overflow: hidden;
+    width: 100px;
+    height: 100px;
+    text-align: right;
+}
+
+.ribbon span {
+    font-size: 10px;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 20px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    width: 120px;
+    display: block;
+    background: #b45309;
+    box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+    position: absolute;
+    top: 22px;
+    right: -28px;
+}
+
+.hero-bg {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 30%, #fde68a 100%);
+}
