@@ -3,7 +3,21 @@
 <cite>
 **Referenced Files in This Document**
 - [index.html](file://docs/index.html)
+- [cart.js](file://docs/js/cart.js)
+- [main.js](file://docs/js/main.js)
+- [products.js](file://docs/js/products.js)
+- [components.js](file://docs/js/components.js)
+- [translations.json](file://docs/translations.json)
+- [products.json](file://docs/products.json)
 </cite>
+
+## Update Summary
+**Changes Made**
+- **Major Architectural Refactoring**: Complete separation of cart functionality into dedicated `cart.js` module with persistent localStorage storage
+- **Enhanced State Management**: Replaced in-memory arrays with robust localStorage-based persistence for cross-session cart continuity
+- **Improved Module Architecture**: Clean separation of concerns with dedicated modules for cart management, UI components, and business logic
+- **Enhanced Error Handling**: Robust error handling for storage operations with graceful fallback mechanisms
+- **Optimized Performance**: Efficient array operations and minimal DOM manipulation for better user experience
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -11,281 +25,409 @@
 3. [Core Components](#core-components)
 4. [Architecture Overview](#architecture-overview)
 5. [Detailed Component Analysis](#detailed-component-analysis)
-6. [Dependency Analysis](#dependency-analysis)
-7. [Performance Considerations](#performance-considerations)
-8. [Troubleshooting Guide](#troubleshooting-guide)
-9. [Conclusion](#conclusion)
+6. [Enhanced WhatsApp Integration](#enhanced-whatsapp-integration)
+7. [Dependency Analysis](#dependency-analysis)
+8. [Performance Considerations](#performance-considerations)
+9. [Troubleshooting Guide](#troubleshooting-guide)
+10. [Conclusion](#conclusion)
 
 ## Introduction
-This document explains the shopping cart sub-feature implemented in a single-page site for Fujian Florist. It covers:
-- In-memory cart state management using arrays
-- Quantity tracking and real-time price calculations
-- User interaction handlers for adding/removing items and adjusting quantities
-- Checkout flow via WhatsApp Business API (wa.me link generation)
-- UI persistence patterns within the page session
-- Common issues such as state synchronization and performance considerations for larger catalogs
+This document explains the enhanced shopping cart sub-feature implemented for Fujian Florist's single-page website. The implementation features a sophisticated cart system with persistent storage using localStorage, enhanced WhatsApp integration with detailed product information, and improved user experience through real-time updates and comprehensive product identification.
 
-The implementation is contained entirely within one HTML file with embedded CSS and JavaScript, making it straightforward to understand and maintain.
+Key enhancements include:
+- **Persistent Cart Storage**: Uses localStorage for cart data persistence across browser sessions and page reloads
+- **Modular Architecture**: Clean separation of cart functionality into dedicated `cart.js` module
+- **Enhanced Product Identification**: Each product displays its unique ID for precise ordering
+- **Improved WhatsApp Integration**: Detailed order messages with product numbers and complete itemization
+- **Real-time Price Calculations**: Instant updates for quantities and totals
+- **Multi-language Support**: Full Chinese and English localization
+- **Robust Error Handling**: Graceful fallback mechanisms for storage operations
+
+The modular architecture separates concerns into distinct JavaScript modules for cart management, UI components, product handling, and internationalization, providing maintainable and scalable code structure.
 
 ## Project Structure
-The shopping cart feature lives inside a single HTML file that includes:
-- Product catalog data arrays by category
-- A global in-memory cart array
-- Functions to render product cards and update the cart UI
-- Event-driven interactions for add/remove/quantity changes
-- WhatsApp checkout link generation
+The shopping cart feature is distributed across multiple modular files with clear separation of responsibilities:
 
 ```mermaid
 graph TB
-A["HTML Page<br/>docs/index.html"] --> B["Product Data Arrays<br/>by category"]
-A --> C["Cart State Array<br/>in-memory"]
-A --> D["UI Elements<br/>Sidebar, Count Badge, Totals"]
-A --> E["Event Handlers<br/>Add/Remove/Quantity"]
-A --> F["WhatsApp Link Generator<br/>Checkout Flow"]
-B --> E
-C --> E
-E --> D
-E --> F
+A["index.html<br/>Main HTML Structure"] --> B["cart.js<br/>Cart State Management & Persistence"]
+A --> C["main.js<br/>Main Controller & Business Logic"]
+A --> D["products.js<br/>Product Data & Rendering"]
+A --> E["components.js<br/>Shared UI Components"]
+A --> F["translations.json<br/>i18n Resources"]
+A --> G["products.json<br/>Product Catalog"]
+B --> H["localStorage<br/>Persistent Storage Layer"]
+C --> I["WhatsApp API<br/>Order Generation"]
+D --> J["Product Grids<br/>Category Display"]
+E --> K["Toast Notifications<br/>UI Feedback"]
 ```
 
 **Diagram sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1330-1330](file://docs/index.html#L1330-L1330)
-- [index.html:1446-1476](file://docs/index.html#L1446-L1476)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [index.html:695-700](file://docs/index.html#L695-L700)
+- [cart.js:1-69](file://docs/js/cart.js#L1-L69)
+- [main.js:1-134](file://docs/js/main.js#L1-L134)
+- [products.js:1-101](file://docs/js/products.js#L1-L101)
+- [components.js:1-72](file://docs/js/components.js#L1-L72)
 
 **Section sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1330-1330](file://docs/index.html#L1330-L1330)
-- [index.html:1446-1476](file://docs/index.html#L1446-L1476)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [index.html:695-700](file://docs/index.html#L695-L700)
+- [cart.js:1-69](file://docs/js/cart.js#L1-L69)
+- [main.js:1-134](file://docs/js/main.js#L1-L134)
+- [products.js:1-101](file://docs/js/products.js#L1-L101)
+- [components.js:1-72](file://docs/js/components.js#L1-L72)
 
 ## Core Components
-- Product catalog arrays: Each category has an array of product objects containing id, name(s), price, category, image, and description(s).
-- Cart state: A single in-memory array holds selected items with quantity.
-- UI rendering: Functions render product cards into category grids and rebuild the cart sidebar on state changes.
-- Interaction handlers: Add to cart, remove from cart, update quantity, toggle cart visibility, show toast notifications.
-- Checkout integration: Generates a WhatsApp message URL with itemized order details and total.
 
-Key responsibilities and relationships:
-- addToCart locates a product across all categories and updates the cart array.
-- removeFromCart filters out the item by id.
-- updateQuantity increments/decrements quantity and removes the item if quantity drops to zero.
-- generateWhatsAppLink builds a formatted message string and returns a wa.me URL.
-- updateCartUI recalculates totals and re-renders the cart sidebar and header badge.
+### Cart State Management Module (cart.js)
+The dedicated cart module provides a comprehensive API for managing shopping cart operations with persistent storage:
+
+- **Storage Strategy**: Uses localStorage with JSON serialization for cross-session persistence
+- **CRUD Operations**: Add, remove, update quantity, clear cart functionality
+- **Data Integrity**: Automatic validation and error handling for corrupted storage
+- **Performance Optimization**: Efficient array operations with minimal DOM manipulation
+- **Module Pattern**: Encapsulated state management with private helper functions
+
+### Main Controller Module (main.js)
+Orchestrates the entire shopping experience with business logic:
+
+- **Event Handling**: Centralized management of add/remove/update operations
+- **WhatsApp Integration**: Generates detailed order messages with product IDs and pricing
+- **UI Synchronization**: Real-time updates across cart sidebar, header badge, and totals
+- **Language Support**: Dynamic content switching between Chinese and English
+- **Initialization**: Coordinated loading of all dependencies and UI setup
+
+### Product Management System (products.js)
+Handles product catalog loading and rendering:
+
+- **Dynamic Loading**: Fetches product data from external JSON file
+- **Category Organization**: Groups products by type (ceremonial, funeral, opening, etc.)
+- **Visual Enhancement**: Category-specific badges and styling
+- **Search Functionality**: Efficient product lookup by ID across all categories
+
+### Shared UI Components (components.js)
+Provides reusable interface elements:
+
+- **Toast Notifications**: Non-intrusive feedback for user actions
+- **Cart Sidebar**: Slide-out panel with smooth animations
+- **Mobile Menu**: Responsive navigation for smaller screens
+- **Navbar Effects**: Scroll-based shadow transitions
 
 **Section sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1330-1330](file://docs/index.html#L1330-L1330)
-- [index.html:1446-1476](file://docs/index.html#L1446-L1476)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [cart.js:1-69](file://docs/js/cart.js#L1-L69)
+- [main.js:1-134](file://docs/js/main.js#L1-L134)
+- [products.js:1-101](file://docs/js/products.js#L1-L101)
+- [components.js:1-72](file://docs/js/components.js#L1-L72)
 
 ## Architecture Overview
-The cart follows a simple client-side MVC-like pattern:
-- Model: Product arrays and cart array
-- View: DOM elements for product grids, cart sidebar, header badge, and totals
-- Controller: Event handlers and functions that mutate model and update view
+The shopping cart follows a modular MVC-like pattern with clear separation of concerns and persistent storage:
 
 ```mermaid
 sequenceDiagram
 participant U as "User"
-participant P as "Product Card Button"
-participant C as "addToCart()"
-participant S as "Cart State Array"
-participant V as "updateCartUI()"
-participant W as "generateWhatsAppLink()"
-participant L as "WhatsApp Link"
+participant P as "Product Card"
+participant M as "Main Controller"
+participant C as "Cart Module"
+participant L as "localStorage"
+participant W as "WhatsApp Generator"
+participant UI as "UI Components"
 U->>P : Click "Add to Cart"
-P->>C : Call with productId
-C->>S : Find product and update/add item
-C->>V : Trigger UI refresh
-V-->>U : Update badge, sidebar, totals
-U->>L : Click "Order via WhatsApp"
-L->>W : Build message and URL
-W-->>U : Open wa.me chat with order details
+P->>M : handleAddToCart(productId)
+M->>C : addToCart(product)
+C->>L : Save cart data
+C-->>M : Return updated cart
+M->>UI : updateCartUI()
+UI-->>U : Refresh sidebar & badge
+U->>W : Click "Order via WhatsApp"
+W->>C : Get cart items
+W->>W : Generate formatted message
+W-->>U : Open wa.me link
 ```
 
 **Diagram sources**
-- [index.html:1446-1459](file://docs/index.html#L1446-L1459)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
+- [main.js:8-14](file://docs/js/main.js#L8-L14)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
+- [main.js:26-45](file://docs/js/main.js#L26-L45)
 
 ## Detailed Component Analysis
 
-### Cart State Management (In-Memory Arrays)
-- Global cart variable holds an array of items; each item mirrors product fields plus a quantity property.
-- On load, the cart starts empty and is updated only through explicit user actions.
-- No server or local storage persistence is used; cart resets on page reload.
+### Enhanced Cart State Management with Persistent Storage
 
-Complexity:
-- Adding an item: O(n) search over existing cart + O(1) push/update
-- Removing an item: O(n) filter
-- Updating quantity: O(n) find + O(1) mutation
-- Calculating totals: O(n) reduce
+**Updated** The cart system now uses localStorage for persistent storage instead of in-memory arrays, providing seamless cart continuity across page reloads and browser sessions.
 
-Optimization opportunities:
-- Maintain a Map keyed by product id for O(1) lookups when catalog grows large.
-- Batch DOM updates to avoid repeated reflows.
+#### Storage Architecture
+- **Storage Key**: `fujianFloristCart` for consistent data access
+- **Serialization**: JSON.stringify/parse for reliable data persistence
+- **Error Handling**: Graceful fallback to empty cart on storage corruption
+- **Atomic Updates**: Complete cart replacement ensures data consistency
+
+#### Core Operations
+```javascript
+// Add to cart with duplicate detection
+function addToCart(product) {
+    const cart = _load();
+    const existing = cart.find(item => item.id === product.id);
+    if (existing) {
+        existing.quantity++;
+    } else {
+        cart.push({ ...product, quantity: 1 });
+    }
+    _save(cart);
+    return cart;
+}
+```
+
+#### Performance Characteristics
+- **Add Operation**: O(n) search + O(1) push/update
+- **Remove Operation**: O(n) filter operation
+- **Quantity Update**: O(n) find + O(1) mutation
+- **Total Calculation**: O(n) reduce operation
 
 **Section sources**
-- [index.html:1330-1330](file://docs/index.html#L1330-L1330)
-- [index.html:1446-1459](file://docs/index.html#L1446-L1459)
-- [index.html:1461-1476](file://docs/index.html#L1461-L1476)
-- [index.html:1496-1505](file://docs/index.html#L1496-L1505)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
+- [cart.js:36-40](file://docs/js/cart.js#L36-L40)
+- [cart.js:42-53](file://docs/js/cart.js#L42-L53)
 
-### Quantity Tracking Mechanisms
-- When adding an item, if it already exists in the cart, its quantity increments; otherwise, a new entry is created with quantity 1.
-- The minus button decreases quantity; if quantity reaches zero or below, the item is removed automatically.
-- The UI reflects current quantity inline and recalculates per-item subtotal.
+### Enhanced Quantity Tracking Mechanisms
 
-Edge cases handled:
-- Prevents negative quantities by removing the item when quantity <= 0.
-- Ensures the cart badge hides when no items are present.
+The quantity tracking system provides intuitive controls with automatic boundary validation:
+
+#### Increment/Decrement Logic
+- **Automatic Removal**: Items automatically removed when quantity reaches zero or below
+- **Boundary Protection**: Prevents negative quantities through immediate removal
+- **Visual Feedback**: Real-time quantity display updates
+- **Price Recalculation**: Per-item subtotals update instantly
+
+#### Edge Case Handling
+- **Zero Quantity**: Triggers item removal from cart
+- **Negative Values**: Automatically corrected by removing the item
+- **Empty Cart**: Displays appropriate empty state messaging
+- **Storage Errors**: Graceful degradation to empty cart
 
 **Section sources**
-- [index.html:1446-1459](file://docs/index.html#L1446-L1459)
-- [index.html:1466-1476](file://docs/index.html#L1466-L1476)
-- [index.html:1506-1511](file://docs/index.html#L1506-L1511)
+- [cart.js:42-53](file://docs/js/cart.js#L42-L53)
+- [main.js:21-24](file://docs/js/main.js#L21-L24)
 
 ### Real-Time Price Calculations
-- Subtotal per item equals unit price multiplied by quantity.
-- Grand total is computed by summing per-item subtotals.
-- Both values update instantly after any cart change.
 
-Implementation notes:
-- Uses array reduce to compute totals efficiently.
-- Currency formatting is minimal; consider locale-aware formatting for production.
+The pricing system provides instant calculation updates across all cart operations:
 
-**Section sources**
-- [index.html:1503-1505](file://docs/index.html#L1503-L1505)
-- [index.html:1546-1546](file://docs/index.html#L1546-L1546)
+#### Subtotal Calculation
+- **Per-Item Pricing**: Unit price × quantity for each cart item
+- **Grand Total**: Sum of all per-item subtotals
+- **Currency Formatting**: Consistent dollar sign formatting
+- **Locale Support**: Multi-currency ready architecture
 
-### Integration with WhatsApp Business API (Checkout Flow)
-- The checkout action generates a pre-filled WhatsApp message listing each cart item with product number, name, quantity, and line total.
-- The final message includes a grand total and a polite closing.
-- The generated URL opens a WhatsApp chat with the shop’s number using wa.me.
-
-Flow:
-- User clicks “Order via WhatsApp”
-- System calls the link generator
-- Browser navigates to the constructed wa.me URL
-
-Notes:
-- This uses the public wa.me web interface rather than the official WhatsApp Business Cloud API. For automated processing, backend integration would be required.
+#### Performance Optimization
+- **Efficient Reduction**: Single-pass calculation using Array.reduce()
+- **Cached Totals**: Reuse calculated values where possible
+- **Minimal DOM Updates**: Batched UI updates to prevent reflows
 
 **Section sources**
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
-- [index.html:1549-1551](file://docs/index.html#L1549-L1551)
+- [cart.js:59-61](file://docs/js/cart.js#L59-L61)
+- [main.js:101](file://docs/js/main.js#L101)
 
-### User Interaction Handlers
-- Add to cart: Invoked from product card buttons; finds product across all categories and updates cart state.
-- Remove from cart: Filters out the item by id and refreshes UI.
-- Update quantity: Adjusts quantity and triggers removal if needed.
-- Toggle cart: Shows/hides the slide-in sidebar and manages body scroll lock.
-- Toast notification: Provides brief feedback when items are added.
+### Enhanced User Interaction Handlers
 
-Accessibility and UX:
-- Clear visual feedback via badge count and toast messages.
-- Smooth transitions for sidebar open/close.
+The interaction system provides comprehensive event handling with smooth user feedback:
 
-**Section sources**
-- [index.html:1446-1459](file://docs/index.html#L1446-L1459)
-- [index.html:1461-1476](file://docs/index.html#L1461-L1476)
-- [index.html:1555-1568](file://docs/index.html#L1555-L1568)
-- [index.html:1575-1585](file://docs/index.html#L1575-L1585)
+#### Add to Cart Flow
+1. **Product Lookup**: Find product by ID across all categories
+2. **State Update**: Add or increment item in cart
+3. **Persistence**: Save to localStorage immediately
+4. **UI Refresh**: Update sidebar, badge, and totals
+5. **User Feedback**: Show toast notification
 
-### Cart Persistence Patterns
-- Current implementation does not persist cart across sessions.
-- To persist, consider localStorage or sessionStorage:
-  - Save cart on every mutation
-  - Load cart on DOMContentLoaded
-  - Handle serialization/deserialization safely
+#### Remove from Cart Flow
+1. **Filter Operation**: Remove item by ID from cart array
+2. **State Persistence**: Save updated cart to storage
+3. **UI Synchronization**: Refresh all affected UI elements
+4. **Empty State**: Handle empty cart display appropriately
 
-Trade-offs:
-- localStorage persists across tabs and sessions but requires careful parsing and migration strategies.
-- sessionStorage clears on tab close and may better reflect a single browsing session.
+#### Quantity Adjustment Flow
+1. **Delta Application**: Apply +/- quantity change
+2. **Validation**: Check for zero/negative quantities
+3. **Conditional Removal**: Remove item if quantity ≤ 0
+4. **Update Persistence**: Save changes to storage
+5. **UI Refresh**: Update quantities and prices
 
 **Section sources**
-- [index.html:1330-1330](file://docs/index.html#L1330-L1330)
-- [index.html:1332-1341](file://docs/index.html#L1332-L1341)
+- [main.js:8-24](file://docs/js/main.js#L8-L24)
+- [components.js:53-63](file://docs/js/components.js#L53-L63)
 
-### Concrete Examples from Codebase
-- Adding an item: See the function that searches all products and updates the cart array, then refreshes UI and shows a toast.
-- Removing an item: See the filter-based removal followed by UI refresh.
-- Adjusting quantity: See the increment/decrement logic with automatic removal at zero.
-- Generating checkout link: See the message builder and URL construction.
-- Rendering cart UI: See the full sidebar rebuild including totals and WhatsApp link update.
+### Enhanced Cart Persistence Patterns
+
+**Updated** The cart system now implements robust persistence using localStorage instead of session-only memory storage.
+
+#### Storage Strategy Benefits
+- **Cross-Session Persistence**: Cart survives browser restarts
+- **Tab Synchronization**: Multiple tabs share same cart state
+- **Data Recovery**: Automatic recovery from storage errors
+- **Performance**: Fast local storage access vs. network requests
+
+#### Implementation Details
+- **Serialization**: JSON format for reliable data transfer
+- **Error Handling**: Try-catch blocks for storage operations
+- **Fallback Strategy**: Empty cart initialization on errors
+- **Migration Ready**: Easy schema updates for future changes
 
 **Section sources**
-- [index.html:1446-1459](file://docs/index.html#L1446-L1459)
-- [index.html:1461-1476](file://docs/index.html#L1461-L1476)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [cart.js:8-18](file://docs/js/cart.js#L8-L18)
+- [cart.js:63-65](file://docs/js/cart.js#L63-L65)
+
+## Enhanced WhatsApp Integration
+
+The WhatsApp integration generates detailed order messages with structured product information for better customer communication.
+
+### Enhanced Order Message Format
+
+The checkout system generates comprehensive WhatsApp messages with structured product information:
+
+#### Message Structure
+```
+您好福建花店，我有意訂購以下花牌：
+
+[產品編號: 201] 豪華雙喜婚慶花牌 x 2 - $1376
+[產品編號: 102] 高雅立式花牌 - 恩典 x 1 - $880
+
+總計：$2256
+
+請與我聯絡確認訂單詳情。謝謝！
+```
+
+#### Key Enhancements
+- **Product Number Display**: Each item includes its unique ID in brackets
+- **Structured Layout**: Clear separation between items and totals
+- **Bilingual Support**: Automatic language switching based on user preference
+- **Professional Formatting**: Clean, readable message structure
+
+### Checkout Flow Implementation
+
+The checkout process includes enhanced product identification and improved customer communication.
+
+#### Message Generation Process
+1. **Language Detection**: Determine user's preferred language
+2. **Header Creation**: Generate appropriate greeting message
+3. **Item Iteration**: Loop through cart items with product details
+4. **ID Inclusion**: Add product numbers for precise ordering
+5. **Price Calculation**: Compute line totals and grand total
+6. **Footer Addition**: Include closing message and contact request
+
+#### URL Construction
+- **Base URL**: `https://wa.me/85291463455`
+- **Message Encoding**: Proper URL encoding for special characters
+- **Character Limits**: Handles long product lists efficiently
+
+**Section sources**
+- [main.js:26-45](file://docs/js/main.js#L26-L45)
+- [translations.json:195-196](file://docs/translations.json#L195-L196)
 
 ## Dependency Analysis
-High-level dependencies among components:
-- Product arrays feed both product rendering and cart operations.
-- Cart state drives UI updates and checkout link generation.
-- UI elements depend on IDs and classes defined in the HTML.
+
+The enhanced shopping cart system maintains clean dependency relationships with the new modular architecture:
 
 ```mermaid
 graph LR
-PA["Product Arrays"] --> AC["addToCart()"]
-CA["Cart Array"] --> AC
-AC --> CU["updateCartUI()"]
-CU --> UI["DOM Elements"]
-CU --> WL["WhatsApp Link"]
-WL --> WA["wa.me URL"]
+A["Products Module"] --> B["Main Controller"]
+C["Cart Module"] --> B
+D["Components Module"] --> B
+E["Translations Module"] --> B
+B --> F["DOM Elements"]
+B --> G["WhatsApp Integration"]
+C --> H["localStorage"]
+A --> I["products.json"]
+E --> J["translations.json"]
 ```
 
 **Diagram sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1330-1330](file://docs/index.html#L1330-L1330)
-- [index.html:1446-1459](file://docs/index.html#L1446-L1459)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
+- [main.js:119-127](file://docs/js/main.js#L119-L127)
+- [cart.js:67](file://docs/js/cart.js#L67)
+- [products.js:99](file://docs/js/products.js#L99)
+
+### Module Dependencies
+- **Main Controller**: Depends on Products, Cart, Components, and Translations modules
+- **Cart Module**: Independent storage layer with no external dependencies
+- **Products Module**: External data source (products.json) and Translations module
+- **Components Module**: DOM manipulation utilities with no internal dependencies
+- **Translations Module**: External resource (translations.json) for i18n support
 
 **Section sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1330-1330](file://docs/index.html#L1330-L1330)
-- [index.html:1446-1459](file://docs/index.html#L1446-L1459)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [main.js:119-127](file://docs/js/main.js#L119-L127)
+- [cart.js:67](file://docs/js/cart.js#L67)
+- [products.js:99](file://docs/js/products.js#L99)
 
 ## Performance Considerations
-Current approach is efficient for small catalogs:
-- Search across concatenated arrays is O(n) per add operation.
-- DOM rebuilds occur on each cart mutation.
 
-Recommendations for larger catalogs:
-- Index products by id in a Map for O(1) lookup.
-- Use a virtualized list or pagination for product grids.
-- Debounce rapid UI updates if multiple mutations happen quickly.
-- Avoid unnecessary re-renders by diffing before updating innerHTML.
-- Precompute derived data (e.g., totals) only when needed.
+### Storage Performance
+- **localStorage Access**: Optimized for frequent read/write operations
+- **JSON Serialization**: Efficient string conversion for complex objects
+- **Memory Management**: Minimal memory footprint with garbage collection
 
-[No sources needed since this section provides general guidance]
+### UI Performance
+- **Batched Updates**: DOM mutations grouped to minimize reflows
+- **Event Delegation**: Efficient event handling for dynamic elements
+- **Lazy Loading**: Product images loaded on demand
+
+### Scalability Considerations
+- **Array Operations**: Current implementation efficient for small-medium catalogs
+- **Future Optimization**: Consider Map-based lookups for large product collections
+- **Pagination Ready**: Architecture supports infinite scroll for extensive catalogs
 
 ## Troubleshooting Guide
-Common issues and resolutions:
-- Cart not updating: Ensure updateCartUI is called after any cart mutation. Verify element IDs exist in the DOM.
-- Duplicate items: Confirm addToCart checks for existing id and increments quantity instead of pushing duplicates.
-- Negative quantities: Validate updateQuantity removes items when quantity <= 0.
-- Incorrect totals: Check reduce logic for summing quantities and prices.
-- WhatsApp link not updating: Ensure generateWhatsAppLink is invoked and assigned to the checkout link element during updateCartUI.
 
-Operational tips:
-- Use browser DevTools to inspect the cart array and verify mutations.
-- Temporarily log key variables (cart length, totals) to confirm calculations.
+### Common Issues and Solutions
+
+#### Cart Not Persisting
+- **Check localStorage**: Verify browser storage permissions
+- **Validate JSON**: Ensure cart data is properly serialized
+- **Storage Quota**: Monitor storage usage limits
+
+#### WhatsApp Link Not Working
+- **URL Encoding**: Verify proper character encoding
+- **Phone Number**: Confirm correct WhatsApp business number
+- **Message Length**: Check for excessive message length
+
+#### Product Numbers Not Displaying
+- **Translation Keys**: Verify `product_no` translation exists
+- **Product Data**: Ensure all products have valid IDs
+- **Language Switching**: Test both Chinese and English modes
+
+#### Performance Issues with Large Carts
+- **Array Operations**: Consider optimizing find/filter operations
+- **DOM Updates**: Implement virtual scrolling for many items
+- **Storage Size**: Monitor localStorage growth
+
+### Debugging Tips
+- **Console Logging**: Add temporary logs for cart state inspection
+- **Network Tab**: Monitor localStorage operations
+- **Element Inspector**: Verify DOM structure updates
+- **Performance Profiler**: Identify bottlenecks in cart operations
 
 **Section sources**
-- [index.html:1446-1459](file://docs/index.html#L1446-L1459)
-- [index.html:1466-1476](file://docs/index.html#L1466-L1476)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
+- [cart.js:8-18](file://docs/js/cart.js#L8-L18)
+- [main.js:26-45](file://docs/js/main.js#L26-L45)
+- [main.js:47-107](file://docs/js/main.js#L47-L107)
 
 ## Conclusion
-The shopping cart is a lightweight, client-side feature built around in-memory arrays and direct DOM manipulation. It supports core e-commerce interactions—adding/removing items, adjusting quantities, and calculating totals—and integrates with WhatsApp for order initiation via a pre-filled message. For production-scale catalogs and persistent carts, consider indexing strategies, virtualization, and storage mechanisms while preserving the simplicity and clarity of the current design.
+
+The enhanced shopping cart implementation represents a significant architectural upgrade from basic in-memory storage to a robust, modular e-commerce solution. The major improvements include:
+
+### Major Enhancements
+- **Persistent Storage**: Seamless cart continuity across sessions using localStorage
+- **Modular Architecture**: Clean separation of concerns with dedicated cart.js module
+- **Enhanced Product Identification**: Unique product numbers for precise ordering
+- **Improved WhatsApp Integration**: Detailed order messages with structured formatting
+- **Robust Error Handling**: Graceful fallback mechanisms for storage operations
+
+### Technical Achievements
+- **Performance Optimization**: Efficient array operations and minimal DOM manipulation
+- **Error Handling**: Robust fallback mechanisms for storage and data integrity
+- **Internationalization**: Full bilingual support with dynamic language switching
+- **Responsive Design**: Mobile-first approach with smooth animations
+
+### Future Considerations
+- **Advanced Analytics**: Track cart abandonment and popular products
+- **Payment Integration**: Expand beyond WhatsApp to direct payment processing
+- **Inventory Management**: Real-time stock level synchronization
+- **Customer Accounts**: Persistent user profiles and order history
+
+The implementation successfully balances simplicity with advanced functionality, providing a solid foundation for the florist's online ordering system while maintaining excellent performance and user experience through the new modular architecture.

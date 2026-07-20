@@ -1,8 +1,9 @@
 schema_version: 1
 module_path: ""
-title: Fujian Florist Marketing Site (GitHub Pages)
+title: Fujian Florist Static Site (docs/)
 scope:
     - README.md
+    - _serve.js
     - docs/
 source_files: []
 depends_on: []

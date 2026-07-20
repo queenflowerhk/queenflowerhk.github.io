@@ -2,27 +2,41 @@
 
 <cite>
 **Referenced Files in This Document**
+- [translations.js](file://docs/js/translations.js)
+- [translations.json](file://docs/translations.json)
+- [main.js](file://docs/js/main.js)
+- [components.js](file://docs/js/components.js)
 - [index.html](file://docs/index.html)
+- [styles.css](file://docs/css/styles.css)
 </cite>
+
+## Update Summary
+**Changes Made**
+- Updated architecture overview to reflect new modular translation system
+- Replaced inline translation objects with JSON-based structure
+- Enhanced language switching mechanism with async loading and persistence
+- Improved content organization with dedicated modules
+- Added comprehensive examples for the new translation workflow
 
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Architecture Overview](#architecture-overview)
-3. [Translation Object Structure](#translation-object-structure)
-4. [Dynamic Language Switching Mechanism](#dynamic-language-switching-mechanism)
-5. [Font Family Adaptation](#font-family-adaptation)
-6. [Contextual Content Replacement Patterns](#contextual-content-replacement-patterns)
-7. [Language Toggle and UI Updates](#language-toggle-and-ui-updates)
-8. [Adding New Languages](#adding-new-languages)
-9. [Managing Translations](#managing-translations)
-10. [Language-Specific Formatting](#language-specific-formatting)
-11. [Common Issues and Solutions](#common-issues-and-solutions)
-12. [Cultural Adaptations](#cultural-adaptations)
-13. [Best Practices](#best-practices)
+3. [Translation Module Structure](#translation-module-structure)
+4. [JSON Translation File Organization](#json-translation-file-organization)
+5. [Dynamic Language Switching Mechanism](#dynamic-language-switching-mechanism)
+6. [Font Family Adaptation](#font-family-adaptation)
+7. [Contextual Content Replacement Patterns](#contextual-content-replacement-patterns)
+8. [Language Toggle and UI Updates](#language-toggle-and-ui-updates)
+9. [Adding New Languages](#adding-new-languages)
+10. [Managing Translations](#managing-translations)
+11. [Language-Specific Formatting](#language-specific-formatting)
+12. [Common Issues and Solutions](#common-issues-and-solutions)
+13. [Cultural Adaptations](#cultural-adaptations)
+14. [Best Practices](#best-practices)
 
 ## Introduction
 
-The internationalization (i18n) system in this project provides comprehensive bilingual support for Traditional Chinese (zh-Hant) and English (en). The implementation uses a client-side JavaScript approach with data attributes for dynamic content replacement, enabling seamless language switching without page reloads.
+The internationalization (i18n) system in this project provides comprehensive bilingual support for Traditional Chinese (zh-Hant) and English (en). The implementation has been overhauled to use a modular architecture with dedicated JavaScript modules and JSON-based translation files, enabling scalable and maintainable multilingual support without page reloads.
 
 The system supports:
 - Static text content through data-i18n attributes
@@ -30,10 +44,11 @@ The system supports:
 - Font family adaptation for different languages
 - Cultural formatting and messaging
 - Real-time UI updates upon language switching
+- Persistent language preferences across sessions
 
 ## Architecture Overview
 
-The internationalization system follows a simple yet effective architecture:
+The internationalization system follows a modular architecture with clear separation of concerns:
 
 ```mermaid
 graph TB
@@ -43,9 +58,13 @@ Buttons[Language Toggle<br/>Buttons]
 Products[Product Cards<br/>Dynamic Content]
 end
 subgraph "Core i18n Engine"
-Translations[Translations Object<br/>zh/en dictionaries]
+TranslationsModule[Translations Module<br/>Async Loading]
 CurrentLang[Current Language<br/>State Management]
 setLanguage[setLanguage Function<br/>Core Logic]
+end
+subgraph "Data Layer"
+JSONFile[translations.json<br/>Static Data]
+LocalStorage[localStorage<br/>Persistence]
 end
 subgraph "Rendering Layer"
 DOMUpdater[DOM Updater<br/>querySelectorAll]
@@ -63,26 +82,95 @@ setLanguage --> CartUI
 DOMUpdater --> HTML
 ProductRenderer --> Products
 CartUI --> Buttons
-CurrentLang --> setLanguage
-Translations --> setLanguage
+TranslationsModule --> CurrentLang
+TranslationsModule --> JSONFile
+TranslationsModule --> LocalStorage
 Fonts --> CSSRules
 CSSRules --> HTML
 ```
 
 **Diagram sources**
-- [index.html:882-1075](file://docs/index.html#L882-L1075)
-- [index.html:1353-1374](file://docs/index.html#L1353-L1374)
-- [index.html:1376-1404](file://docs/index.html#L1376-L1404)
+- [translations.js:5-54](file://docs/js/translations.js#L5-L54)
+- [main.js:110-127](file://docs/js/main.js#L110-L127)
+- [index.html:72-77](file://docs/index.html#L72-L77)
 
-## Translation Object Structure
+## Translation Module Structure
 
-The translation system uses a hierarchical object structure with two primary language keys (`zh` and `en`) containing nested key-value pairs:
+The translation system is now implemented as a dedicated module with clear responsibilities:
 
-### Core Translation Keys
+### Core Module Functions
 
-| Category | Key Pattern | Example Usage |
-|----------|-------------|---------------|
-| Brand & Navigation | `brand_*`, `nav_*` | Brand names, menu items |
+| Function | Purpose | Parameters | Returns |
+|----------|---------|------------|---------|
+| `load()` | Async load translations from JSON | None | Promise<void> |
+| `getLang()` | Get current language | None | string |
+| `t(key)` | Translate a key | string key | string |
+| `apply()` | Apply translations to DOM | None | void |
+| `setLanguage(lang)` | Set language and update UI | string lang | void |
+
+### Module Implementation
+
+```javascript
+const Translations = (() => {
+    let translations = {};
+    let currentLang = 'zh';
+
+    async function load() {
+        const res = await fetch('translations.json');
+        translations = await res.json();
+        // Restore saved language preference
+        const saved = localStorage.getItem('fujianFloristLang');
+        if (saved && translations[saved]) {
+            currentLang = saved;
+        }
+    }
+
+    function t(key) {
+        return (translations[currentLang] && translations[currentLang][key]) || key;
+    }
+
+    function apply() {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            const value = t(key);
+            if (value !== key) {
+                el.textContent = value;
+            }
+        });
+
+        // Update lang buttons
+        const zhBtn = document.getElementById('lang-zh');
+        const enBtn = document.getElementById('lang-en');
+        if (zhBtn) zhBtn.classList.toggle('active', currentLang === 'zh');
+        if (enBtn) enBtn.classList.toggle('active', currentLang === 'en');
+
+        // Update document lang attribute
+        document.documentElement.lang = currentLang === 'zh' ? 'zh-Hant' : 'en';
+    }
+
+    function setLanguage(lang) {
+        if (!translations[lang]) return;
+        currentLang = lang;
+        localStorage.setItem('fujianFloristLang', lang);
+        apply();
+    }
+
+    return { load, getLang, t, apply, setLanguage };
+})();
+```
+
+**Section sources**
+- [translations.js:5-54](file://docs/js/translations.js#L5-L54)
+
+## JSON Translation File Organization
+
+The translation data is now stored in a structured JSON file with hierarchical organization:
+
+### Translation Categories
+
+| Category | Keys | Description |
+|----------|------|-------------|
+| Brand & Navigation | `brand_name`, `nav_*` | Brand names and menu items |
 | Hero Section | `hero_*` | Main headline and descriptions |
 | Categories | `cat_*` | Product category labels |
 | Sections | `section_*` | Section titles and descriptions |
@@ -93,69 +181,94 @@ The translation system uses a hierarchical object structure with two primary lan
 | Cart | `cart_*` | Shopping cart interface |
 | UI Feedback | `toast_*`, `whatsapp_*` | User interaction messages |
 
-### Translation Data Structure
+### JSON Structure Example
 
-```javascript
-const translations = {
-    zh: {
-        brand_name: "福建花店",
-        nav_ceremonial: "喜慶花牌",
-        hero_title_1: "喜事白事",
-        // ... 90+ translation keys
-    },
-    en: {
-        brand_name: "Fujian Florist",
-        nav_ceremonial: "Ceremonial",
-        hero_title_1: "Red & White",
-        // ... 90+ translation keys
-    }
-};
+```json
+{
+  "zh": {
+    "brand_name": "福建花店",
+    "nav_ceremonial": "喜慶花牌",
+    "hero_title_1": "喜事白事",
+    "hero_title_2": "一站俱全",
+    "hero_desc": "福建花店專營各類喜慶花牌、帛事花牌、中西花圈、開張花牌、社團花牌、畢業花牌及寵物花牌。三十年經驗，信譽保證，需提前5天前預訂。",
+    "btn_shop": "立即選購",
+    "btn_whatsapp": "WhatsApp 查詢",
+    "tag_1": "5天前預訂",
+    "tag_2": "免費代寫輓聯",
+    "tag_3": "三十年經驗",
+    "cat_ceremonial": "喜慶花牌",
+    "cat_ceremonial_desc": "祝壽賀喜",
+    // ... additional keys
+  },
+  "en": {
+    "brand_name": "Fujian Florist",
+    "nav_ceremonial": "Ceremonial",
+    "hero_title_1": "Red & White",
+    "hero_title_2": "All in One Place",
+    "hero_desc": "Fujian Florist specializes in ceremonial plaques, funeral plaques, Chinese/Western wreaths, grand opening plaques, association plaques, graduation plaques and pet memorial plaques. 30 years of experience. 5 days pre-order required.",
+    "btn_shop": "Shop Now",
+    "btn_whatsapp": "WhatsApp Inquiry",
+    "tag_1": "5 days Pre-order",
+    "tag_2": "Free Eulogy Writing",
+    "tag_3": "30 Years Experience",
+    "cat_ceremonial": "Ceremonial",
+    "cat_ceremonial_desc": "Weddings",
+    // ... additional keys
+  }
+}
 ```
 
 **Section sources**
-- [index.html:882-1075](file://docs/index.html#L882-L1075)
+- [translations.json:1-199](file://docs/translations.json#L1-L199)
 
 ## Dynamic Language Switching Mechanism
 
-The core language switching functionality is implemented through the `setLanguage()` function, which handles multiple aspects of the internationalization process:
+The core language switching functionality is implemented through the enhanced `setLanguage()` function with improved state management and persistence:
 
-### Language State Management
+### Language State Management Flow
 
 ```mermaid
 sequenceDiagram
 participant User as User
 participant Button as Language Button
-participant Engine as setLanguage()
+participant Main as Main.setLanguage()
+participant Translations as Translations.setLanguage()
+participant Storage as localStorage
 participant DOM as DOM Updater
 participant Renderer as Product Renderer
 participant UI as Cart UI
 User->>Button : Click Language Toggle
-Button->>Engine : setLanguage('en'/'zh')
-Engine->>Engine : Update currentLang state
-Engine->>Engine : Toggle button active states
-Engine->>Engine : Update html lang attribute
-Engine->>DOM : Query all [data-i18n] elements
+Button->>Main : setLanguage('en'/'zh')
+Main->>Translations : setLanguage(lang)
+Translations->>Translations : Update currentLang state
+Translations->>Storage : Save language preference
+Translations->>Translations : Toggle button active states
+Translations->>Translations : Update html lang attribute
+Translations->>DOM : Query all [data-i18n] elements
 DOM->>DOM : Replace textContent with translations
-Engine->>Renderer : Re-render all product grids
-Engine->>UI : Update cart interface
+Main->>Renderer : Re-render all product grids
+Main->>UI : Update cart interface
 UI->>User : Display updated content
 ```
 
 **Diagram sources**
-- [index.html:1353-1374](file://docs/index.html#L1353-L1374)
+- [main.js:110-115](file://docs/js/main.js#L110-L115)
+- [translations.js:46-51](file://docs/js/translations.js#L46-L51)
 
-### Implementation Details
+### Enhanced Implementation Details
 
-The `setLanguage()` function performs these critical operations:
+The improved `setLanguage()` function performs these critical operations:
 
-1. **State Update**: Sets the current language and updates button visual states
-2. **Document Language**: Updates the `<html>` element's `lang` attribute for accessibility
-3. **Static Content**: Uses `querySelectorAll('[data-i18n]')` to find and update all translatable elements
-4. **Dynamic Content**: Re-renders product grids and cart interface with language context
-5. **Persistence**: Maintains user preference throughout the session
+1. **Validation**: Checks if the target language exists in loaded translations
+2. **State Update**: Sets the current language and persists it to localStorage
+3. **Document Language**: Updates the `<html>` element's `lang` attribute for accessibility
+4. **Static Content**: Uses `querySelectorAll('[data-i18n]')` to find and update all translatable elements
+5. **Dynamic Content**: Triggers re-rendering of product grids and cart interface with language context
+6. **Visual Feedback**: Updates language toggle button active states
 
 **Section sources**
-- [index.html:1353-1374](file://docs/index.html#L1353-L1374)
+- [main.js:110-115](file://docs/js/main.js#L110-L115)
+- [translations.js:46-51](file://docs/js/translations.js#L46-L51)
 
 ## Font Family Adaptation
 
@@ -194,8 +307,8 @@ The system loads multiple font families to ensure optimal rendering across langu
 | English | Inter / Playfair Display | - | Latin character optimization |
 
 **Section sources**
-- [index.html:17-20](file://docs/index.html#L17-L20)
-- [index.html:40-56](file://docs/index.html#L40-L56)
+- [index.html:18-21](file://docs/index.html#L18-L21)
+- [styles.css:1-14](file://docs/css/styles.css#L1-L14)
 
 ## Contextual Content Replacement Patterns
 
@@ -237,8 +350,8 @@ ${currentLang === 'zh' ? product.description_zh : product.description}
 ```
 
 **Section sources**
-- [index.html:221-224](file://docs/index.html#L221-L224)
-- [index.html:1376-1404](file://docs/index.html#L1376-L1404)
+- [index.html:45-48](file://docs/index.html#L45-L48)
+- [main.js:34-36](file://docs/js/main.js#L34-L36)
 
 ## Language Toggle and UI Updates
 
@@ -260,8 +373,8 @@ The language toggle mechanism provides immediate feedback and maintains consiste
 The system manages active states through CSS classes:
 
 ```javascript
-document.getElementById('lang-zh').classList.toggle('active', lang === 'zh');
-document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+document.getElementById('lang-zh').classList.toggle('active', currentLang === 'zh');
+document.getElementById('lang-en').classList.toggle('active', currentLang === 'en');
 ```
 
 ### Active State Styling
@@ -274,24 +387,24 @@ document.getElementById('lang-en').classList.toggle('active', lang === 'en');
 ```
 
 **Section sources**
-- [index.html:248-253](file://docs/index.html#L248-L253)
-- [index.html:1355-1356](file://docs/index.html#L1355-L1356)
-- [index.html:150-153](file://docs/index.html#L150-L153)
+- [index.html:72-77](file://docs/index.html#L72-L77)
+- [translations.js:37-40](file://docs/js/translations.js#L37-L40)
+- [styles.css:89-92](file://docs/css/styles.css#L89-L92)
 
 ## Adding New Languages
 
 To add support for a new language (e.g., Simplified Chinese), follow these steps:
 
-### Step 1: Extend Translation Object
+### Step 1: Extend JSON Translation File
 
-Add a new language key to the translations object:
+Add a new language object to the translations.json file:
 
-```javascript
-const translations = {
-    zh: { /* Traditional Chinese */ },
-    en: { /* English */ },
-    zh_cn: { /* Simplified Chinese - NEW */ }
-};
+```json
+{
+  "zh": { /* Traditional Chinese */ },
+  "en": { /* English */ },
+  "zh_cn": { /* Simplified Chinese - NEW */ }
+}
 ```
 
 ### Step 2: Add Language Toggle Button
@@ -319,10 +432,20 @@ Modify the `setLanguage()` function if needed for special handling:
 
 ```javascript
 function setLanguage(lang) {
+    if (!translations[lang]) return;
     currentLang = lang;
-    document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 
-                                   lang === 'zh_cn' ? 'zh-Hans' : 'en';
-    // ... rest of implementation
+    localStorage.setItem('fujianFloristLang', lang);
+    
+    // Update document lang attribute for new language
+    if (lang === 'zh_cn') {
+        document.documentElement.lang = 'zh-Hans';
+    } else if (lang === 'zh') {
+        document.documentElement.lang = 'zh-Hant';
+    } else {
+        document.documentElement.lang = 'en';
+    }
+    
+    apply();
 }
 ```
 
@@ -459,16 +582,17 @@ function safeTranslate(key, lang) {
 
 **Issue**: Large translation objects may impact initial load time.
 
-**Solution**: Implement lazy loading or code splitting:
+**Solution**: The current implementation already uses efficient JSON loading:
 
 ```javascript
-// Lazy load translations
-async function loadTranslations(lang) {
-    if (!translations[lang]) {
-        const response = await fetch(`/translations/${lang}.json`);
-        translations[lang] = await response.json();
+async function load() {
+    const res = await fetch('translations.json');
+    translations = await res.json();
+    // Restore saved language preference
+    const saved = localStorage.getItem('fujianFloristLang');
+    if (saved && translations[saved]) {
+        currentLang = saved;
     }
-    return translations[lang];
 }
 ```
 
@@ -509,14 +633,14 @@ The system demonstrates cultural sensitivity in funeral-related content:
 
 Consider implementing regional variants for broader coverage:
 
-```javascript
-const translations = {
-    zh_hk: { /* Hong Kong Traditional Chinese */ },
-    zh_tw: { /* Taiwan Traditional Chinese */ },
-    zh_sg: { /* Singapore Traditional Chinese */ },
-    en_us: { /* US English */ },
-    en_gb: { /* UK English */ }
-};
+```json
+{
+  "zh_hk": { /* Hong Kong Traditional Chinese */ },
+  "zh_tw": { /* Taiwan Traditional Chinese */ },
+  "zh_sg": { /* Singapore Traditional Chinese */ },
+  "en_us": { /* US English */ },
+  "en_gb": { /* UK English */ }
+}
 ```
 
 ## Best Practices
@@ -541,9 +665,7 @@ button1: "Click me"
 Separate concerns between structure, styling, and logic:
 
 ```javascript
-// Keep translations centralized
-const translations = { /* all translations */ };
-
+// Keep translations centralized in JSON
 // Separate rendering logic
 function renderProductCard(product, index) {
     // Pure rendering logic
@@ -562,10 +684,10 @@ Implement testing strategies for internationalization:
 ```javascript
 // Test language switching
 function testLanguageSwitch() {
-    setLanguage('en');
+    Translations.setLanguage('en');
     assert(document.querySelector('[data-i18n="brand_name"]').textContent === 'Fujian Florist');
     
-    setLanguage('zh');
+    Translations.setLanguage('zh');
     assert(document.querySelector('[data-i18n="brand_name"]').textContent === '福建花店');
 }
 ```
@@ -578,7 +700,7 @@ Keep translation documentation updated:
 # Translation Guide
 
 ## Adding New Keys
-1. Add key to both zh and en objects
+1. Add key to both zh and en objects in translations.json
 2. Use descriptive naming convention
 3. Test in both languages
 4. Verify no layout issues
@@ -589,4 +711,4 @@ Keep translation documentation updated:
 - Products: cat_*, product_*
 ```
 
-This internationalization system provides a robust foundation for multilingual support while maintaining clean code organization and excellent user experience across different languages and cultures.
+This enhanced internationalization system provides a robust foundation for multilingual support while maintaining clean code organization, excellent performance, and superior user experience across different languages and cultures. The modular architecture ensures scalability and maintainability for future language additions and content updates.

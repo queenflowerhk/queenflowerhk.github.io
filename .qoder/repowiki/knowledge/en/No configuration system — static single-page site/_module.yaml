@@ -1,6 +1,6 @@
 schema_version: 1
 module_path: configuration_system
-title: No configuration system — static single-page site
+title: No Configuration System — Static Single-Page Site
 scope: []
 source_files: []
 depends_on: []

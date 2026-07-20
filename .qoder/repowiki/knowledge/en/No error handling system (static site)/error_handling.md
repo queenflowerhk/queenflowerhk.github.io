@@ -1,1 +1,8 @@
-This repository is a static GitHub Pages site consisting of a single `docs/index.html` file and a `README.md`. It contains no server-side code, no application logic, no middleware, no error types or sentinel errors, and no panic/recover usage. The only match for 'error' in the codebase is a WhatsApp link parameter (`?text=你好福建花店！我想查詢花牌價錢及訂購。`) — not an error-handling construct. As a purely static marketing site, there is no error handling architecture to document.
+This repository is a static single-page marketing and ordering site served directly from GitHub Pages. It contains no centralized error-handling framework, custom error types, sentinel errors, middleware, or logging infrastructure. Error handling is minimal and ad-hoc:
+
+- `_serve.js` (local dev server): the only place where an `err` argument is checked; on failure it writes a 404 response with a plain text body.
+- `docs/js/cart.js`: wraps `localStorage.getItem` + `JSON.parse` in a try/catch that silently returns an empty cart when storage is corrupted — no user-facing message.
+- `docs/js/products.js`, `docs/js/translations.js`: use `fetch(...).json()` without any `.catch()` or error branch, so network failures are unhandled.
+- All other modules (`main.js`, `components.js`) perform DOM mutations and assume elements exist; missing nodes are ignored via early `return` rather than surfaced as errors.
+
+There are no `throw` statements, no custom Error subclasses, no global error handler, and no logging calls anywhere in the codebase. The site's architecture (pure client-side JS reading local JSON files) makes runtime errors rare and non-fatal by design.

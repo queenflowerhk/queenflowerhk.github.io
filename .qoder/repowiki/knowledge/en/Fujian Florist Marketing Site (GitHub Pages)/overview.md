@@ -1,1 +1,0 @@
-Single-page marketing and ordering site for Fujian Florist, a Hong Kong florist specializing in ceremonial and funeral floral plaques, served via GitHub Pages.

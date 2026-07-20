@@ -1,1 +1,0 @@
-Deploy by pushing commits to the repository's default branch; GitHub Pages automatically serves `docs/index.html`. The `docs/.nojekyll` file is required to prevent Jekyll from transforming the page. No local dev server is configured — open `docs/index.html` directly in a browser.

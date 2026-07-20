@@ -1,0 +1,4 @@
+- Each JS feature is exposed as a module-scoped IIFE assigned to a global constant (`Main`, `Products`, `Translations`, `Cart`, `Components`) that returns an explicit public API object instead of using `export`.
+- User-facing strings are never hard-coded in HTML or JS; every translatable node carries a `data-i18n="key"` attribute and is populated by `Translations.apply()` after `translations.json` is loaded.
+- Product data is kept out of the DOM in `products.json` and rendered imperatively by `Products.renderCategory(category, gridId)` into pre-existing grid containers identified by fixed element ids.
+- Cart operations are side-effectful mutations of an in-memory array followed by a full re-render of `#cart-items` and `#cart-total`; there is no virtual DOM or incremental diffing.

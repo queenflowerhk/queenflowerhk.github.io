@@ -1,4 +1,0 @@
-- All user-visible text is externalized into a single `translations` JS object keyed by language (`zh`, `en`) and referenced in markup via `data-i18n="<key>"` attributes, with a `setLanguage()` runtime switcher.
-- Each product category section follows a uniform template: a heading block with a decorative gold divider, a descriptive paragraph, and a grid container whose id matches the category slug (e.g. `#ceremonial-grid`, `#wreaths-grid`) that is later populated by JS.
-- Interactive UI elements use inline `onclick="..."` handlers bound to global functions defined in the same script block (e.g. `toggleCart()`, `toggleMobileMenu()`, `setLanguage()`), keeping all behavior co-located with the markup.
-- External links to WhatsApp always target `https://wa.me/85291463455` with a pre-filled Chinese message body, and WeChat uses the `weixin://contacts/profile/QUEEN88881234` deep-link scheme.

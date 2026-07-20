@@ -2,8 +2,19 @@
 
 <cite>
 **Referenced Files in This Document**
+- [cart.js](file://docs/js/cart.js)
+- [main.js](file://docs/js/main.js)
+- [components.js](file://docs/js/components.js)
 - [index.html](file://docs/index.html)
 </cite>
+
+## Update Summary
+**Changes Made**
+- Updated persistence strategy section to reflect localStorage implementation
+- Added new Cart module architecture overview
+- Updated all sections to reference the new modular cart system
+- Revised performance considerations for persistent storage
+- Enhanced troubleshooting guide for localStorage-specific issues
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -18,109 +29,106 @@
 10. [Appendices](#appendices)
 
 ## Introduction
-This document explains the shopping cart state management system implemented in a single-page HTML application. It covers:
+This document explains the shopping cart state management system implemented in a single-page HTML application. The system has been redesigned with a modular architecture featuring persistent storage using localStorage. It covers:
 - The cart array structure and item schema
 - Add-to-cart behavior, including duplicate handling and quantity updates
 - Remove-from-cart logic and empty cart state
 - Price calculation algorithms for subtotal computation and currency formatting
-- Persistence strategy (in-memory only; no session or local storage)
+- **Updated**: Persistent storage strategy using localStorage for cross-session data retention
 - Examples for extending functionality, customizing item properties, and implementing validation rules
 - Performance considerations for large datasets and memory optimization techniques
 
 ## Project Structure
-The cart system is implemented within a single HTML file that contains:
-- Product catalog arrays organized by category
-- A global cart array representing the current user’s selections
-- UI rendering functions to display products and cart contents
-- Event-driven handlers for adding, removing, and updating items
-- Price computation and checkout link generation
+The cart system is now implemented as a modular architecture with separate JavaScript modules:
+- **cart.js**: Core cart state management with localStorage persistence
+- **main.js**: Application orchestration and UI rendering logic
+- **components.js**: Shared UI components and behaviors
+- **index.html**: Main HTML structure with cart sidebar and product catalog
 
 ```mermaid
 graph TB
-A["Product Catalog Arrays<br/>ceremonialProducts, funeralProducts, wreathProducts,<br/>openingProducts, associationProducts, graduationProducts, petProducts"] --> B["addToCart(productId)"]
-B --> C["cart Array (in-memory)"]
-D["removeFromCart(productId)"] --> C
-E["updateQuantity(productId, change)"] --> C
-F["updateCartUI()"] --> G["DOM Elements:<br/>cart-count, cart-items, cart-footer, cart-total"]
-H["generateWhatsAppLink()"] --> I["Checkout Link"]
-C --> F
-C --> H
+A["Product Catalog Arrays<br/>ceremonialProducts, funeralProducts, wreathProducts,<br/>openingProducts, associationProducts, graduationProducts, petProducts"] --> B["Main.handleAddToCart(productId)"]
+B --> C["Cart.addToCart(product)"]
+C --> D["localStorage Persistence<br/>(fujianFloristCart)"]
+E["Cart.removeFromCart(productId)"] --> D
+F["Cart.updateQuantity(productId, change)"] --> D
+G["Cart.getCart()"] --> H["DOM Elements:<br/>cart-count, cart-items, cart-footer, cart-total"]
+I["generateWhatsAppLink()"] --> J["Checkout Link"]
+D --> G
+D --> I
 ```
 
 **Diagram sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1330](file://docs/index.html#L1330)
-- [index.html:1446-1476](file://docs/index.html#L1446-L1476)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
+- [cart.js:36-40](file://docs/js/cart.js#L36-L40)
+- [cart.js:42-53](file://docs/js/cart.js#L42-L53)
+- [cart.js:20-22](file://docs/js/cart.js#L20-L22)
+- [main.js:26-45](file://docs/js/main.js#L26-L45)
+- [main.js:47-107](file://docs/js/main.js#L47-L107)
 
 **Section sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1330](file://docs/index.html#L1330)
-- [index.html:1446-1476](file://docs/index.html#L1446-L1476)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [cart.js:1-69](file://docs/js/cart.js#L1-L69)
+- [main.js:1-134](file://docs/js/main.js#L1-L134)
+- [components.js:1-72](file://docs/js/components.js#L1-L72)
+- [index.html:627-674](file://docs/index.html#L627-L674)
 
 ## Core Components
-- Cart data store: an in-memory array initialized at page load. Each element represents a line item with product details and a quantity field.
-- Product catalogs: multiple arrays grouped by category, each containing objects with fields such as id, name, name_zh, price, category, image, description, and description_zh.
-- Handlers:
-  - addToCart(productId): finds the product, checks for duplicates, increments quantity if present, otherwise pushes a new item with quantity 1.
-  - removeFromCart(productId): filters out the item by id.
-  - updateQuantity(productId, change): adjusts quantity and removes the item when quantity drops to zero or below.
-- UI updater: updateCartUI() computes totals and re-renders the cart sidebar and footer.
-- Checkout generator: generateWhatsAppLink() builds a message string from cart items and returns a WhatsApp URL.
+- **Cart Module**: A self-contained module providing CRUD operations for cart items with automatic localStorage persistence
+- **Main Module**: Orchestrates cart operations, UI rendering, and WhatsApp checkout generation
+- **Components Module**: Handles shared UI behaviors like toast notifications and cart sidebar toggling
+- **Storage Layer**: localStorage-based persistence with JSON serialization/deserialization
+- **UI Rendering**: Dynamic DOM manipulation for cart display and totals calculation
 
 Key responsibilities:
-- Data integrity: ensure unique ids per line item and non-negative quantities.
-- UI consistency: keep DOM state synchronized with the cart array after every mutation.
-- Pricing accuracy: compute subtotals and totals using item.price * item.quantity.
+- **Data Integrity**: Ensure unique ids per line item and non-negative quantities with automatic persistence
+- **UI Consistency**: Keep DOM state synchronized with the persisted cart data after every mutation
+- **Pricing Accuracy**: Compute subtotals and totals using item.price * item.quantity
+- **Cross-Session Persistence**: Maintain cart state across browser sessions and page reloads
 
 **Section sources**
-- [index.html:1330](file://docs/index.html#L1330)
-- [index.html:1446-1476](file://docs/index.html#L1446-L1476)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
+- [cart.js:5-68](file://docs/js/cart.js#L5-L68)
+- [main.js:8-24](file://docs/js/main.js#L8-L24)
+- [components.js:53-63](file://docs/js/components.js#L53-L63)
 
 ## Architecture Overview
-The cart system follows a simple unidirectional flow:
-- User actions trigger handlers that mutate the in-memory cart array.
-- After mutations, updateCartUI() recalculates totals and refreshes the DOM.
-- Checkout uses generateWhatsAppLink() to produce a pre-filled message based on the current cart.
+The cart system follows a modular, unidirectional flow with persistent storage:
+- User actions trigger handlers in the Main module that call Cart module methods
+- Cart operations automatically persist data to localStorage
+- After mutations, updateCartUI() recalculates totals and refreshes the DOM
+- Checkout uses generateWhatsAppLink() to produce a pre-filled message based on the current cart
 
 ```mermaid
 sequenceDiagram
 participant U as "User"
 participant P as "Product Card Button"
-participant AC as "addToCart(productId)"
-participant CT as "cart Array"
+participant M as "Main.handleAddToCart()"
+participant C as "Cart.addToCart()"
+participant S as "localStorage"
 participant UI as "updateCartUI()"
 participant WL as "generateWhatsAppLink()"
 U->>P : Click "Add to Cart"
-P->>AC : Call with productId
-AC->>CT : Find existing item by id
-alt Item exists
-AC->>CT : Increment quantity
-else New item
-AC->>CT : Push { ...product, quantity : 1 }
-end
-AC->>UI : Update UI
+P->>M : Call with productId
+M->>C : Call with product object
+C->>S : Save updated cart
+C-->>M : Return cart
+M->>UI : Update UI
 U->>WL : Open checkout link
-WL->>CT : Iterate items to build message
+WL->>S : Load cart from storage
 WL-->>U : Return WhatsApp URL
 ```
 
 **Diagram sources**
-- [index.html:1446-1476](file://docs/index.html#L1446-L1476)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
+- [main.js:8-14](file://docs/js/main.js#L8-L14)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
+- [cart.js:8-18](file://docs/js/cart.js#L8-L18)
+- [main.js:26-45](file://docs/js/main.js#L26-L45)
 
 ## Detailed Component Analysis
 
 ### Cart Data Model
-- Storage: In-memory array named cart.
-- Item shape: Each item is a copy of a product object plus a quantity field.
-- Product fields used by cart:
+- **Storage**: localStorage with key 'fujianFloristCart'
+- **Item shape**: Each item is a copy of a product object plus a quantity field
+- **Product fields used by cart**:
   - id: unique identifier for matching duplicates
   - name / name_zh: display names in English/Chinese
   - price: numeric value used for calculations
@@ -129,142 +137,154 @@ WL-->>U : Return WhatsApp URL
   - category: not directly used by cart logic but available from product source
 
 Complexity:
-- Lookup by id is O(n) where n is number of cart items.
-- Insertion and removal are O(n) due to find/filter operations.
+- Lookup by id is O(n) where n is number of cart items
+- Insertion and removal are O(n) due to find/filter operations
+- Storage operations add overhead for JSON serialization/deserialization
 
 Optimization opportunities:
-- Maintain a Map keyed by id for O(1) lookups and updates.
-- Keep a separate lightweight line-item model with only required fields to reduce memory footprint.
+- Maintain a Map keyed by id for O(1) lookups and updates
+- Keep a separate lightweight line-item model with only required fields to reduce memory footprint
+- Implement batch operations to minimize localStorage writes
 
 **Section sources**
-- [index.html:1330](file://docs/index.html#L1330)
-- [index.html:1446-1455](file://docs/index.html#L1446-L1455)
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
+- [cart.js:5-68](file://docs/js/cart.js#L5-L68)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
 
 ### Add to Cart Functionality
 Behavior:
-- Concatenates all product arrays to locate the target product by id.
-- If an item with the same id already exists in cart, increment its quantity.
-- Otherwise, push a new item created by spreading the product object and setting quantity to 1.
-- Calls updateCartUI() to reflect changes and shows a toast notification.
+- Receives a complete product object from the Main module
+- Loads current cart from localStorage
+- If an item with the same id already exists in cart, increment its quantity
+- Otherwise, push a new item created by spreading the product object and setting quantity to 1
+- Persists the updated cart to localStorage
+- Returns the updated cart for UI updates
 
 Duplicate handling:
-- Duplicate detection is performed via cart.find(item => item.id === productId).
-- Quantity is incremented rather than creating a new entry.
+- Duplicate detection is performed via cart.find(item => item.id === product.id)
+- Quantity is incremented rather than creating a new entry
 
 Edge cases:
-- If productId does not match any product, addToCart will not add anything because product lookup fails.
-- No explicit validation for negative or zero quantities during addition.
+- Graceful error handling if localStorage is unavailable or corrupted
+- No explicit validation for negative or zero quantities during addition
 
 **Section sources**
-- [index.html:1446-1459](file://docs/index.html#L1446-L1459)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
 
 #### Sequence Diagram: Add to Cart
 ```mermaid
 sequenceDiagram
 participant U as "User"
 participant BTN as "Add to Cart Button"
-participant AC as "addToCart(productId)"
-participant ALL as "All Products List"
-participant CT as "cart Array"
-participant UI as "updateCartUI()"
+participant M as "Main.handleAddToCart()"
+participant C as "Cart.addToCart()"
+local as "localStorage"
 U->>BTN : Click
-BTN->>AC : productId
-AC->>ALL : Find product by id
-AC->>CT : Find existing item by id
+BTN->>M : productId
+M->>C : product object
+C->>local : Load cart
+C->>C : Find existing item by id
 alt Found
-AC->>CT : item.quantity++
+C->>C : item.quantity++
 else Not found
-AC->>CT : push({ ...product, quantity : 1 })
+C->>C : push({ ...product, quantity : 1 })
 end
-AC->>UI : Render updated cart
+C->>local : Save updated cart
+C-->>M : Return cart
+M->>M : updateCartUI()
 ```
 
 **Diagram sources**
-- [index.html:1446-1459](file://docs/index.html#L1446-L1459)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [main.js:8-14](file://docs/js/main.js#L8-L14)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
+- [cart.js:8-18](file://docs/js/cart.js#L8-L18)
 
 ### Remove from Cart Logic
 Behavior:
-- Filters the cart array to exclude the item whose id matches the provided productId.
-- Re-renders the cart UI immediately after removal.
+- Loads current cart from localStorage
+- Filters the cart array to exclude the item whose id matches the provided productId
+- Persists the filtered cart back to localStorage
+- Returns the updated cart for UI updates
 
 Empty cart state:
-- When cart.length equals 0, updateCartUI renders an empty-state placeholder and hides the footer section.
+- When cart.length equals 0, updateCartUI renders an empty-state placeholder and hides the footer section
 
 **Section sources**
-- [index.html:1461-1464](file://docs/index.html#L1461-L1464)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [cart.js:36-40](file://docs/js/cart.js#L36-L40)
+- [main.js:47-107](file://docs/js/main.js#L47-L107)
 
 #### Flowchart: Remove from Cart
 ```mermaid
 flowchart TD
-Start(["Remove Request"]) --> FindItem["Find item by productId"]
-FindItem --> Exists{"Item exists?"}
-Exists -- "No" --> End(["Exit"])
-Exists -- "Yes" --> Filter["Filter out item by id"]
-Filter --> UpdateUI["updateCartUI()"]
+Start(["Remove Request"]) --> Load["Load cart from localStorage"]
+Load --> Filter["Filter out item by id"]
+Filter --> Save["Save to localStorage"]
+Save --> UpdateUI["updateCartUI()"]
 UpdateUI --> CheckEmpty{"cart.length == 0?"}
 CheckEmpty -- "Yes" --> ShowEmpty["Render empty state and hide footer"]
 CheckEmpty -- "No" --> RenderItems["Render items and totals"]
-ShowEmpty --> End
+ShowEmpty --> End(["Exit"])
 RenderItems --> End
 ```
 
 **Diagram sources**
-- [index.html:1461-1464](file://docs/index.html#L1461-L1464)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [cart.js:36-40](file://docs/js/cart.js#L36-L40)
+- [main.js:47-107](file://docs/js/main.js#L47-L107)
 
 ### Update Quantity Logic
 Behavior:
-- Finds the item by productId and adds the change (+1 or -1).
-- If the resulting quantity is less than or equal to zero, it removes the item via removeFromCart.
-- Otherwise, it updates the UI.
+- Loads current cart from localStorage
+- Finds the item by productId and adds the delta (+1 or -1)
+- If the resulting quantity is less than or equal to zero, it removes the item via removeFromCart
+- Otherwise, persists the updated cart to localStorage
+- Returns the updated cart for UI updates
 
 Validation:
-- Prevents negative quantities by removing the item when quantity reaches zero or below.
+- Prevents negative quantities by removing the item when quantity reaches zero or below
 
 **Section sources**
-- [index.html:1466-1476](file://docs/index.html#L1466-L1476)
+- [cart.js:42-53](file://docs/js/cart.js#L42-L53)
 
 #### Flowchart: Update Quantity
 ```mermaid
 flowchart TD
-Start(["Update Quantity"]) --> FindItem["Find item by productId"]
+Start(["Update Quantity"]) --> Load["Load cart from localStorage"]
+Load --> FindItem["Find item by productId"]
 FindItem --> Exists{"Item exists?"}
 Exists -- "No" --> End(["Exit"])
-Exists -- "Yes" --> Adjust["item.quantity += change"]
+Exists -- "Yes" --> Adjust["item.quantity += delta"]
 Adjust --> Valid{"quantity > 0?"}
 Valid -- "No" --> Remove["removeFromCart(productId)"]
-Valid -- "Yes" --> UpdateUI["updateCartUI()"]
+Valid -- "Yes" --> Save["Save to localStorage"]
 Remove --> End
+Save --> UpdateUI["updateCartUI()"]
 UpdateUI --> End
 ```
 
 **Diagram sources**
-- [index.html:1466-1476](file://docs/index.html#L1466-L1476)
+- [cart.js:42-53](file://docs/js/cart.js#L42-L53)
 
 ### Price Calculation Algorithms
 Subtotal computation:
-- Total items count: sum of item.quantity across all items.
-- Subtotal total: sum of item.price * item.quantity across all items.
+- Total items count: sum of item.quantity across all items (via getCartCount())
+- Subtotal total: sum of item.price * item.quantity across all items (via getCartTotal())
 
 Currency formatting:
-- Prices are rendered as plain numbers prefixed with a dollar sign without decimal formatting.
-- Line item totals and cart total use the same pattern.
+- Prices are rendered as plain numbers prefixed with a dollar sign without decimal formatting
+- Line item totals and cart total use the same pattern
 
 Checkout message:
-- Generates a text message listing each item with id, localized name, quantity, and line total.
-- Appends a final total line and a call-to-action message in the selected language.
+- Generates a text message listing each item with id, localized name, quantity, and line total
+- Appends a final total line and a call-to-action message in the selected language
 
 **Section sources**
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
+- [cart.js:55-61](file://docs/js/cart.js#L55-L61)
+- [main.js:26-45](file://docs/js/main.js#L26-L45)
 
 #### Flowchart: Subtotal Computation
 ```mermaid
 flowchart TD
-Start(["Compute Totals"]) --> Init["Initialize totalItems = 0, totalPrice = 0"]
+Start(["Compute Totals"]) --> Load["Load cart from localStorage"]
+Load --> Init["Initialize totalItems = 0, totalPrice = 0"]
 Init --> Loop["For each item in cart"]
 Loop --> IncItems["totalItems += item.quantity"]
 IncItems --> IncPrice["totalPrice += item.price * item.quantity"]
@@ -275,116 +295,158 @@ Render --> End(["Done"])
 ```
 
 **Diagram sources**
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [cart.js:55-61](file://docs/js/cart.js#L55-L61)
 
 ### Cart Persistence Strategy
-Current implementation:
-- Uses an in-memory array for cart state.
-- No usage of localStorage, sessionStorage, cookies, or server-side persistence.
-- Cart resets on page reload.
+**Updated** The cart system now uses localStorage for persistent storage:
 
-Recommendations for session-based persistence:
-- Persist cart to sessionStorage to survive tab refreshes while clearing on close.
-- Optionally persist to localStorage for cross-session retention.
-- Integrate persistence hooks into addToCart, removeFromCart, and updateQuantity to save after each mutation.
+Current implementation:
+- Uses localStorage with key 'fujianFloristCart' for cart data persistence
+- Automatic JSON serialization/deserialization for cart objects
+- Cart persists across browser sessions and page reloads
+- Error handling for localStorage corruption or unavailability
+- All cart operations (add, remove, update) automatically persist changes
+
+Storage lifecycle:
+- **Initialization**: Cart loads from localStorage on page load
+- **Mutations**: Every cart operation saves changes immediately to localStorage
+- **Retrieval**: Cart data is loaded fresh from storage for each operation
+- **Cleanup**: ClearCart function resets localStorage to empty array
+
+Benefits:
+- Cross-session persistence maintains user selections
+- Improved reliability with automatic error recovery
+- Simplified architecture with centralized storage logic
 
 **Section sources**
-- [index.html:1330](file://docs/index.html#L1330)
-- [index.html:1446-1476](file://docs/index.html#L1446-L1476)
+- [cart.js:1-18](file://docs/js/cart.js#L1-L18)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
+- [cart.js:36-40](file://docs/js/cart.js#L36-L40)
+- [cart.js:42-53](file://docs/js/cart.js#L42-L53)
+- [cart.js:63-65](file://docs/js/cart.js#L63-L65)
 
 ### Extending Cart Functionality
 Examples you can implement:
 - Custom item properties:
-  - Add optional fields like color, size, or gift message to product objects and propagate them into cart items when added.
+  - Add optional fields like color, size, or gift message to product objects and propagate them into cart items when added
 - Validation rules:
-  - Enforce minimum order amounts before enabling checkout.
-  - Limit maximum quantity per item.
-  - Validate stock availability against a backend inventory endpoint.
+  - Enforce minimum order amounts before enabling checkout
+  - Limit maximum quantity per item
+  - Validate stock availability against a backend inventory endpoint
 - Additional features:
-  - Apply discount codes or promotions.
-  - Group items by category for shipping estimates.
-  - Export cart to JSON for analytics or backup.
+  - Apply discount codes or promotions
+  - Group items by category for shipping estimates
+  - Export cart to JSON for analytics or backup
+  - Implement cart sharing between tabs using storage events
 
 Implementation guidance:
-- Extend the item creation in addToCart to include new fields.
-- Update updateCartUI to render additional fields.
-- Modify generateWhatsAppLink to include extra details in the checkout message.
-
-[No sources needed since this section provides general guidance]
+- Extend the item creation in addToCart to include new fields
+- Update updateCartUI to render additional fields
+- Modify generateWhatsAppLink to include extra details in the checkout message
+- Add new methods to the Cart module for advanced operations
 
 ## Dependency Analysis
-The cart system has minimal dependencies:
-- DOM APIs for reading/writing elements.
-- Global variables for product arrays and cart state.
-- Language toggle affects which localized strings are used in UI and checkout messages.
+The cart system has a clean modular dependency structure:
+- **Cart Module**: Self-contained with localStorage dependency
+- **Main Module**: Depends on Cart, Translations, Products, and Components
+- **Components Module**: Depends on Cart for cart count updates
+- **HTML**: References all modules in proper dependency order
 
 ```mermaid
 graph LR
-CAT["Product Catalog Arrays"] --> ADD["addToCart"]
-CART["cart Array"] --> ADD
-CART --> REMOVE["removeFromCart"]
-CART --> UPDATEQ["updateQuantity"]
-CART --> UIUPD["updateCartUI"]
-CART --> WA["generateWhatsAppLink"]
-UIUPD --> DOM["DOM Elements"]
+CAT["Product Catalog Arrays"] --> MAIN["Main Module"]
+MAIN --> CART["Cart Module"]
+MAIN --> TRANS["Translations Module"]
+MAIN --> COMP["Components Module"]
+CART --> LOCAL["localStorage"]
+COMP --> CART
+MAIN --> DOM["DOM Elements"]
 ```
 
 **Diagram sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1330](file://docs/index.html#L1330)
-- [index.html:1446-1476](file://docs/index.html#L1446-L1476)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [cart.js:1-69](file://docs/js/cart.js#L1-L69)
+- [main.js:1-134](file://docs/js/main.js#L1-L134)
+- [components.js:1-72](file://docs/js/components.js#L1-L72)
+- [index.html:695-700](file://docs/index.html#L695-L700)
 
 **Section sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1330](file://docs/index.html#L1330)
-- [index.html:1446-1476](file://docs/index.html#L1446-L1476)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [cart.js:1-69](file://docs/js/cart.js#L1-L69)
+- [main.js:1-134](file://docs/js/main.js#L1-L134)
+- [components.js:1-72](file://docs/js/components.js#L1-L72)
+- [index.html:695-700](file://docs/index.html#L695-L700)
 
 ## Performance Considerations
-- Time complexity:
-  - addToCart: O(n) to find existing item; O(1) to push new item.
-  - removeFromCart: O(n) to filter.
-  - updateQuantity: O(n) to find item.
-  - updateCartUI: O(n) to compute totals and O(n) to render items.
-- Memory usage:
-  - Each cart item holds a full product object copy. For large catalogs or many items, consider storing only necessary fields in cart entries.
-- Optimization techniques:
-  - Use a Map keyed by id for O(1) lookups and updates.
-  - Debounce rapid UI updates if batch operations occur.
-  - Virtualize or paginate cart rendering if displaying very large lists.
-  - Avoid repeated concatenation of product arrays; cache a flattened index once.
+**Updated** Performance considerations for localStorage-based cart system:
 
-[No sources needed since this section provides general guidance]
+- **Time complexity**:
+  - addToCart: O(n) to find existing item + O(1) localStorage write
+  - removeFromCart: O(n) to filter + O(1) localStorage write
+  - updateQuantity: O(n) to find item + O(1) localStorage write
+  - updateCartUI: O(n) to compute totals and O(n) to render items
+  - Storage operations: JSON serialization/deserialization overhead
+
+- **Memory usage**:
+  - Each cart item holds a full product object copy
+  - localStorage has ~5-10MB storage limit depending on browser
+  - Consider storing only essential fields in cart entries for large catalogs
+
+- **Optimization techniques**:
+  - Use a Map keyed by id for O(1) lookups and updates
+  - Debounce rapid UI updates if batch operations occur
+  - Virtualize or paginate cart rendering if displaying very large lists
+  - Cache frequently accessed data to reduce localStorage reads
+  - Implement lazy loading for product images in cart display
+  - Consider IndexedDB for larger datasets exceeding localStorage limits
+
+- **Storage considerations**:
+  - Monitor localStorage quota usage
+  - Implement graceful degradation if storage is unavailable
+  - Consider data migration strategies for storage format changes
 
 ## Troubleshooting Guide
-Common issues and resolutions:
-- Adding an unknown productId:
-  - Symptom: Nothing appears in cart.
-  - Cause: Product lookup fails; addToCart does not add anything.
-  - Resolution: Ensure productId corresponds to an existing product in one of the catalog arrays.
-- Negative or zero quantity:
-  - Behavior: Decreasing quantity to zero or below removes the item automatically.
-  - Resolution: This is expected; validate user interactions to prevent accidental decrements.
-- Totals not updating:
-  - Symptom: Cart totals remain unchanged after modifications.
-  - Cause: Missing call to updateCartUI after mutation.
-  - Resolution: Ensure updateCartUI is invoked after any cart change.
-- Empty cart UI not showing:
-  - Symptom: Footer remains visible even when cart is empty.
-  - Cause: DOM class toggling may be incorrect.
-  - Resolution: Verify cartFooter visibility is controlled by cart.length check in updateCartUI.
+**Updated** Common issues and resolutions for localStorage-based cart system:
+
+- **Adding an unknown productId**:
+  - Symptom: Nothing appears in cart
+  - Cause: Product lookup fails; addToCart does not add anything
+  - Resolution: Ensure productId corresponds to an existing product in one of the catalog arrays
+
+- **Negative or zero quantity**:
+  - Behavior: Decreasing quantity to zero or below removes the item automatically
+  - Resolution: This is expected; validate user interactions to prevent accidental decrements
+
+- **Totals not updating**:
+  - Symptom: Cart totals remain unchanged after modifications
+  - Cause: Missing call to updateCartUI after mutation
+  - Resolution: Ensure updateCartUI is invoked after any cart change
+
+- **Empty cart UI not showing**:
+  - Symptom: Footer remains visible even when cart is empty
+  - Cause: DOM class toggling may be incorrect
+  - Resolution: Verify cartFooter visibility is controlled by cart.length check in updateCartUI
+
+- **localStorage errors**:
+  - Symptom: Cart operations fail silently or throw errors
+  - Cause: localStorage quota exceeded, privacy mode, or corrupted data
+  - Resolution: Check for storage availability, handle JSON parsing errors, implement fallback mechanisms
+
+- **Cart data not persisting**:
+  - Symptom: Cart resets on page reload
+  - Cause: localStorage disabled or storage key mismatch
+  - Resolution: Verify localStorage is enabled, check storage key consistency, inspect browser developer tools
+
+- **Cross-tab synchronization issues**:
+  - Symptom: Cart changes in one tab don't reflect in other tabs
+  - Cause: No event listeners for storage changes
+  - Resolution: Implement storage event listeners for real-time sync between tabs
 
 **Section sources**
-- [index.html:1446-1476](file://docs/index.html#L1446-L1476)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [cart.js:8-18](file://docs/js/cart.js#L8-L18)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
+- [main.js:47-107](file://docs/js/main.js#L47-L107)
 
 ## Conclusion
-The cart system is a straightforward, in-memory implementation suitable for small-scale use cases. It provides essential operations for adding, removing, and updating items, along with basic price computation and a WhatsApp-based checkout flow. To scale up, consider introducing persistent storage, optimized data structures, and robust validation rules.
-
-[No sources needed since this section summarizes without analyzing specific files]
+The cart system has been successfully redesigned with a modular architecture featuring persistent storage using localStorage. The new implementation provides essential operations for adding, removing, and updating items, along with basic price computation and a WhatsApp-based checkout flow. The localStorage-based persistence ensures cart data survives across browser sessions and page reloads, significantly improving user experience. For further scaling, consider introducing optimized data structures, robust validation rules, and advanced storage solutions like IndexedDB for larger datasets.
 
 ## Appendices
 
@@ -400,18 +462,29 @@ The cart system is a straightforward, in-memory implementation suitable for smal
   - quantity: number (added at runtime)
 
 **Section sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1446-1455](file://docs/index.html#L1446-L1455)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
 
 ### Appendix B: Example Extensions
-- Add a “gift wrap” option:
-  - Include a boolean field in product objects and propagate it into cart items.
-  - Update updateCartUI to show the option and adjust totals accordingly.
+- Add a "gift wrap" option:
+  - Include a boolean field in product objects and propagate it into cart items
+  - Update updateCartUI to show the option and adjust totals accordingly
 - Implement stock limits:
-  - Add a maxStock field to product objects.
-  - In addToCart and updateQuantity, enforce item.quantity <= maxStock.
+  - Add a maxStock field to product objects
+  - In addToCart and updateQuantity, enforce item.quantity <= maxStock
 - Persist cart across sessions:
-  - Save cart to localStorage on each mutation.
-  - Load cart from localStorage on page initialization.
+  - Already implemented via localStorage
+  - Consider adding export/import functionality for backup purposes
+- Add storage event listeners:
+  - Listen for storage events to sync cart across browser tabs
+  - Implement real-time collaboration features
 
-[No sources needed since this section provides general guidance]
+### Appendix C: Storage API Reference
+- **Storage Key**: 'fujianFloristCart'
+- **Data Format**: JSON array of cart items
+- **Error Handling**: Graceful fallback to empty cart on storage errors
+- **Quota Management**: Automatic handling of storage limits
+- **Serialization**: JSON.stringify/JSON.parse for data persistence
+
+**Section sources**
+- [cart.js:6](file://docs/js/cart.js#L6)
+- [cart.js:8-18](file://docs/js/cart.js#L8-L18)

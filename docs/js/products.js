@@ -87,13 +87,13 @@ const Products = (() => {
     }
 
     function renderAll() {
-        renderCategory('ceremonial', 'ceremonial-grid');
         renderCategory('funeral', 'funeral-products-grid');
         renderCategory('wreath', 'wreaths-grid');
         renderCategory('opening', 'opening-grid');
         renderCategory('association', 'association-grid');
         renderCategory('graduation', 'graduation-grid');
         renderCategory('pets', 'pets-grid');
+        renderCategory('ceremonial', 'ceremonial-grid');
     }
 
     return { load, getAllProductsFlat, getCategory, findProduct, renderAll, renderCategory };

@@ -3,20 +3,21 @@ schema_version: 1
 locale: en-US
 branch: main
 nodes_managed: true
-exported_at: "2026-07-19T14:35:00Z"
+exported_at: "2026-07-20T15:52:01Z"
 modules:
     "":
-        dir_name: Fujian Florist Marketing Site (GitHub Pages)
-        title: Fujian Florist Marketing Site (GitHub Pages)
+        dir_name: Fujian Florist Static Site (docs_)
+        title: Fujian Florist Static Site (docs/)
         scope:
             - README.md
+            - _serve.js
             - docs/
         source_files: []
         children: []
         depends_on: []
         related_to: []
     build_system:
-        dir_name: No build system — static site served directly from docs_
+        dir_name: No build system — static site served directly from docs__2
         title: No build system — static site served directly from docs/
         scope: []
         source_files:
@@ -42,7 +43,7 @@ modules:
         depends_on: []
         related_to: []
     error_handling:
-        dir_name: No error handling system (static site)
+        dir_name: No error handling system (static site)_2
         title: No error handling system (static site)
         scope: []
         source_files: []
@@ -50,18 +51,21 @@ modules:
         depends_on: []
         related_to: []
     frontend_style:
-        dir_name: No Frontend Style System — Static HTML Site
-        title: No Frontend Style System — Static HTML Site
+        dir_name: Tailwind Utility-First Styling with Custom Gold Theme
+        title: Tailwind Utility-First Styling with Custom Gold Theme
         scope: []
-        source_files: []
+        source_files:
+            - docs/index.html
+            - docs/css/styles.css
         children: []
         depends_on: []
         related_to: []
     logging_system:
-        dir_name: No logging system — static marketing site
+        dir_name: No logging system — static marketing site_2
         title: No logging system — static marketing site
         scope: []
-        source_files: []
+        source_files:
+            - _serve.js
         children: []
         depends_on: []
         related_to: []

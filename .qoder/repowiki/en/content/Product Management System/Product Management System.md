@@ -2,367 +2,482 @@
 
 <cite>
 **Referenced Files in This Document**
+- [products.json](file://docs/products.json)
+- [main.js](file://docs/js/main.js)
+- [products.js](file://docs/js/products.js)
+- [cart.js](file://docs/js/cart.js)
+- [translations.js](file://docs/js/translations.js)
+- [components.js](file://docs/js/components.js)
 - [index.html](file://docs/index.html)
+- [translations.json](file://docs/translations.json)
 </cite>
+
+## Update Summary
+**Changes Made**
+- Completely restructured from hardcoded arrays in index.html to data-driven approach using products.json
+- Implemented dynamic loading system with asynchronous data fetching
+- Enhanced category management with centralized badge configuration
+- Improved bilingual support with translation integration
+- Modularized JavaScript architecture with separate modules for cart, translations, and components
+- Added localStorage persistence for cart state and language preferences
 
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [Project Structure](#project-structure)
-3. [Core Components](#core-components)
-4. [Architecture Overview](#architecture-overview)
-5. [Detailed Component Analysis](#detailed-component-analysis)
-6. [Dependency Analysis](#dependency-analysis)
-7. [Performance Considerations](#performance-considerations)
-8. [Troubleshooting Guide](#troubleshooting-guide)
-9. [Conclusion](#conclusion)
+2. [Architecture Overview](#architecture-overview)
+3. [Data Layer](#data-layer)
+4. [Dynamic Loading System](#dynamic-loading-system)
+5. [Category Management](#category-management)
+6. [Rendering Engine](#rendering-engine)
+7. [Cart Integration](#cart-integration)
+8. [Internationalization Support](#internationalization-support)
+9. [Component Architecture](#component-architecture)
+10. [Adding New Products](#adding-new-products)
+11. [Creating New Categories](#creating-new-categories)
+12. [Performance Considerations](#performance-considerations)
+13. [Troubleshooting Guide](#troubleshooting-guide)
+14. [Conclusion](#conclusion)
 
 ## Introduction
-This document explains the product management system implemented for a florist website. It covers seven product categories (ceremonial, funeral, wreath, opening, association, graduation, pet memorial), the product data structure, dynamic rendering using template literals and DOM manipulation, image handling via Unsplash CDN, and the relationship between product arrays and render functions. It also provides practical guidance on adding new products, modifying existing ones, creating new categories, and addressing common issues such as image optimization and performance considerations.
+This document explains the modernized product management system implemented for the Fujian Florist website. The system has been completely restructured from a monolithic approach with hardcoded arrays to a modular, data-driven architecture that uses JSON files for product data and implements dynamic loading with improved category management and comprehensive bilingual support.
 
-## Project Structure
-The entire implementation is contained within a single HTML file that includes:
-- Static page sections for each category
-- Inline CSS for styling and animations
-- Inline JavaScript for internationalization, product data, rendering logic, cart operations, and UI interactions
+The system now supports seven distinct product categories (ceremonial, funeral, wreath, opening, association, graduation, pet memorial) through a sophisticated data layer, dynamic rendering engine, and component-based architecture. It features seamless integration with Unsplash CDN for images, WhatsApp checkout functionality, and persistent shopping cart state.
+
+## Architecture Overview
+The system follows a modular client-side architecture with clear separation of concerns:
 
 ```mermaid
 graph TB
-A["HTML Sections<br/>Category Grids"] --> B["JavaScript Data Arrays<br/>Product Lists by Category"]
-B --> C["Render Functions<br/>Template Literals + DOM"]
-C --> D["Cart State & UI Updates"]
-C --> E["Language Switching<br/>(zh/en)"]
-C --> F["WhatsApp Checkout Link Generation"]
-A --> G["Unsplash Images<br/>CDN URLs"]
+A["HTML Structure<br/>Grid Containers"] --> B["Main Module<br/>Initialization & Orchestration"]
+B --> C["Products Module<br/>Data Loading & Rendering"]
+B --> D["Translations Module<br/>i18n Management"]
+B --> E["Cart Module<br/>State Management"]
+B --> F["Components Module<br/>UI Behaviors"]
+C --> G["products.json<br/>Product Data Source"]
+C --> H["Unsplash CDN<br/>Image Delivery"]
+D --> I["translations.json<br/>Language Resources"]
+E --> J["localStorage<br/>Persistent State"]
+K["WhatsApp API<br/>Checkout Integration"]
+C --> L["DOM Manipulation<br/>Template Literals"]
+E --> K
 ```
 
 **Diagram sources**
-- [index.html:402-587](file://docs/index.html#L402-L587)
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1332-1351](file://docs/index.html#L1332-L1351)
-- [index.html:1376-1444](file://docs/index.html#L1376-L1444)
-- [index.html:1446-1553](file://docs/index.html#L1446-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
+- [main.js:119-127](file://docs/js/main.js#L119-L127)
+- [products.js:17-20](file://docs/js/products.js#L17-L20)
+- [translations.js:9-17](file://docs/js/translations.js#L9-L17)
+- [cart.js:5-18](file://docs/js/cart.js#L5-L18)
 
 **Section sources**
-- [index.html:402-587](file://docs/index.html#L402-L587)
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1332-1351](file://docs/index.html#L1332-L1351)
-- [index.html:1376-1444](file://docs/index.html#L1376-L1444)
-- [index.html:1446-1553](file://docs/index.html#L1446-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
+- [main.js:119-127](file://docs/js/main.js#L119-L127)
+- [products.js:17-20](file://docs/js/products.js#L17-L20)
+- [translations.js:9-17](file://docs/js/translations.js#L9-L17)
+- [cart.js:5-18](file://docs/js/cart.js#L5-L18)
 
-## Core Components
-- Product data arrays per category: Each category has its own array of product objects with consistent fields.
-- Render functions: One function per category to map data into HTML cards and inject them into the corresponding grid container.
-- Shared card renderer: A reusable function builds the product card markup using template literals and applies category-specific styles and badges.
-- Cart state and UI: A simple in-memory cart array drives the sidebar UI, totals, and WhatsApp checkout link generation.
-- Internationalization: A translations object supports zh/en toggling; language changes re-render all product grids.
+## Data Layer
+The data layer has been completely restructured to use a centralized JSON file for all product information, replacing the previous hardcoded arrays approach.
 
-Key responsibilities:
-- Data: Define and maintain product records.
-- Rendering: Convert data to DOM nodes efficiently.
-- Interaction: Add/remove items from cart, update quantities, show feedback.
-- Localization: Update text content and re-render product lists when language changes.
+### Product Data Structure
+Each product object maintains consistent fields across all categories:
+- `id`: Unique numeric identifier for product lookup and cart operations
+- `name`: English product name
+- `name_zh`: Chinese product name  
+- `price`: Numeric price value for calculations
+- `image`: Unsplash CDN URL with optimization parameters
+- `description`: English product description
+- `description_zh`: Chinese product description
+
+### Category Organization
+Products are organized into seven categories within the JSON structure:
+- **ceremonial**: Wedding plaques, longevity celebrations, engagement blessings
+- **funeral**: Traditional white wreaths, standing sprays, casket arrangements
+- **wreath**: Chinese round wreaths, Western circular wreaths, heart-shaped memorials
+- **opening**: Grand opening plaques, prosperity stands, orchid arrangements
+- **association**: Hometown association plaques, chamber of commerce stands, clan association displays
+- **graduation**: Honor plaques, academic achievement stands, school ceremony displays
+- **pets**: Pet memorial plaques, rainbow bridge wreaths, companion memorials
 
 **Section sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1376-1444](file://docs/index.html#L1376-L1444)
-- [index.html:1446-1553](file://docs/index.html#L1446-L1553)
-- [index.html:1353-1374](file://docs/index.html#L1353-L1374)
+- [products.json:1-224](file://docs/products.json#L1-L224)
 
-## Architecture Overview
-The system follows a straightforward client-side architecture:
-- Data layer: Seven arrays hold product records.
-- View layer: Each category section contains a grid container element.
-- Controller layer: Render functions transform data into HTML strings and set innerHTML on containers.
-- State layer: The cart array persists user selections during the session.
-- Integration points: Unsplash CDN for images; WhatsApp API for checkout messaging.
+## Dynamic Loading System
+The system implements an asynchronous data loading mechanism that fetches product data from the JSON file at runtime.
 
+### Asynchronous Data Fetching
 ```mermaid
 sequenceDiagram
-participant User as "User"
-participant DOM as "Document"
-participant Init as "DOMContentLoaded"
-participant Render as "Render Functions"
-participant Card as "renderProductCard"
-participant Cart as "Cart State"
-participant WA as "WhatsApp Link"
-User->>DOM : Load page
-DOM-->>Init : Trigger event
-Init->>Render : Call category renderers
-Render->>Card : Build HTML for each product
-Card-->>Render : Return HTML string
-Render->>DOM : Set innerHTML on grid containers
-User->>DOM : Click "Add to Cart"
-DOM-->>Cart : addToCart(productId)
-Cart-->>DOM : updateCartUI()
-Cart->>WA : generateWhatsAppLink()
-WA-->>DOM : Update checkout link href
+participant DOM as "DOMContentLoaded"
+participant Main as "Main.init()"
+participant Translations as "Translations.load()"
+participant Products as "Products.load()"
+participant JSON as "products.json"
+participant Render as "Products.renderAll()"
+DOM->>Main : Trigger initialization
+Main->>Translations : load()
+Translations->>JSON : fetch('translations.json')
+JSON-->>Translations : Return translations
+Main->>Products : load()
+Products->>JSON : fetch('products.json')
+JSON-->>Products : Return product data
+Main->>Render : renderAll()
+Render->>DOM : Populate grid containers
 ```
 
 **Diagram sources**
-- [index.html:1332-1351](file://docs/index.html#L1332-L1351)
-- [index.html:1376-1444](file://docs/index.html#L1376-L1444)
-- [index.html:1446-1553](file://docs/index.html#L1446-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
+- [main.js:119-127](file://docs/js/main.js#L119-L127)
+- [products.js:17-20](file://docs/js/products.js#L17-L20)
+- [translations.js:9-17](file://docs/js/translations.js#L9-L17)
 
-## Detailed Component Analysis
-
-### Product Data Model
-Each product object includes:
-- id: Unique numeric identifier
-- name: English name
-- name_zh: Chinese name
-- price: Numeric price
-- category: String matching one of the seven categories
-- image: Unsplash CDN URL with size/format parameters
-- description: English description
-- description_zh: Chinese description
-
-Examples by category:
-- Ceremonial: IDs 201, 202, 204, 205
-- Funeral: IDs 101, 102, 103, 104
-- Wreath: IDs 302, 303, 304
-- Opening: IDs 402, 403, 404
-- Association: IDs 501, 502, 503
-- Graduation: IDs 601, 602, 603
-- Pet Memorial: IDs 701, 702, 703
-
-These arrays are defined at module scope and consumed by their respective render functions.
+### Data Processing Pipeline
+The system processes loaded data through several stages:
+1. **Raw Data Fetch**: Async HTTP requests to JSON endpoints
+2. **Data Transformation**: Convert flat arrays to structured objects with category metadata
+3. **Caching**: Store processed data in module scope for efficient access
+4. **Rendering**: Generate HTML markup and inject into DOM elements
 
 **Section sources**
-- [index.html:1079-1120](file://docs/index.html#L1079-L1120)
-- [index.html:1122-1163](file://docs/index.html#L1122-L1163)
-- [index.html:1165-1196](file://docs/index.html#L1165-L1196)
-- [index.html:1198-1229](file://docs/index.html#L1198-L1229)
-- [index.html:1231-1262](file://docs/index.html#L1231-L1262)
-- [index.html:1264-1295](file://docs/index.html#L1264-L1295)
-- [index.html:1297-1328](file://docs/index.html#L1297-L1328)
+- [products.js:17-26](file://docs/js/products.js#L17-L26)
+- [main.js:119-127](file://docs/js/main.js#L119-L127)
 
-### Dynamic Rendering Implementation
-- Template literals: The shared card builder uses backtick strings to compose HTML with embedded expressions for names, descriptions, prices, and images.
-- DOM injection: Each category’s render function sets innerHTML on its grid container after mapping the product array to card HTML strings.
-- Conditional UI: Badges and color accents vary by category; funeral and pet categories use subdued colors, while others use accent colors.
+## Category Management
+Category management has been significantly improved with centralized configuration and enhanced badge system.
+
+### Badge Configuration System
+Categories now have centralized badge configurations that control visual presentation:
+
+| Category | Badge Text (EN) | Badge Text (ZH) | Color | Somber Mode |
+|----------|----------------|-----------------|-------|-------------|
+| ceremonial | Celebration | 喜慶 | #b45309 | No |
+| funeral | - | - | - | Yes |
+| wreath | - | - | - | No |
+| opening | Opening | 開張 | #b45309 | No |
+| association | Association | 社團 | #b45309 | No |
+| graduation | Graduation | 畢業 | #2563eb | No |
+| pets | Pet | 寵物 | #7c3aed | Yes |
+
+### Dynamic Styling Logic
+The system automatically applies appropriate styling based on category characteristics:
+- **Somber categories** (funeral, pets): Gray color schemes, subdued button styles
+- **Celebratory categories**: Amber/gold color schemes, vibrant button interactions
+- **Badge display**: Conditional rendering based on category configuration
+
+**Section sources**
+- [products.js:8-15](file://docs/js/products.js#L8-L15)
+- [products.js:46-50](file://docs/js/products.js#L46-L50)
+
+## Rendering Engine
+The rendering engine has been modularized with a shared card builder that handles template generation and DOM manipulation.
+
+### Template Literal Architecture
+The shared card renderer uses template literals to generate responsive product cards:
 
 ```mermaid
 flowchart TD
-Start(["Render Function Entry"]) --> GetGrid["Get Grid Container by ID"]
-GetGrid --> MapProducts["Map Products to Card HTML Strings"]
-MapProducts --> BuildCard["Use Shared Card Builder<br/>with Template Literals"]
-BuildCard --> InjectHTML["Set innerHTML on Grid"]
-InjectHTML --> End(["Render Complete"])
+A["Product Data Object"] --> B["Language Detection"]
+B --> C["Badge Configuration Lookup"]
+C --> D["Styling Decision<br/>(Somber vs Celebratory)"]
+D --> E["Template Literal Generation"]
+E --> F["DOM Injection"]
+F --> G["Event Handler Attachment"]
 ```
 
 **Diagram sources**
-- [index.html:1376-1444](file://docs/index.html#L1376-L1444)
+- [products.js:37-80](file://docs/js/products.js#L37-L80)
+
+### Grid Container Management
+Each category targets specific grid containers by ID:
+- `ceremonial-grid` → ceremonial products
+- `funeral-products-grid` → funeral products  
+- `wreaths-grid` → wreath products
+- `opening-grid` → opening products
+- `association-grid` → association products
+- `graduation-grid` → graduation products
+- `pets-grid` → pet memorial products
 
 **Section sources**
-- [index.html:1376-1444](file://docs/index.html#L1376-L1444)
+- [products.js:82-97](file://docs/js/products.js#L82-L97)
+- [index.html:239,293,330,348,366,384,402:239-402](file://docs/index.html#L239-L402)
 
-### Image Handling via Unsplash CDN
-- All product images reference Unsplash URLs with query parameters for width, auto-formatting, cropping, and quality.
-- Benefits: Consistent sizing, optimized delivery, and reduced server load.
-- Best practices: Keep width around 600px for grid thumbnails; adjust q parameter for balance between quality and bandwidth.
+## Cart Integration
+The cart system provides persistent shopping functionality with localStorage storage and real-time UI updates.
 
-Common pitfalls:
-- Using excessively large widths or high quality values can increase load time.
-- Missing alt text increases accessibility issues; ensure alt reflects current language selection.
-
-**Section sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-
-### Relationship Between Product Arrays and Render Functions
-- Each category has a dedicated array and a corresponding render function.
-- On initial load and language switch, all render functions are invoked to populate grids.
-- The shared card builder centralizes layout and behavior, minimizing duplication.
-
+### State Management Architecture
 ```mermaid
-classDiagram
-class DataArrays {
-+ceremonialProducts
-+funeralProducts
-+wreathProducts
-+openingProducts
-+associationProducts
-+graduationProducts
-+petProducts
+stateDiagram-v2
+[*] --> EmptyCart
+EmptyCart --> ItemAdded : addToCart(product)
+ItemAdded --> QuantityUpdated : updateQuantity(id, delta)
+QuantityUpdated --> ItemRemoved : quantity <= 0
+ItemRemoved --> EmptyCart
+state ItemAdded {
+[*] --> ExistingItem
+[*] --> NewItem
+ExistingItem --> Incremented : quantity++
+NewItem --> Initialized : quantity = 1
 }
-class RenderFunctions {
-+renderCeremonialProducts()
-+renderFuneralProducts()
-+renderWreathProducts()
-+renderOpeningProducts()
-+renderAssociationProducts()
-+renderGraduationProducts()
-+renderPetProducts()
-}
-class SharedRenderer {
-+renderProductCard(product, index, badgeText, badgeColor)
-}
-class CartState {
-+cart[]
-+addToCart(id)
-+removeFromCart(id)
-+updateQuantity(id, change)
-+updateCartUI()
-}
-DataArrays --> RenderFunctions : "consumed by"
-RenderFunctions --> SharedRenderer : "uses"
-RenderFunctions --> CartState : "invokes on add-to-cart"
 ```
 
 **Diagram sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1376-1444](file://docs/index.html#L1376-L1444)
-- [index.html:1446-1553](file://docs/index.html#L1446-L1553)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
+
+### Persistent Storage
+The cart system uses localStorage for data persistence:
+- **Storage Key**: `fujianFloristCart`
+- **Data Format**: JSON array of product objects with quantity metadata
+- **Auto-sync**: All cart operations automatically save to storage
+- **Error Handling**: Graceful fallback to empty cart on storage errors
 
 **Section sources**
-- [index.html:1332-1351](file://docs/index.html#L1332-L1351)
-- [index.html:1376-1444](file://docs/index.html#L1376-L1444)
-- [index.html:1446-1553](file://docs/index.html#L1446-L1553)
+- [cart.js:5-18](file://docs/js/cart.js#L5-L18)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
 
-### Adding New Products
-Steps:
-1. Choose the appropriate category array.
-2. Append a new product object with all required fields.
-3. Ensure unique id and valid Unsplash image URL.
-4. Save and reload; the product will appear automatically.
+## Internationalization Support
+The system provides comprehensive bilingual support with dynamic language switching and content localization.
 
-Where to edit:
-- Ceremonial: [index.html:1079-1120](file://docs/index.html#L1079-L1120)
-- Funeral: [index.html:1122-1163](file://docs/index.html#L1122-L1163)
-- Wreath: [index.html:1165-1196](file://docs/index.html#L1165-L1196)
-- Opening: [index.html:1198-1229](file://docs/index.html#L1198-L1229)
-- Association: [index.html:1231-1262](file://docs/index.html#L1231-L1262)
-- Graduation: [index.html:1264-1295](file://docs/index.html#L1264-L1295)
-- Pet Memorial: [index.html:1297-1328](file://docs/index.html#L1297-L1328)
-
-**Section sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-
-### Modifying Existing Products
-To update an existing product:
-- Locate the product by id within the relevant category array.
-- Edit fields such as name, price, image, or descriptions.
-- Changes reflect immediately upon reload.
-
-Example targets:
-- Ceremonial entries: [index.html:1079-1120](file://docs/index.html#L1079-L1120)
-- Funeral entries: [index.html:1122-1163](file://docs/index.html#L1122-L1163)
-- Wreath entries: [index.html:1165-1196](file://docs/index.html#L1165-L1196)
-- Opening entries: [index.html:1198-1229](file://docs/index.html#L1198-L1229)
-- Association entries: [index.html:1231-1262](file://docs/index.html#L1231-L1262)
-- Graduation entries: [index.html:1264-1295](file://docs/index.html#L1264-L1295)
-- Pet entries: [index.html:1297-1328](file://docs/index.html#L1297-L1328)
-
-**Section sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-
-### Creating a New Category
-To introduce a new category:
-1. Add a new product array following the same schema.
-2. Create a new render function similar to existing ones.
-3. Add a new grid container element in the HTML with a unique id.
-4. Invoke the new render function on initialization and language switch.
-5. Optionally add navigation links and hero/category tiles if desired.
-
-Implementation anchors:
-- Initialization block where renderers are called: [index.html:1332-1351](file://docs/index.html#L1332-L1351)
-- Language switcher re-render calls: [index.html:1353-1374](file://docs/index.html#L1353-L1374)
-- Example render function pattern: [index.html:1406-1444](file://docs/index.html#L1406-L1444)
-- Section grid containers: [index.html:402-587](file://docs/index.html#L402-L587)
-
-**Section sources**
-- [index.html:1332-1351](file://docs/index.html#L1332-L1351)
-- [index.html:1353-1374](file://docs/index.html#L1353-L1374)
-- [index.html:1406-1444](file://docs/index.html#L1406-L1444)
-- [index.html:402-587](file://docs/index.html#L402-L587)
-
-### Cart Integration and Checkout Flow
-- Adding to cart: The shared card button triggers addToCart with the product id.
-- Cart updates: updateCartUI recalculates totals and rebuilds the cart sidebar.
-- WhatsApp checkout: generateWhatsAppLink composes a message including item details and total, then updates the checkout link.
-
-```mermaid
-sequenceDiagram
-participant User as "User"
-participant Card as "Product Card Button"
-participant Cart as "addToCart / updateCartUI"
-participant WA as "generateWhatsAppLink"
-participant DOM as "Checkout Link"
-User->>Card : Click "Add to Cart"
-Card->>Cart : addToCart(productId)
-Cart->>Cart : updateCartUI()
-Cart->>WA : generateWhatsAppLink()
-WA-->>DOM : Set href for checkout link
-```
-
-**Diagram sources**
-- [index.html:1376-1444](file://docs/index.html#L1376-L1444)
-- [index.html:1446-1553](file://docs/index.html#L1446-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
-
-**Section sources**
-- [index.html:1446-1553](file://docs/index.html#L1446-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
-
-## Dependency Analysis
-- Data dependencies: Render functions depend on category arrays.
-- UI dependencies: Cards depend on shared renderer and global language state.
-- External dependencies: Unsplash CDN for images; WhatsApp API for checkout messages.
-- No circular dependencies observed; clear separation between data, view, and interaction layers.
-
+### Translation Architecture
 ```mermaid
 graph LR
-Data["Product Arrays"] --> Render["Category Renderers"]
-Render --> Shared["Shared Card Builder"]
-Shared --> DOM["Grid Containers"]
-Shared --> Cart["Cart State"]
-Cart --> WA["WhatsApp Link Generator"]
-Shared --> Lang["Language State"]
-Data --> Images["Unsplash CDN"]
+A["translations.json"] --> B["Translations Module"]
+B --> C["Language State<br/>(currentLang)"]
+C --> D["DOM Elements<br/>(data-i18n attributes)"]
+C --> E["Dynamic Content<br/>(Product names/descriptions)"]
+C --> F["UI Components<br/>(Buttons, labels)"]
+G["Language Switcher<br/>(zh/en buttons)"] --> B
+H["localStorage<br/>(fujianFloristLang)"] --> B
 ```
 
 **Diagram sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1376-1444](file://docs/index.html#L1376-L1444)
-- [index.html:1446-1553](file://docs/index.html#L1446-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
+- [translations.js:9-17](file://docs/js/translations.js#L9-L17)
+- [translations.js:27-44](file://docs/js/translations.js#L27-L44)
+
+### Language-Specific Features
+- **Content Localization**: Product names, descriptions, and UI text switch dynamically
+- **Visual Adaptation**: Document language attribute updates for proper font rendering
+- **Preference Persistence**: User language choice saved to localStorage
+- **Fallback Handling**: Graceful degradation when translations are missing
 
 **Section sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1376-1444](file://docs/index.html#L1376-L1444)
-- [index.html:1446-1553](file://docs/index.html#L1446-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
+- [translations.js:9-51](file://docs/js/translations.js#L9-L51)
+- [translations.json:1-199](file://docs/translations.json#L1-L199)
+
+## Component Architecture
+The system follows a modular component pattern with clear separation of responsibilities.
+
+### Module Responsibilities
+- **Main Module**: Application orchestration, event handling, and cross-module communication
+- **Products Module**: Data loading, processing, and rendering logic
+- **Cart Module**: Shopping cart state management and persistence
+- **Translations Module**: Internationalization and language switching
+- **Components Module**: Reusable UI behaviors and shared functionality
+
+### Event Flow Architecture
+```mermaid
+sequenceDiagram
+participant User as "User Interaction"
+participant Card as "Product Card"
+participant Main as "Main.handleAddToCart"
+participant Products as "Products.findProduct"
+participant Cart as "Cart.addToCart"
+participant UI as "updateCartUI"
+participant Toast as "Components.showToast"
+User->>Card : Click "Add to Cart"
+Card->>Main : handleAddToCart(productId)
+Main->>Products : findProduct(productId)
+Products-->>Main : Return product object
+Main->>Cart : addToCart(product)
+Cart-->>Main : Updated cart state
+Main->>UI : updateCartUI()
+Main->>Toast : showToast(message)
+UI-->>User : Visual feedback
+Toast-->>User : Success notification
+```
+
+**Diagram sources**
+- [main.js:8-14](file://docs/js/main.js#L8-L14)
+- [products.js:32-34](file://docs/js/products.js#L32-34)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
+
+**Section sources**
+- [main.js:1-134](file://docs/js/main.js#L1-134)
+- [components.js:1-72](file://docs/js/components.js#L1-72)
+
+## Adding New Products
+Adding new products is now simplified through the centralized JSON data structure.
+
+### Step-by-Step Process
+1. **Open products.json**: Navigate to the appropriate category section
+2. **Add Product Object**: Insert new product following the established schema
+3. **Ensure Unique ID**: Use unique numeric identifier within category range
+4. **Provide Bilingual Content**: Include both English and Chinese versions
+5. **Optimize Image URL**: Use Unsplash CDN with appropriate parameters
+6. **Save and Test**: Changes appear immediately after page reload
+
+### Product Schema Requirements
+```json
+{
+  "id": 801,
+  "name": "New Product Name",
+  "name_zh": "新產品名稱", 
+  "price": 999,
+  "image": "https://images.unsplash.com/photo-[ID]?w=600&auto=format&fit=crop&q=80",
+  "description": "English product description",
+  "description_zh": "中文產品描述"
+}
+```
+
+### Best Practices
+- **ID Sequencing**: Follow existing numbering patterns (e.g., 801+ for new categories)
+- **Image Optimization**: Use w=600 parameter for optimal grid display
+- **Price Formatting**: Use integer values without currency symbols
+- **Description Length**: Keep descriptions concise but informative
+- **Bilingual Consistency**: Ensure both language versions convey same meaning
+
+**Section sources**
+- [products.json:1-224](file://docs/products.json#L1-L224)
+
+## Creating New Categories
+Creating new categories requires updates across multiple files and architectural components.
+
+### Implementation Steps
+1. **Update products.json**: Add new category array with product objects
+2. **Configure Badge Settings**: Add badge configuration in products.js
+3. **Create Grid Container**: Add HTML grid element with unique ID
+4. **Update Navigation**: Add navigation links and category tiles
+5. **Modify Render Function**: Update renderAll() method
+6. **Add Translations**: Include category-specific translations
+
+### Required File Modifications
+
+#### products.json Addition
+```json
+"new_category": [
+  {
+    "id": 901,
+    "name": "New Category Product",
+    "name_zh": "新類別產品",
+    "price": 1000,
+    "image": "https://images.unsplash.com/photo-[ID]?w=600&auto=format&fit=crop&q=80",
+    "description": "English description",
+    "description_zh": "中文描述"
+  }
+]
+```
+
+#### products.js Badge Configuration
+```javascript
+const badges = {
+  // ... existing categories
+  new_category: { 
+    text_zh: '新類別', 
+    text_en: 'New Category', 
+    color: '#color-code' 
+  }
+};
+```
+
+#### HTML Grid Container
+```html
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="new-category-grid"></div>
+```
+
+#### Render Function Update
+```javascript
+function renderAll() {
+  // ... existing renders
+  renderCategory('new_category', 'new-category-grid');
+}
+```
+
+**Section sources**
+- [products.js:8-15](file://docs/js/products.js#L8-L15)
+- [products.js:89-97](file://docs/js/products.js#L89-L97)
+- [index.html:239-402](file://docs/index.html#L239-L402)
 
 ## Performance Considerations
-- Image optimization: Use Unsplash parameters to limit width and quality; avoid oversized images for grid thumbnails.
-- Rendering efficiency: innerHTML batch insertion is efficient for small catalogs; consider virtualization only if the catalog grows significantly.
-- Re-renders on language switch: Current approach re-renders all grids; acceptable for small datasets but could be optimized by caching rendered HTML per language if needed.
-- Event delegation: For very large catalogs, delegating click events to parent containers can reduce memory overhead.
-- Avoid layout thrashing: Batch DOM writes and reads; current code primarily writes once per grid, which is efficient.
+The modernized architecture includes several performance optimizations and best practices.
 
-[No sources needed since this section provides general guidance]
+### Data Loading Optimization
+- **Asynchronous Loading**: Non-blocking data fetch prevents UI freezing
+- **Single Request**: All product data loaded in one HTTP request
+- **Memory Efficiency**: Data cached in module scope for reuse
+- **Lazy Evaluation**: Only necessary data processed per category
+
+### Rendering Performance
+- **Batch DOM Updates**: innerHTML batch insertion reduces reflows
+- **Efficient Templates**: Template literals minimize string concatenation overhead
+- **Conditional Rendering**: Badge and styling logic optimized for performance
+- **Event Delegation**: Single event handlers reduce memory footprint
+
+### Image Optimization
+- **CDN Delivery**: Unsplash CDN provides optimized image delivery
+- **Responsive Sizing**: w=600 parameter balances quality and bandwidth
+- **Format Optimization**: auto=format ensures optimal format selection
+- **Quality Control**: q=80 parameter provides good quality-to-size ratio
+
+### Memory Management
+- **Module Pattern**: IIFE pattern prevents global namespace pollution
+- **Event Cleanup**: Proper event handler management prevents memory leaks
+- **LocalStorage Limits**: Cart data size managed to prevent storage quota issues
 
 ## Troubleshooting Guide
-Common issues and resolutions:
-- Product not appearing: Verify the product exists in the correct category array and that the grid container id matches the render function target.
-- Wrong image displayed: Check the Unsplash URL format and ensure it resolves; confirm alt text references the correct language field.
-- Price formatting incorrect: Ensure price is a number and not a string; verify currency symbol usage in the card builder.
-- Cart not updating: Confirm addToCart receives the correct id and that updateCartUI is called afterward.
-- WhatsApp link missing details: Validate generateWhatsAppLink constructs the message correctly and that the checkout link href is updated.
+Common issues and their solutions in the modernized system.
 
-Relevant implementation areas:
-- Category arrays and product schemas: [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- Render functions and grid ids: [index.html:1406-1444](file://docs/index.html#L1406-L1444)
-- Cart operations and UI updates: [index.html:1446-1553](file://docs/index.html#L1446-L1553)
-- WhatsApp link generation: [index.html:1478-1494](file://docs/index.html#L1478-L1494)
+### Data Loading Issues
+**Problem**: Products not appearing on page load
+- **Check Network Tab**: Verify products.json loads successfully
+- **Validate JSON Syntax**: Ensure proper JSON formatting and syntax
+- **Verify File Path**: Confirm correct relative path to products.json
+- **Check Console Errors**: Look for CORS or parsing errors
+
+**Problem**: Wrong language content displayed
+- **Verify translations.json**: Check if required keys exist in selected language
+- **Check Language State**: Confirm currentLang variable is set correctly
+- **Inspect DOM Attributes**: Verify data-i18n attributes are properly applied
+
+### Rendering Problems
+**Problem**: Grid containers not found
+- **Check Element IDs**: Verify grid container IDs match render function calls
+- **Validate HTML Structure**: Ensure grid divs exist before script execution
+- **Review Script Order**: Confirm scripts load in correct dependency order
+
+**Problem**: Images not displaying
+- **Validate Unsplash URLs**: Check image URLs are accessible and properly formatted
+- **Verify Image Parameters**: Ensure w=600 and other parameters are correct
+- **Check CORS Policy**: Confirm Unsplash allows cross-origin requests
+
+### Cart Functionality Issues
+**Problem**: Cart items not persisting
+- **Check localStorage Access**: Verify browser allows localStorage
+- **Validate Storage Key**: Ensure STORAGE_KEY constant matches usage
+- **Inspect Error Handling**: Check try-catch blocks in _load() function
+
+**Problem**: Cart total calculations incorrect
+- **Verify Price Values**: Ensure prices are numbers, not strings
+- **Check Quantity Updates**: Validate quantity increment/decrement logic
+- **Review Calculation Methods**: Inspect getCartTotal() implementation
+
+### Internationalization Problems
+**Problem**: Language switching not working
+- **Check Button Handlers**: Verify onclick handlers call setLanguage()
+- **Validate Language Keys**: Ensure both 'zh' and 'en' keys exist in translations
+- **Inspect DOM Updates**: Check if data-i18n elements are being updated
+
+**Problem**: Missing translations
+- **Verify Translation Keys**: Check if all required keys exist in translations.json
+- **Check Fallback Logic**: Ensure default key returns when translation missing
+- **Validate JSON Structure**: Confirm proper nesting and formatting
 
 **Section sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1406-1444](file://docs/index.html#L1406-L1444)
-- [index.html:1446-1553](file://docs/index.html#L1446-L1553)
-- [index.html:1478-1494](file://docs/index.html#L1478-L1494)
+- [products.js:17-20](file://docs/js/products.js#L17-L20)
+- [translations.js:9-17](file://docs/js/translations.js#L9-L17)
+- [cart.js:8-14](file://docs/js/cart.js#L8-L14)
 
 ## Conclusion
-The product management system is a compact, client-side solution built around clear data arrays, reusable rendering logic, and straightforward DOM manipulation. It supports seven distinct categories, bilingual content, and seamless integration with Unsplash for images and WhatsApp for checkout. By adhering to the provided patterns, you can confidently add new products, modify existing ones, and extend the system with additional categories while maintaining performance and usability.
+The modernized product management system represents a significant architectural improvement over the original hardcoded approach. The new data-driven architecture provides better maintainability, scalability, and user experience through:
+
+- **Centralized Data Management**: All product information stored in structured JSON format
+- **Modular Code Organization**: Clear separation of concerns with dedicated modules
+- **Enhanced User Experience**: Real-time language switching and persistent shopping cart
+- **Improved Performance**: Asynchronous loading and optimized rendering pipeline
+- **Better Maintainability**: Easy addition of new products and categories through standardized schemas
+
+The system successfully supports all seven product categories while providing a foundation for future enhancements such as search functionality, filtering capabilities, and expanded internationalization support. The modular architecture ensures that new features can be added without disrupting existing functionality, making it well-suited for continued development and scaling.
