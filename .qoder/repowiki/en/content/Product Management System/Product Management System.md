@@ -14,12 +14,10 @@
 
 ## Update Summary
 **Changes Made**
-- Completely restructured from hardcoded arrays in index.html to data-driven approach using products.json
-- Implemented dynamic loading system with asynchronous data fetching
-- Enhanced category management with centralized badge configuration
-- Improved bilingual support with translation integration
-- Modularized JavaScript architecture with separate modules for cart, translations, and components
-- Added localStorage persistence for cart state and language preferences
+- Updated booking policy documentation to reflect new "5 days advance booking" requirement across all service categories
+- Updated product pricing information for Premium Traditional White Wreath (Product ID 101) from $580 to $1300
+- Enhanced booking policy section with comprehensive details about the new advance booking requirements
+- Updated pricing examples and product data references throughout the documentation
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -40,7 +38,7 @@
 ## Introduction
 This document explains the modernized product management system implemented for the Fujian Florist website. The system has been completely restructured from a monolithic approach with hardcoded arrays to a modular, data-driven architecture that uses JSON files for product data and implements dynamic loading with improved category management and comprehensive bilingual support.
 
-The system now supports seven distinct product categories (ceremonial, funeral, wreath, opening, association, graduation, pet memorial) through a sophisticated data layer, dynamic rendering engine, and component-based architecture. It features seamless integration with Unsplash CDN for images, WhatsApp checkout functionality, and persistent shopping cart state.
+The system now supports seven distinct product categories (ceremonial, funeral, wreath, opening, association, graduation, pet memorial) through a sophisticated data layer, dynamic rendering engine, and component-based architecture. It features seamless integration with Unsplash CDN for images, WhatsApp checkout functionality, and persistent shopping cart state. All products require a minimum 5-day advance booking period to ensure quality preparation and service excellence.
 
 ## Architecture Overview
 The system follows a modular client-side architecture with clear separation of concerns:
@@ -96,8 +94,14 @@ Products are organized into seven categories within the JSON structure:
 - **graduation**: Honor plaques, academic achievement stands, school ceremony displays
 - **pets**: Pet memorial plaques, rainbow bridge wreaths, companion memorials
 
+### Booking Policy Integration
+All products in the system adhere to the standardized 5-day advance booking policy, which is consistently enforced across all categories and reflected in both user-facing content and backend processing logic.
+
+**Updated** The booking policy has been updated from the previous 3-working-day requirement to a comprehensive 5-day advance booking period across all service categories to ensure optimal quality preparation and customer satisfaction.
+
 **Section sources**
-- [products.json:1-224](file://docs/products.json#L1-L224)
+- [products.json:1-215](file://docs/products.json#L1-L215)
+- [translations.json:129-220](file://docs/translations.json#L129-L220)
 
 ## Dynamic Loading System
 The system implements an asynchronous data loading mechanism that fetches product data from the JSON file at runtime.
@@ -226,9 +230,13 @@ The cart system uses localStorage for data persistence:
 - **Auto-sync**: All cart operations automatically save to storage
 - **Error Handling**: Graceful fallback to empty cart on storage errors
 
+### Booking Policy Enforcement
+The cart system integrates with the 5-day advance booking policy, ensuring customers are informed about ordering requirements during the checkout process.
+
 **Section sources**
 - [cart.js:5-18](file://docs/js/cart.js#L5-L18)
 - [cart.js:24-34](file://docs/js/cart.js#L24-L34)
+- [translations.json:219-220](file://docs/translations.json#L219-L220)
 
 ## Internationalization Support
 The system provides comprehensive bilingual support with dynamic language switching and content localization.
@@ -254,10 +262,13 @@ H["localStorage<br/>(fujianFloristLang)"] --> B
 - **Visual Adaptation**: Document language attribute updates for proper font rendering
 - **Preference Persistence**: User language choice saved to localStorage
 - **Fallback Handling**: Graceful degradation when translations are missing
+- **Booking Policy Consistency**: Unified 5-day advance booking messaging across all languages
+
+**Updated** The internationalization system now consistently reflects the updated 5-day advance booking policy across both English and Chinese translations, ensuring uniform customer communication regardless of language preference.
 
 **Section sources**
 - [translations.js:9-51](file://docs/js/translations.js#L9-L51)
-- [translations.json:1-199](file://docs/translations.json#L1-L199)
+- [translations.json:1-229](file://docs/translations.json#L1-L229)
 
 ## Component Architecture
 The system follows a modular component pattern with clear separation of responsibilities.
@@ -309,7 +320,8 @@ Adding new products is now simplified through the centralized JSON data structur
 3. **Ensure Unique ID**: Use unique numeric identifier within category range
 4. **Provide Bilingual Content**: Include both English and Chinese versions
 5. **Optimize Image URL**: Use Unsplash CDN with appropriate parameters
-6. **Save and Test**: Changes appear immediately after page reload
+6. **Apply Booking Policy**: Ensure product adheres to 5-day advance booking requirement
+7. **Save and Test**: Changes appear immediately after page reload
 
 ### Product Schema Requirements
 ```json
@@ -330,9 +342,12 @@ Adding new products is now simplified through the centralized JSON data structur
 - **Price Formatting**: Use integer values without currency symbols
 - **Description Length**: Keep descriptions concise but informative
 - **Bilingual Consistency**: Ensure both language versions convey same meaning
+- **Booking Policy Compliance**: All products must comply with the 5-day advance booking requirement
+
+**Updated** The product addition process now includes explicit consideration of the updated 5-day advance booking policy, ensuring consistency across all new product listings.
 
 **Section sources**
-- [products.json:1-224](file://docs/products.json#L1-L224)
+- [products.json:1-215](file://docs/products.json#L1-L215)
 
 ## Creating New Categories
 Creating new categories requires updates across multiple files and architectural components.
@@ -344,6 +359,7 @@ Creating new categories requires updates across multiple files and architectural
 4. **Update Navigation**: Add navigation links and category tiles
 5. **Modify Render Function**: Update renderAll() method
 6. **Add Translations**: Include category-specific translations
+7. **Apply Booking Policy**: Ensure new category adheres to 5-day advance booking requirement
 
 ### Required File Modifications
 
@@ -455,6 +471,17 @@ Common issues and their solutions in the modernized system.
 - **Check Quantity Updates**: Validate quantity increment/decrement logic
 - **Review Calculation Methods**: Inspect getCartTotal() implementation
 
+### Booking Policy Issues
+**Problem**: Incorrect booking policy information displayed
+- **Check translations.json**: Verify all booking policy references updated to "5 days"
+- **Verify HTML Content**: Ensure urgent order sections reflect new policy
+- **Test Both Languages**: Confirm policy consistency across English and Chinese versions
+
+**Problem**: Product pricing discrepancies
+- **Verify products.json**: Check product prices match current catalog
+- **Update Product Records**: Ensure all price changes are reflected in data layer
+- **Clear Browser Cache**: Force refresh to see updated pricing information
+
 ### Internationalization Problems
 **Problem**: Language switching not working
 - **Check Button Handlers**: Verify onclick handlers call setLanguage()
@@ -466,10 +493,14 @@ Common issues and their solutions in the modernized system.
 - **Check Fallback Logic**: Ensure default key returns when translation missing
 - **Validate JSON Structure**: Confirm proper nesting and formatting
 
+**Updated** Added troubleshooting guidance for booking policy and pricing issues, reflecting the recent updates to the 5-day advance booking requirement and product pricing adjustments.
+
 **Section sources**
 - [products.js:17-20](file://docs/js/products.js#L17-L20)
 - [translations.js:9-17](file://docs/js/translations.js#L9-L17)
 - [cart.js:8-14](file://docs/js/cart.js#L8-L14)
+- [products.json:42-49](file://docs/products.json#L42-L49)
+- [translations.json:129-220](file://docs/translations.json#L129-L220)
 
 ## Conclusion
 The modernized product management system represents a significant architectural improvement over the original hardcoded approach. The new data-driven architecture provides better maintainability, scalability, and user experience through:
@@ -479,5 +510,6 @@ The modernized product management system represents a significant architectural 
 - **Enhanced User Experience**: Real-time language switching and persistent shopping cart
 - **Improved Performance**: Asynchronous loading and optimized rendering pipeline
 - **Better Maintainability**: Easy addition of new products and categories through standardized schemas
+- **Consistent Booking Policy**: Unified 5-day advance booking requirement across all services
 
-The system successfully supports all seven product categories while providing a foundation for future enhancements such as search functionality, filtering capabilities, and expanded internationalization support. The modular architecture ensures that new features can be added without disrupting existing functionality, making it well-suited for continued development and scaling.
+The system successfully supports all seven product categories while providing a foundation for future enhancements such as search functionality, filtering capabilities, and expanded internationalization support. The modular architecture ensures that new features can be added without disrupting existing functionality, making it well-suited for continued development and scaling. Recent updates to the booking policy and product pricing demonstrate the system's flexibility in accommodating business rule changes while maintaining data integrity and user experience consistency.

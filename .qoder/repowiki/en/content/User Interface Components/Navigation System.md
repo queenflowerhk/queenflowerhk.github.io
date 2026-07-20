@@ -3,7 +3,17 @@
 <cite>
 **Referenced Files in This Document**
 - [index.html](file://docs/index.html)
+- [main.js](file://docs/js/main.js)
+- [components.js](file://docs/js/components.js)
+- [styles.css](file://docs/css/styles.css)
 </cite>
+
+## Update Summary
+**Changes Made**
+- Updated navigation menu order to reflect ceremonial plaques section moved after pets memorial section
+- Enhanced active link styling with improved visual hierarchy for current page sections
+- Refined hover states throughout desktop and mobile interfaces for better user feedback
+- Updated mobile menu active state styling to highlight current section
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -23,6 +33,8 @@
 ## Introduction
 
 The navigation system component is a sophisticated, responsive navigation solution implemented within a single-page HTML application for Fujian Florist. This navigation system provides seamless user experience across desktop and mobile devices, featuring smooth scrolling, sticky behavior, backdrop blur effects, and comprehensive accessibility support. The implementation demonstrates modern web development practices with Tailwind CSS utility classes and vanilla JavaScript functionality.
+
+**Updated** The navigation structure has been optimized with ceremonial plaques section positioned after pets memorial section for improved user flow and logical content organization.
 
 ## Project Structure
 
@@ -45,22 +57,25 @@ D --> M[Anchor Links]
 D --> N[Scroll Events]
 E --> O[Shadow Effect]
 E --> P[Scroll Detection]
+F --> Q[Enhanced Hover States]
+F --> R[Active Link Styling]
+K --> S[Mobile Active States]
 ```
 
 **Diagram sources**
-- [index.html:214-282](file://docs/index.html#L214-L282)
-- [index.html:1343-1350](file://docs/index.html#L1343-L1350)
+- [index.html:36-105](file://docs/index.html#L36-L105)
+- [components.js:41-51](file://docs/js/components.js#L41-L51)
 
 **Section sources**
-- [index.html:214-282](file://docs/index.html#L214-L282)
+- [index.html:36-105](file://docs/index.html#L36-L105)
 
 ## Core Components
 
 ### Desktop Navigation Menu
-The desktop navigation features a horizontal menu layout with smooth hover transitions and active state management. It includes multiple navigation categories with distinct styling for different sections.
+The desktop navigation features a horizontal menu layout with enhanced hover transitions and improved active state management. The navigation includes eight main categories with distinct styling for different sections, now organized with ceremonial plaques following pets memorial for better user flow.
 
 ### Mobile Hamburger Menu
-A responsive hamburger menu that transforms into a full-screen overlay on smaller screens, providing easy access to all navigation links with smooth toggle animations.
+A responsive hamburger menu that transforms into a full-screen overlay on smaller screens, providing easy access to all navigation links with smooth toggle animations and enhanced active state indicators.
 
 ### Sticky Navigation Behavior
 The navigation bar implements sticky positioning with dynamic shadow effects that activate upon scrolling, enhancing visual hierarchy and user orientation.
@@ -68,9 +83,11 @@ The navigation bar implements sticky positioning with dynamic shadow effects tha
 ### Smooth Scrolling Implementation
 Native CSS smooth scrolling combined with JavaScript event handlers ensures seamless navigation between page sections without jarring jumps.
 
+**Updated** Enhanced hover states and active link styling provide better visual feedback across both desktop and mobile interfaces.
+
 **Section sources**
-- [index.html:214-282](file://docs/index.html#L214-L282)
-- [index.html:1570-1573](file://docs/index.html#L1570-L1573)
+- [index.html:36-105](file://docs/index.html#L36-L105)
+- [components.js:41-51](file://docs/js/components.js#L41-L51)
 
 ## Architecture Overview
 
@@ -98,17 +115,18 @@ Nav->>Nav : Update visual state
 User->>Nav : Toggle Hamburger
 Nav->>Menu : Toggle visibility
 Menu->>Menu : Animate transition
+Note over Nav,Menu : Enhanced hover states and active styling
 ```
 
 **Diagram sources**
-- [index.html:1570-1573](file://docs/index.html#L1570-L1573)
-- [index.html:1343-1350](file://docs/index.html#L1343-L1350)
+- [components.js:41-51](file://docs/js/components.js#L41-L51)
+- [index.html:36-105](file://docs/index.html#L36-L105)
 
 ## Detailed Component Analysis
 
 ### Navigation Bar Structure
 
-The main navigation container uses semantic HTML5 elements with comprehensive Tailwind CSS classes:
+The main navigation container uses semantic HTML5 elements with comprehensive Tailwind CSS classes and enhanced styling:
 
 ```mermaid
 classDiagram
@@ -140,6 +158,7 @@ class DesktopMenu {
 +nav_links_array = 8
 +hover_text_transitions = true
 +font_medium = true
++enhanced_active_states = true
 }
 class MobileControls {
 +lang_switcher = true
@@ -152,12 +171,14 @@ NavigationBar --> DesktopMenu : contains
 NavigationBar --> MobileControls : contains
 ```
 
+**Updated** Enhanced active link styling and improved hover states throughout the navigation interface.
+
 **Diagram sources**
-- [index.html:214-265](file://docs/index.html#L214-L265)
+- [index.html:36-105](file://docs/index.html#L36-L105)
 
 ### Mobile Menu Implementation
 
-The mobile menu provides an alternative navigation interface optimized for touch devices:
+The mobile menu provides an alternative navigation interface optimized for touch devices with enhanced active state styling:
 
 ```mermaid
 flowchart TD
@@ -170,15 +191,18 @@ E --> G[User clicks link]
 F --> H[Menu remains closed]
 G --> I[Close mobile menu automatically]
 I --> J[Trigger smooth scroll]
+J --> K[Update active link styling]
 ```
 
+**Updated** Enhanced mobile menu active states with improved visual hierarchy for current section indication.
+
 **Diagram sources**
-- [index.html:260-281](file://docs/index.html#L260-L281)
-- [index.html:1570-1573](file://docs/index.html#L1570-L1573)
+- [index.html:90-104](file://docs/index.html#L90-L104)
+- [components.js:20-23](file://docs/js/components.js#L20-L23)
 
 **Section sources**
-- [index.html:214-282](file://docs/index.html#L214-L282)
-- [index.html:1570-1573](file://docs/index.html#L1570-L1573)
+- [index.html:36-105](file://docs/index.html#L36-L105)
+- [components.js:20-23](file://docs/js/components.js#L20-L23)
 
 ## CSS Styling and Effects
 
@@ -188,19 +212,26 @@ The navigation utilizes `backdrop-blur-md` class to create a frosted glass effec
 ### Border Transitions
 Smooth border color transitions are implemented using Tailwind's transition utilities, providing visual feedback during hover states and focus changes.
 
-### Hover States
+### Enhanced Hover States
 Comprehensive hover effects include:
-- Text color transitions from gray to amber tones
+- Text color transitions from gray to amber tones with improved timing
 - Background color changes for interactive elements
 - Shadow depth modifications
 - Transform animations for enhanced interactivity
+- **Updated** Refined hover states with better contrast and smoother transitions
+
+### Active Link Styling
+**Updated** Enhanced active link styling provides clear visual indication of current page section:
+- Ceremonial plaques link maintains prominent styling when active
+- Improved contrast ratios for better accessibility
+- Consistent styling across desktop and mobile interfaces
 
 ### Custom Scrollbar Styling
 Webkit-specific scrollbar customization provides consistent visual appearance across browsers with amber-themed styling.
 
 **Section sources**
-- [index.html:39-208](file://docs/index.html#L39-L208)
-- [index.html:214-282](file://docs/index.html#L214-L282)
+- [index.html:36-105](file://docs/index.html#L36-L105)
+- [styles.css:94-96](file://docs/css/styles.css#L94-L96)
 
 ## JavaScript Functionality
 
@@ -215,10 +246,12 @@ Two approaches are implemented:
 ### Sticky Navigation Enhancement
 A scroll event listener dynamically adds/removes shadow classes based on scroll position, creating a visual elevation effect when users navigate away from the top of the page.
 
+**Updated** Enhanced navigation initialization with improved scroll handling and active state management.
+
 **Section sources**
-- [index.html:1570-1573](file://docs/index.html#L1570-L1573)
-- [index.html:1343-1350](file://docs/index.html#L1343-L1350)
-- [index.html:155](file://docs/index.html#L155-L157)
+- [components.js:20-23](file://docs/js/components.js#L20-L23)
+- [components.js:41-51](file://docs/js/components.js#L41-L51)
+- [styles.css:94-96](file://docs/css/styles.css#L94-L96)
 
 ## Responsive Design Implementation
 
@@ -234,9 +267,10 @@ Mobile navigation elements are optimized for touch interaction with appropriate 
 ### Adaptive Layout
 The navigation automatically adapts its layout based on screen size, ensuring optimal usability across all device types.
 
+**Updated** Enhanced responsive behavior with improved mobile menu active states and better touch target sizing.
+
 **Section sources**
-- [index.html:228-265](file://docs/index.html#L228-L265)
-- [index.html:267-281](file://docs/index.html#L267-L281)
+- [index.html:36-105](file://docs/index.html#L36-L105)
 
 ## Accessibility Features
 
@@ -252,8 +286,10 @@ Text colors maintain sufficient contrast ratios against backgrounds to meet WCAG
 ### Focus Management
 Interactive elements provide clear visual focus states to assist keyboard navigation users.
 
+**Updated** Enhanced active link styling improves accessibility with better contrast ratios and clearer visual indicators.
+
 **Section sources**
-- [index.html:214-282](file://docs/index.html#L214-L282)
+- [index.html:36-105](file://docs/index.html#L36-L105)
 
 ## Cross-Browser Compatibility
 
@@ -270,7 +306,7 @@ Tailwind CSS handles vendor prefixing automatically, ensuring consistent behavio
 Efficient DOM manipulation and minimal reflows ensure smooth performance across all supported browsers.
 
 **Section sources**
-- [index.html:39-208](file://docs/index.html#L39-L208)
+- [styles.css:94-96](file://docs/css/styles.css#L94-L96)
 
 ## Performance Considerations
 
@@ -287,8 +323,7 @@ JavaScript functions are designed to minimize DOM queries and updates, reducing 
 External dependencies (Tailwind CSS, Font Awesome) are loaded via CDN for optimal caching and loading performance.
 
 **Section sources**
-- [index.html:1343-1350](file://docs/index.html#L1343-L1350)
-- [index.html:1570-1573](file://docs/index.html#L1570-L1573)
+- [components.js:41-51](file://docs/js/components.js#L41-L51)
 
 ## Troubleshooting Guide
 
@@ -314,11 +349,18 @@ External dependencies (Tailwind CSS, Font Awesome) are loaded via CDN for optima
 - Check for conflicting CSS rules that might override the blur effect
 - Ensure the navigation background opacity allows the blur effect to be visible
 
+#### Active Link Styling Issues
+- **Updated** Verify that active link classes are properly applied when navigating to sections
+- Check for CSS specificity conflicts affecting hover and active states
+- Ensure mobile menu active states are correctly managed
+
 **Section sources**
-- [index.html:1570-1573](file://docs/index.html#L1570-L1573)
-- [index.html:1343-1350](file://docs/index.html#L1343-L1350)
-- [index.html:155-157](file://docs/index.html#L155-L157)
+- [components.js:20-23](file://docs/js/components.js#L20-L23)
+- [components.js:41-51](file://docs/js/components.js#L41-L51)
+- [styles.css:94-96](file://docs/css/styles.css#L94-L96)
 
 ## Conclusion
 
-The navigation system component represents a comprehensive, production-ready implementation that successfully balances aesthetics, functionality, and performance. Through careful use of modern CSS techniques, efficient JavaScript patterns, and responsive design principles, it delivers an exceptional user experience across all devices and browsers. The modular architecture ensures maintainability and scalability, while the attention to accessibility and cross-browser compatibility makes it suitable for diverse user bases. This implementation serves as an excellent reference for building robust navigation systems in modern web applications.
+The navigation system component represents a comprehensive, production-ready implementation that successfully balances aesthetics, functionality, and performance. Through careful use of modern CSS techniques, efficient JavaScript patterns, and responsive design principles, it delivers an exceptional user experience across all devices and browsers. The recent enhancements to active link styling and hover states, along with the optimized navigation structure featuring ceremonial plaques after pets memorial, further improve user flow and visual hierarchy. The modular architecture ensures maintainability and scalability, while the attention to accessibility and cross-browser compatibility makes it suitable for diverse user bases. This implementation serves as an excellent reference for building robust navigation systems in modern web applications.
+
+**Updated** Recent improvements include enhanced active link styling, refined hover states, and optimized navigation structure for better user experience and improved content organization.

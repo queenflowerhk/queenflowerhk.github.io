@@ -6,17 +6,17 @@
 - [translations.json](file://docs/translations.json)
 - [main.js](file://docs/js/main.js)
 - [components.js](file://docs/js/components.js)
+- [products.js](file://docs/js/products.js)
 - [index.html](file://docs/index.html)
 - [styles.css](file://docs/css/styles.css)
 </cite>
 
 ## Update Summary
 **Changes Made**
-- Updated architecture overview to reflect new modular translation system
-- Replaced inline translation objects with JSON-based structure
-- Enhanced language switching mechanism with async loading and persistence
-- Improved content organization with dedicated modules
-- Added comprehensive examples for the new translation workflow
+- Updated 5-day booking policy messaging across all translation keys for consistency
+- Enhanced documentation to reflect current translation structure and implementation
+- Added comprehensive examples showing bilingual content management patterns
+- Updated code references to match actual implementation details
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -36,7 +36,7 @@
 
 ## Introduction
 
-The internationalization (i18n) system in this project provides comprehensive bilingual support for Traditional Chinese (zh-Hant) and English (en). The implementation has been overhauled to use a modular architecture with dedicated JavaScript modules and JSON-based translation files, enabling scalable and maintainable multilingual support without page reloads.
+The internationalization (i18n) system in this project provides comprehensive bilingual support for Traditional Chinese (zh-Hant) and English (en). The implementation uses a modular architecture with dedicated JavaScript modules and JSON-based translation files, enabling scalable and maintainable multilingual support without page reloads.
 
 The system supports:
 - Static text content through data-i18n attributes
@@ -45,6 +45,7 @@ The system supports:
 - Cultural formatting and messaging
 - Real-time UI updates upon language switching
 - Persistent language preferences across sessions
+- Consistent business policy messaging across both languages
 
 ## Architecture Overview
 
@@ -56,6 +57,7 @@ subgraph "User Interface Layer"
 HTML[HTML Elements<br/>with data-i18n]
 Buttons[Language Toggle<br/>Buttons]
 Products[Product Cards<br/>Dynamic Content]
+Cart[Shopping Cart<br/>UI Components]
 end
 subgraph "Core i18n Engine"
 TranslationsModule[Translations Module<br/>Async Loading]
@@ -64,12 +66,14 @@ setLanguage[setLanguage Function<br/>Core Logic]
 end
 subgraph "Data Layer"
 JSONFile[translations.json<br/>Static Data]
+ProductsJSON[products.json<br/>Product Data]
 LocalStorage[localStorage<br/>Persistence]
 end
 subgraph "Rendering Layer"
 DOMUpdater[DOM Updater<br/>querySelectorAll]
 ProductRenderer[Product Renderer<br/>Language-aware]
 CartUI[Cart UI<br/>Language Context]
+Components[Shared Components<br/>Toast & UI]
 end
 subgraph "Styling Layer"
 Fonts[Font Families<br/>Noto Sans TC/Inter]
@@ -81,22 +85,24 @@ setLanguage --> ProductRenderer
 setLanguage --> CartUI
 DOMUpdater --> HTML
 ProductRenderer --> Products
-CartUI --> Buttons
+CartUI --> Cart
+Components --> Cart
 TranslationsModule --> CurrentLang
 TranslationsModule --> JSONFile
 TranslationsModule --> LocalStorage
+TranslationsModule --> ProductsJSON
 Fonts --> CSSRules
 CSSRules --> HTML
 ```
 
 **Diagram sources**
 - [translations.js:5-54](file://docs/js/translations.js#L5-L54)
-- [main.js:110-127](file://docs/js/main.js#L110-L127)
+- [main.js:110-115](file://docs/js/main.js#L110-L115)
 - [index.html:72-77](file://docs/index.html#L72-L77)
 
 ## Translation Module Structure
 
-The translation system is now implemented as a dedicated module with clear responsibilities:
+The translation system is implemented as a dedicated module with clear responsibilities:
 
 ### Core Module Functions
 
@@ -164,7 +170,7 @@ const Translations = (() => {
 
 ## JSON Translation File Organization
 
-The translation data is now stored in a structured JSON file with hierarchical organization:
+The translation data is stored in a structured JSON file with hierarchical organization covering all website content:
 
 ### Translation Categories
 
@@ -181,7 +187,9 @@ The translation data is now stored in a structured JSON file with hierarchical o
 | Cart | `cart_*` | Shopping cart interface |
 | UI Feedback | `toast_*`, `whatsapp_*` | User interaction messages |
 
-### JSON Structure Example
+### Current Translation Structure Example
+
+The translation files now consistently reflect the 5-day booking policy requirement:
 
 ```json
 {
@@ -196,9 +204,9 @@ The translation data is now stored in a structured JSON file with hierarchical o
     "tag_1": "5天前預訂",
     "tag_2": "免費代寫輓聯",
     "tag_3": "三十年經驗",
-    "cat_ceremonial": "喜慶花牌",
-    "cat_ceremonial_desc": "祝壽賀喜",
-    // ... additional keys
+    "section_ceremonial_desc": "婚嫁喜慶、壽辰祝賀、滿月之喜，以鮮豔奪目的花牌傳達最誠摯的祝福。需提前5天前預訂。",
+    "urgent_desc": "所有花牌需提前<strong>5天前</strong>預訂。如需急單服務，訂單金額需<strong>$800或以上</strong>。請直接致電或WhatsApp查詢急單安排。",
+    "cart_preorder": "需提前5天前預訂。急單需$800起。"
   },
   "en": {
     "brand_name": "Fujian Florist",
@@ -211,15 +219,15 @@ The translation data is now stored in a structured JSON file with hierarchical o
     "tag_1": "5 days Pre-order",
     "tag_2": "Free Eulogy Writing",
     "tag_3": "30 Years Experience",
-    "cat_ceremonial": "Ceremonial",
-    "cat_ceremonial_desc": "Weddings",
-    // ... additional keys
+    "section_ceremonial_desc": "Weddings, birthdays, full moon celebrations. 5 days pre-order required.",
+    "urgent_desc": "All plaques require 5 days pre-order. For urgent orders, minimum order $800+. Please call or WhatsApp for urgent arrangements.",
+    "cart_preorder": "5 days pre-order required. Urgent orders $800+."
   }
 }
 ```
 
 **Section sources**
-- [translations.json:1-199](file://docs/translations.json#L1-L199)
+- [translations.json:1-229](file://docs/translations.json#L1-L229)
 
 ## Dynamic Language Switching Mechanism
 
@@ -236,7 +244,7 @@ participant Translations as Translations.setLanguage()
 participant Storage as localStorage
 participant DOM as DOM Updater
 participant Renderer as Product Renderer
-participant UI as Cart UI
+participant CartUI as Cart UI
 User->>Button : Click Language Toggle
 Button->>Main : setLanguage('en'/'zh')
 Main->>Translations : setLanguage(lang)
@@ -247,8 +255,8 @@ Translations->>Translations : Update html lang attribute
 Translations->>DOM : Query all [data-i18n] elements
 DOM->>DOM : Replace textContent with translations
 Main->>Renderer : Re-render all product grids
-Main->>UI : Update cart interface
-UI->>User : Display updated content
+Main->>CartUI : Update cart interface
+CartUI->>User : Display updated content
 ```
 
 **Diagram sources**
@@ -351,7 +359,7 @@ ${currentLang === 'zh' ? product.description_zh : product.description}
 
 **Section sources**
 - [index.html:45-48](file://docs/index.html#L45-L48)
-- [main.js:34-36](file://docs/js/main.js#L34-L36)
+- [products.js:52-53](file://docs/js/products.js#L52-L53)
 
 ## Language Toggle and UI Updates
 
@@ -711,4 +719,4 @@ Keep translation documentation updated:
 - Products: cat_*, product_*
 ```
 
-This enhanced internationalization system provides a robust foundation for multilingual support while maintaining clean code organization, excellent performance, and superior user experience across different languages and cultures. The modular architecture ensures scalability and maintainability for future language additions and content updates.
+This enhanced internationalization system provides a robust foundation for multilingual support while maintaining clean code organization, excellent performance, and superior user experience across different languages and cultures. The modular architecture ensures scalability and maintainability for future language additions and content updates. The consistent application of business policies like the 5-day booking requirement across both languages ensures reliable customer communication and operational clarity.

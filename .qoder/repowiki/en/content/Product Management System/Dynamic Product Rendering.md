@@ -3,7 +3,18 @@
 <cite>
 **Referenced Files in This Document**
 - [index.html](file://docs/index.html)
+- [products.js](file://docs/js/products.js)
+- [main.js](file://docs/js/main.js)
+- [cart.js](file://docs/js/cart.js)
+- [products.json](file://docs/products.json)
 </cite>
+
+## Update Summary
+**Changes Made**
+- Updated renderAll() function documentation to reflect new rendering order with ceremonial category moved to last position
+- Enhanced architecture overview diagram to show correct rendering sequence
+- Updated detailed component analysis to document the refined rendering order
+- Added specific examples of the new rendering sequence implementation
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -28,236 +39,261 @@ This document explains the dynamic product rendering system used to display and 
 - Practical examples for customization, adding interactive elements, and optimizing performance for large catalogs
 
 ## Project Structure
-The application is implemented as a single HTML file that includes:
-- Tailwind CSS via CDN for responsive styling
-- Font Awesome icons via CDN
-- Inline styles for custom animations and transitions
-- A script block containing all data, rendering logic, and UI interactions
+The application is implemented as a modular JavaScript system with separate files for different concerns:
+- HTML shell with Tailwind CSS and Font Awesome CDN integration
+- Products module for data management and rendering logic
+- Cart module for shopping cart state management
+- Main module for initialization and UI coordination
+- Translations module for internationalization support
+- Components module for reusable UI utilities
 
 ```mermaid
 graph TB
 A["HTML Shell<br/>Head + Body"] --> B["Tailwind CSS (CDN)"]
 A --> C["Font Awesome (CDN)"]
-A --> D["Inline Styles<br/>Animations & Transitions"]
-A --> E["Script Block<br/>Data + Logic"]
-E --> F["Product Data Arrays"]
-E --> G["Render Functions<br/>renderProductCard + category renderers"]
-E --> H["Cart State & UI<br/>addToCart, updateCartUI"]
-E --> I["Language Switching<br/>setLanguage"]
-E --> J["UI Utilities<br/>toggleCart, toggleMobileMenu, showToast"]
+A --> D["CSS Styles<br/>Custom Animations"]
+A --> E["JavaScript Modules"]
+E --> F["Products Module<br/>Data + Rendering"]
+E --> G["Cart Module<br/>State Management"]
+E --> H["Main Module<br/>Initialization"]
+E --> I["Translations Module<br/>i18n Support"]
+E --> J["Components Module<br/>UI Utilities"]
+F --> K["Product Data JSON"]
 ```
 
 **Diagram sources**
-- [index.html:1-209](file://docs/index.html#L1-L209)
-- [index.html:881-1589](file://docs/index.html#L881-L1589)
+- [index.html:696-701](file://docs/index.html#L696-L701)
+- [products.js:1-101](file://docs/js/products.js#L1-L101)
+- [cart.js:1-69](file://docs/js/cart.js#L1-L69)
+- [main.js:1-134](file://docs/js/main.js#L1-L134)
 
 **Section sources**
-- [index.html:1-209](file://docs/index.html#L1-L209)
-- [index.html:881-1589](file://docs/index.html#L881-L1589)
+- [index.html:696-701](file://docs/index.html#L696-L701)
+- [products.js:1-101](file://docs/js/products.js#L1-L101)
+- [cart.js:1-69](file://docs/js/cart.js#L1-L69)
+- [main.js:1-134](file://docs/js/main.js#L1-L134)
 
 ## Core Components
-- Product data arrays per category (ceremonial, funeral, wreath, opening, association, graduation, pets)
-- Category-specific render functions that map products into card markup and inject into grid containers
-- Central renderProductCard function that builds each card’s markup using template literals
-- Cart state management and UI updates
-- Language switching mechanism that re-renders content based on current language
-- Toast notifications and slide-in/out cart sidebar
+- **Products Module**: Manages product data loading, categorization, and rendering logic
+- **Cart Module**: Handles shopping cart state persistence and operations
+- **Main Module**: Orchestrates initialization, language switching, and UI updates
+- **Component System**: Provides reusable UI functions like toast notifications and cart toggles
+- **Translation System**: Supports bilingual content (Chinese/English) with dynamic switching
 
 Key responsibilities:
-- Render: Convert product data into DOM nodes
-- Interact: Handle add-to-cart actions and quantity changes
-- Update: Reflect cart state in the UI
-- Localize: Re-render text and labels based on selected language
+- **Render**: Convert product data into responsive DOM nodes with proper styling
+- **Interact**: Handle add-to-cart actions and quantity modifications
+- **Update**: Reflect cart state changes in real-time UI components
+- **Localize**: Re-render all content based on selected language preference
 
 **Section sources**
-- [index.html:1079-1328](file://docs/index.html#L1079-L1328)
-- [index.html:1376-1444](file://docs/index.html#L1376-L1444)
-- [index.html:1446-1553](file://docs/index.html#L1446-L1553)
-- [index.html:1353-1374](file://docs/index.html#L1353-L1374)
+- [products.js:37-97](file://docs/js/products.js#L37-L97)
+- [cart.js:24-67](file://docs/js/cart.js#L24-L67)
+- [main.js:111-129](file://docs/js/main.js#L111-L129)
 
 ## Architecture Overview
-At runtime, the page initializes by rendering all product grids, setting the default language, and updating the cart UI. Each category has its own grid container element where rendered cards are injected.
+At runtime, the page initializes by loading translations and product data, then renders all product grids in a specific order that aligns with the HTML structure. Each category has its own grid container element where rendered cards are injected.
 
 ```mermaid
 sequenceDiagram
 participant Browser as "Browser"
 participant DOM as "Document"
-participant App as "Script Block"
+participant Main as "Main.init()"
+participant Products as "Products.load()"
+participant Render as "Products.renderAll()"
 participant Grid as "Category Grids"
 participant Cart as "Cart State/UI"
 Browser->>DOM : Load index.html
-DOM-->>App : DOMContentLoaded
-App->>Grid : renderCeremonialProducts()
-App->>Grid : renderFuneralProducts()
-App->>Grid : renderWreathProducts()
-App->>Grid : renderOpeningProducts()
-App->>Grid : renderAssociationProducts()
-App->>Grid : renderGraduationProducts()
-App->>Grid : renderPetProducts()
-App->>Cart : updateCartUI()
-App->>App : setLanguage('zh')
-Note over App,Grid : Cards built via renderProductCard and injected into grids
+DOM-->>Main : DOMContentLoaded
+Main->>Products : load()
+Products->>Products : fetch products.json
+Products-->>Main : All products loaded
+Main->>Render : renderAll()
+Render->>Grid : renderCategory('funeral', 'funeral-products-grid')
+Render->>Grid : renderCategory('wreath', 'wreaths-grid')
+Render->>Grid : renderCategory('opening', 'opening-grid')
+Render->>Grid : renderCategory('association', 'association-grid')
+Render->>Grid : renderCategory('graduation', 'graduation-grid')
+Render->>Grid : renderCategory('pets', 'pets-grid')
+Render->>Grid : renderCategory('ceremonial', 'ceremonial-grid')
+Main->>Cart : updateCartUI()
+Note over Main,Grid : Cards built via renderProductCard and injected into grids
 ```
 
+**Updated** The rendering order has been refined to move the ceremonial category from first to last position, ensuring visual consistency with the HTML structure.
+
 **Diagram sources**
-- [index.html:1332-1351](file://docs/index.html#L1332-L1351)
-- [index.html:1353-1374](file://docs/index.html#L1353-L1374)
-- [index.html:1406-1444](file://docs/index.html#L1406-L1444)
+- [main.js:119-127](file://docs/js/main.js#L119-L127)
+- [products.js:89-97](file://docs/js/products.js#L89-L97)
 
 ## Detailed Component Analysis
 
 ### renderProductCard Implementation
-The renderProductCard function constructs a product card using template literals. It:
-- Builds optional ribbon badge markup when provided
-- Chooses price color and button hover style based on product category
+The renderProductCard function constructs a product card using template literals with dynamic styling based on product category. It:
+- Builds optional ribbon badge markup when provided through badge configuration
+- Chooses price color and button hover style based on whether the product is somber (funeral/pets) or celebratory
 - Returns a complete card string including image, title, description, price, and action buttons
 - Uses inline onclick attributes to bind addToCart events directly in markup
+- Implements staggered animation delays for smooth loading experience
 
 ```mermaid
 flowchart TD
-Start(["Call renderProductCard(product, index, badgeText, badgeColor)"]) --> ComputeStyles["Compute ribbonHtml, priceColor, btnColor"]
-ComputeStyles --> BuildMarkup["Build card markup with template literal"]
+Start(["Call renderProductCard(product, index)"]) --> GetLang["Get current language"]
+GetLang --> BadgeConfig["Check badge configuration"]
+BadgeConfig --> BuildRibbon["Build ribbon HTML if exists"]
+BuildRibbon --> DetermineStyle["Determine somber vs celebratory styles"]
+DetermineStyle --> SelectColors["Select priceColor and btnColor"]
+SelectColors --> LocalizeText["Localize product names and labels"]
+LocalizeText --> BuildMarkup["Build complete card markup"]
 BuildMarkup --> ReturnNode["Return HTML string"]
 ReturnNode --> Inject["Injected into grid via innerHTML"]
 Inject --> End(["Done"])
 ```
 
 **Diagram sources**
-- [index.html:1376-1404](file://docs/index.html#L1376-L1404)
+- [products.js:37-80](file://docs/js/products.js#L37-L80)
 
 **Section sources**
-- [index.html:1376-1404](file://docs/index.html#L1376-L1404)
+- [products.js:37-80](file://docs/js/products.js#L37-L80)
 
 ### Responsive Grid Layout Generation
 Each category section defines a responsive grid container using Tailwind classes:
-- Single column on small screens
-- Two columns on medium screens
-- Three columns on large screens
-- Consistent spacing and alignment
+- Single column on small screens (grid-cols-1)
+- Two columns on medium screens (sm:grid-cols-2)
+- Three columns on large screens (lg:grid-cols-3)
+- Consistent spacing and alignment with gap-8
 
 Examples of grid containers:
-- Ceremonial: id="ceremonial-grid"
 - Funeral: id="funeral-products-grid"
 - Wreaths: id="wreaths-grid"
 - Opening: id="opening-grid"
 - Association: id="association-grid"
 - Graduation: id="graduation-grid"
 - Pets: id="pets-grid"
+- Ceremonial: id="ceremonial-grid"
 
-Category renderers map their respective product arrays into cards and assign them to the corresponding grid.
+Category renderers map their respective product arrays into cards and assign them to the corresponding grid using the renderCategory function.
 
 **Section sources**
-- [index.html:417](file://docs/index.html#L417)
-- [index.html:471](file://docs/index.html#L471)
-- [index.html:509](file://docs/index.html#L509)
-- [index.html:528](file://docs/index.html#L528)
-- [index.html:547](file://docs/index.html#L547)
-- [index.html:566](file://docs/index.html#L566)
-- [index.html:585](file://docs/index.html#L585)
-- [index.html:1406-1444](file://docs/index.html#L1406-L1444)
+- [index.html:276](file://docs/index.html#L276)
+- [index.html:313](file://docs/index.html#L313)
+- [index.html:331](file://docs/index.html#L331)
+- [index.html:349](file://docs/index.html#L349)
+- [index.html:367](file://docs/index.html#L367)
+- [index.html:385](file://docs/index.html#L385)
+- [index.html:404](file://docs/index.html#L404)
+- [products.js:82-87](file://docs/js/products.js#L82-L87)
 
 ### Hover Effects Implementation
-Hover behaviors are defined in inline styles:
-- Card lift effect on hover
-- Image zoom effect on hover
-- Smooth transitions for transform and opacity
-- Overlay darkening on hover for emphasis
+Hover behaviors are defined through CSS transitions and Tailwind classes:
+- Card lift effect on hover with shadow enhancement
+- Image overlay darkening on hover for emphasis
+- Add-to-cart button slide-in animation from bottom-right
+- Smooth transitions for transform and opacity changes
+- Color transitions for text and decorative elements
 
-These effects enhance interactivity without JavaScript overhead.
+These effects enhance interactivity without JavaScript overhead and provide visual feedback for user interactions.
 
 **Section sources**
-- [index.html:74-88](file://docs/index.html#L74-L88)
+- [products.js:58-78](file://docs/js/products.js#L58-L78)
 
 ### Mobile-First Design Considerations
-- Navigation collapses into a mobile menu controlled by a toggle function
+- Navigation collapses into a mobile menu controlled by toggle functions
 - Grid layouts adapt from one to three columns using Tailwind breakpoints
-- Touch-friendly button sizes and spacing
+- Touch-friendly button sizes and spacing throughout the interface
 - Cart sidebar slides in from the right on all devices
+- Responsive typography scales appropriately across screen sizes
 
 **Section sources**
-- [index.html:260-281](file://docs/index.html#L260-L281)
-- [index.html:1570-1573](file://docs/index.html#L1570-L1573)
-- [index.html:1555-1568](file://docs/index.html#L1555-L1568)
+- [index.html:90-104](file://docs/index.html#L90-L104)
+- [index.html:630-675](file://docs/index.html#L630-L675)
 
 ### Shopping Cart Integration via addToCart Handlers
-When a user clicks “Add to Cart” on a product card:
-- The handler locates the product in the combined product list
+When a user clicks "Add to Cart" on a product card:
+- The handler locates the product in the combined product list using findProduct
 - If already present, increments quantity; otherwise adds new item with quantity 1
 - Updates the cart UI and shows a toast notification
+- Persists cart state to localStorage for session continuity
 
 ```mermaid
 sequenceDiagram
 participant User as "User"
 participant Card as "Product Card Button"
-participant App as "addToCart(productId)"
-participant State as "cart array"
-participant UI as "updateCartUI()"
-participant Toast as "showToast(message)"
+participant Main as "Main.handleAddToCart"
+participant Products as "Products.findProduct"
+participant Cart as "Cart.addToCart"
+participant UI as "updateCartUI"
+participant Toast as "showToast"
 User->>Card : Click "Add to Cart"
-Card->>App : addToCart(id)
-App->>State : Find or push item
-App->>UI : updateCartUI()
-App->>Toast : showToast("Added to cart!")
+Card->>Main : handleAddToCart(productId)
+Main->>Products : findProduct(id)
+Products-->>Main : Product object
+Main->>Cart : addToCart(product)
+Cart-->>Main : Updated cart array
+Main->>UI : updateCartUI()
+Main->>Toast : showToast(message)
 UI-->>User : Updated cart count and items
 ```
 
 **Diagram sources**
-- [index.html:1446-1459](file://docs/index.html#L1446-L1459)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
-- [index.html:1575-1585](file://docs/index.html#L1575-L1585)
+- [main.js:8-14](file://docs/js/main.js#L8-L14)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
 
 **Section sources**
-- [index.html:1446-1459](file://docs/index.html#L1446-L1459)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
-- [index.html:1575-1585](file://docs/index.html#L1575-L1585)
+- [main.js:8-14](file://docs/js/main.js#L8-L14)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
+- [main.js:47-107](file://docs/js/main.js#L47-L107)
 
 ### Image Loading Optimization with Unsplash CDN Parameters
-All product images use Unsplash URLs with query parameters:
+All product images use optimized URLs with query parameters:
 - w=600 sets width for optimized delivery
 - auto=format&fit=crop ensures adaptive format and cropping
 - q=80 balances quality and load time
 
-This approach reduces bandwidth and improves perceived performance.
+This approach reduces bandwidth and improves perceived performance while maintaining visual quality across different devices and screen densities.
 
 **Section sources**
-- [index.html:1086](file://docs/index.html#L1086)
-- [index.html:1096](file://docs/index.html#L1096)
-- [index.html:1106](file://docs/index.html#L1106)
-- [index.html:1116](file://docs/index.html#L1116)
-- [index.html:1129](file://docs/index.html#L1129)
-- [index.html:1139](file://docs/index.html#L1139)
-- [index.html:1149](file://docs/index.html#L1149)
-- [index.html:1159](file://docs/index.html#L1159)
-- [index.html:1172](file://docs/index.html#L1172)
-- [index.html:1182](file://docs/index.html#L1182)
-- [index.html:1192](file://docs/index.html#L1192)
-- [index.html:1205](file://docs/index.html#L1205)
-- [index.html:1215](file://docs/index.html#L1215)
-- [index.html:1225](file://docs/index.html#L1225)
-- [index.html:1238](file://docs/index.html#L1238)
-- [index.html:1248](file://docs/index.html#L1248)
-- [index.html:1258](file://docs/index.html#L1258)
-- [index.html:1271](file://docs/index.html#L1271)
-- [index.html:1281](file://docs/index.html#L1281)
-- [index.html:1291](file://docs/index.html#L1291)
-- [index.html:1304](file://docs/index.html#L1304)
-- [index.html:1314](file://docs/index.html#L1314)
-- [index.html:1324](file://docs/index.html#L1324)
+- [products.json:8](file://docs/products.json#L8)
+- [products.json:17](file://docs/products.json#L17)
+- [products.json:26](file://docs/products.json#L26)
+- [products.json:35](file://docs/products.json#L35)
 
 ### Accessibility Features: Alt Text Handling
 - Each product image includes an alt attribute dynamically set based on the current language
 - Cart items also include alt text reflecting the selected language
 - This ensures screen readers can describe images appropriately
+- Product IDs are displayed for reference and accessibility
 
 **Section sources**
-- [index.html:1385](file://docs/index.html#L1385)
-- [index.html:1525](file://docs/index.html#L1525)
+- [products.js:61](file://docs/js/products.js#L61)
+- [main.js:76](file://docs/js/main.js#L76)
+
+### Rendering Order Refinement
+The renderAll() function has been updated to refine the rendering order, moving the ceremonial category from the first position to the last position. This change ensures visual consistency with the HTML structure and provides a more logical flow for users navigating through the product categories.
+
+**Updated** The new rendering sequence follows this order: funeral → wreath → opening → association → graduation → pets → ceremonial
+
+```mermaid
+flowchart LR
+A["Funeral Products"] --> B["Wreath Products"]
+B --> C["Opening Products"]
+C --> D["Association Products"]
+D --> E["Graduation Products"]
+E --> F["Pet Products"]
+F --> G["Ceremonial Products"]
+```
+
+**Diagram sources**
+- [products.js:89-97](file://docs/js/products.js#L89-L97)
+
+**Section sources**
+- [products.js:89-97](file://docs/js/products.js#L89-L97)
 
 ### Customization Examples
 
 Customize product card appearance:
-- Adjust hover effects by modifying transition timings and transforms in inline styles
-- Change ribbon badge colors and text per category by passing different badgeColor and badgeText values in category renderers
+- Adjust hover effects by modifying transition timings and transforms in CSS
+- Change ribbon badge colors and text per category by updating the badges configuration object
 - Modify price color and button hover styles within renderProductCard based on category logic
 
 Adding new interactive elements:
@@ -271,33 +307,33 @@ Optimizing rendering performance for large catalogs:
 - Debounce scroll-based UI changes (e.g., navbar shadow)
 - Preload critical images and lazy-load others
 
-[No sources needed since this section provides general guidance]
-
 ## Dependency Analysis
-The script block depends on:
-- Tailwind CSS utility classes for layout and styling
-- Font Awesome icon classes for visual cues
-- DOM APIs for querying elements and manipulating innerHTML
-- Global variables for translations, product data, and cart state
+The system modules depend on each other in a clear hierarchy:
+- Main module orchestrates initialization and coordinates between other modules
+- Products module depends on translations for localization and main for cart integration
+- Cart module operates independently with localStorage persistence
+- Components module provides shared UI functionality
 
 ```mermaid
 graph TB
-Script["Script Block"] --> Data["Product Data Arrays"]
-Script --> Render["renderProductCard + Category Renderers"]
-Script --> Cart["addToCart / updateCartUI"]
-Script --> Lang["setLanguage"]
-Script --> UI["toggleCart / toggleMobileMenu / showToast"]
-Render --> DOM["document.getElementById(...).innerHTML"]
-Cart --> DOM
-Lang --> DOM
-UI --> DOM
+Main["Main Module"] --> Products["Products Module"]
+Main --> Cart["Cart Module"]
+Main --> Components["Components Module"]
+Products --> Translations["Translations Module"]
+Products --> Main
+Cart --> Storage["localStorage"]
+Components --> DOM["DOM APIs"]
 ```
 
 **Diagram sources**
-- [index.html:881-1589](file://docs/index.html#L881-L1589)
+- [main.js:1-134](file://docs/js/main.js#L1-134)
+- [products.js:1-101](file://docs/js/products.js#L1-101)
+- [cart.js:1-69](file://docs/js/cart.js#L1-L69)
 
 **Section sources**
-- [index.html:881-1589](file://docs/index.html#L881-L1589)
+- [main.js:1-134](file://docs/js/main.js#L1-134)
+- [products.js:1-101](file://docs/js/products.js#L1-L101)
+- [cart.js:1-69](file://docs/js/cart.js#L1-L69)
 
 ## Performance Considerations
 - Template literal rendering is efficient for moderate catalogs but may become costly at scale
@@ -305,8 +341,7 @@ UI --> DOM
 - Image parameters reduce payload size; consider further optimizations like srcset or lazy loading
 - Avoid excessive inline event bindings; refactor to event delegation for better maintainability and performance
 - Debounce scroll listeners to prevent layout thrashing
-
-[No sources needed since this section provides general guidance]
+- The refined rendering order minimizes unnecessary DOM manipulations during initial load
 
 ## Troubleshooting Guide
 Common issues and resolutions:
@@ -315,28 +350,35 @@ Common issues and resolutions:
 - Incorrect alt text: Confirm currentLang is updated before rendering and that alt attributes reflect the active language
 - Cart sidebar not closing: Check toggleCart class toggling and overlay visibility states
 - Mobile menu not toggling: Validate toggleMobileMenu and ensure the menu element exists
+- Products not rendering in correct order: Verify renderAll() function maintains the updated sequence: funeral → wreath → opening → association → graduation → pets → ceremonial
 
 **Section sources**
-- [index.html:1446-1459](file://docs/index.html#L1446-L1459)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
-- [index.html:1555-1568](file://docs/index.html#L1555-L1568)
-- [index.html:1570-1573](file://docs/index.html#L1570-L1573)
-- [index.html:1353-1374](file://docs/index.html#L1353-L1374)
+- [main.js:8-14](file://docs/js/main.js#L8-L14)
+- [main.js:47-107](file://docs/js/main.js#L47-L107)
+- [products.js:89-97](file://docs/js/products.js#L89-L97)
 
 ## Conclusion
-The dynamic product rendering system leverages template literals, responsive Tailwind grids, and straightforward DOM manipulation to deliver an interactive shopping experience. The addToCart integration, image optimization via Unsplash parameters, and accessibility-focused alt text contribute to a polished, performant interface. For larger catalogs, consider virtualization, event delegation, and lazy loading to maintain responsiveness.
-
-[No sources needed since this section summarizes without analyzing specific files]
+The dynamic product rendering system leverages template literals, responsive Tailwind grids, and straightforward DOM manipulation to deliver an interactive shopping experience. The recent refinement of the rendering order in renderAll() ensures better visual consistency with the HTML structure. The addToCart integration, image optimization via Unsplash parameters, and accessibility-focused alt text contribute to a polished, performant interface. For larger catalogs, consider virtualization, event delegation, and lazy loading to maintain responsiveness.
 
 ## Appendices
 
 ### API Definitions: Cart Operations
-- addToCart(productId): Adds or increments a product in the cart and updates UI
+- addToCart(product): Adds or increments a product in the cart and persists to localStorage
 - removeFromCart(productId): Removes an item from the cart
-- updateQuantity(productId, change): Adjusts item quantity and removes if zero
-- generateWhatsAppLink(): Produces a WhatsApp message link with cart details
-- updateCartUI(): Refreshes cart count, items, totals, and checkout link
+- updateQuantity(productId, delta): Adjusts item quantity and removes if zero
+- getCart(): Returns current cart state
+- getCartCount(): Returns total number of items in cart
+- getCartTotal(): Returns total monetary value of cart items
+- clearCart(): Empties the cart and clears localStorage
+
+### API Definitions: Products Operations
+- load(): Fetches and loads product data from products.json
+- getAllProductsFlat(): Returns flattened array of all products with category info
+- getCategory(category): Returns products for specific category
+- findProduct(productId): Finds product by ID across all categories
+- renderAll(): Renders all product categories in refined order
+- renderCategory(category, gridId): Renders specific category to designated grid
 
 **Section sources**
-- [index.html:1446-1494](file://docs/index.html#L1446-L1494)
-- [index.html:1496-1553](file://docs/index.html#L1496-L1553)
+- [cart.js:24-67](file://docs/js/cart.js#L24-L67)
+- [products.js:17-97](file://docs/js/products.js#L17-L97)

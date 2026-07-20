@@ -43,7 +43,7 @@
       "name": "Premium Traditional White Wreath",
       "name_zh": "高級傳統白花圈",
       "price": 1300,
-      "image": "https://images.unsplash.com/photo-1490750967868-88aa4f44f562?w=600&auto=format&fit=crop&q=80",
+      "image": "./images/circle-101.jpg",
       "description": "Premium white chrysanthemum wreath with calligraphy eulogy ribbon",
       "description_zh": "高級白菊花花圈，附書法輓聯帶"
     },
@@ -64,15 +64,6 @@
       "image": "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=600&auto=format&fit=crop&q=80",
       "description": "Full deluxe casket spray with white roses, lilies, orchids and eucalyptus",
       "description_zh": "全豪華棺面花飾，白玫瑰、百合、蘭花和尤加利葉"
-    },
-    {
-      "id": 104,
-      "name": "Grand Memorial Cross",
-      "name_zh": "大型悼念十字架",
-      "price": 680,
-      "image": "https://images.unsplash.com/photo-1518882605630-8eb565f5e673?w=600&auto=format&fit=crop&q=80",
-      "description": "Grand floral cross with premium white chrysanthemums and greenery",
-      "description_zh": "大型花卉十字架，頂級白菊花和綠葉"
     }
   ],
   "wreath": [
@@ -99,7 +90,7 @@
       "name": "Deluxe Heart-Shaped Wreath",
       "name_zh": "豪華心型悼念花圈",
       "price": 880,
-      "image": "https://images.unsplash.com/photo-1518882605630-8eb565f5e673?w=600&auto=format&fit=crop&q=80",
+      "image": "./images/heart-304.jpg",
       "description": "Deluxe heart-shaped memorial wreath with premium roses and carnations",
       "description_zh": "豪華心型紀念花圈，頂級玫瑰和康乃馨"
     }
