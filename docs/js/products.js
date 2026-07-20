@@ -57,9 +57,9 @@ const Products = (() => {
         return `
             <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl group fade-in relative" style="animation-delay: ${index * 0.1}s">
                 ${ribbonHtml}
-                <div class="relative h-64 overflow-hidden">
+                <div class="relative aspect-[3/4] overflow-hidden">
                     <img src="${product.image}" alt="${name}" class="product-image w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     <button onclick="Main.handleAddToCart(${product.id})" class="absolute bottom-4 right-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-amber-700 hover:bg-amber-700 hover:text-white transition-all transform translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
                         <i class="fas fa-plus"></i>
                     </button>
