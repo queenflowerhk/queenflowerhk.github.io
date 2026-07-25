@@ -3,11 +3,22 @@
 <cite>
 **Referenced Files in This Document**
 - [index.html](file://docs/index.html)
+- [products.json](file://docs/products.json)
+- [products.js](file://docs/js/products.js)
+- [styles.css](file://docs/css/styles.css)
 </cite>
+
+## Update Summary
+**Changes Made**
+- Updated URL structure section to document explicit height parameters (h=800) alongside width parameters
+- Added new section on mixed image source strategy (Unsplash CDN vs local files)
+- Enhanced image optimization techniques section with dual-dimension parameter benefits
+- Updated responsive image handling to address fixed dimension loading patterns
+- Revised fallback mechanisms to account for local file dependencies
 
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [Unsplash CDN Integration Overview](#unsplash-cdn-integration-overview)
+2. [Image Source Strategy Overview](#image-source-strategy-overview)
 3. [URL Structure and Parameters](#url-structure-and-parameters)
 4. [Image Tag Attributes and Accessibility](#image-tag-attributes-and-accessibility)
 5. [Loading Strategies and Performance](#loading-strategies-and-performance)
@@ -19,13 +30,13 @@
 
 ## Introduction
 
-This document provides comprehensive technical documentation for the external Unsplash CDN integration used throughout the Fujian Florist website. The implementation leverages Unsplash's Content Delivery Network (CDN) to deliver optimized product images with consistent quality and performance across all device types. The system is designed to balance visual quality with loading speed while maintaining accessibility standards and providing robust fallback mechanisms.
+This document provides comprehensive technical documentation for the hybrid image loading system used throughout the Fujian Florist website. The implementation combines external Unsplash CDN integration with local image files to deliver optimized product images with consistent quality and performance across all device types. The system is designed to balance visual quality with loading speed while maintaining accessibility standards and providing robust fallback mechanisms.
 
 The integration covers static hero images, dynamic product gallery images, and responsive image handling across multiple sections including ceremonial plaques, funeral arrangements, wreaths, opening celebrations, association events, graduation ceremonies, and pet memorials.
 
-## Unsplash CDN Integration Overview
+## Image Source Strategy Overview
 
-The website implements a sophisticated image loading strategy using Unsplash's CDN service to deliver high-quality floral imagery optimized for web performance. The integration follows modern web standards and best practices for image delivery, ensuring optimal user experience across different devices and network conditions.
+The website implements a sophisticated hybrid image loading strategy that strategically combines Unsplash's CDN service with locally hosted images to optimize reliability and performance. This approach leverages the strengths of both delivery methods while mitigating their individual limitations.
 
 ### Core Architecture Components
 
@@ -41,6 +52,10 @@ Unsplash[Unsplash CDN]
 EdgeCache[Edge Cache Nodes]
 Origin[Origin Server]
 end
+subgraph "Local Storage"
+LocalImages[Local Image Files]
+StaticAssets[Static Assets]
+end
 subgraph "Processing Pipeline"
 Transform[Image Transformation]
 Optimize[Optimization Engine]
@@ -49,59 +64,89 @@ end
 Browser --> DOM
 DOM --> JS
 JS --> Unsplash
+JS --> LocalImages
 Unsplash --> EdgeCache
 EdgeCache --> Transform
 Transform --> Optimize
 Optimize --> Format
 Format --> Browser
+LocalImages --> StaticAssets
+StaticAssets --> Browser
 EdgeCache -.->|Cache Miss| Origin
 ```
 
 **Diagram sources**
-- [index.html:648-651](file://docs/index.html#L648-L651)
-- [index.html:1086-1327](file://docs/index.html#L1086-L1327)
+- [products.json:7-210](file://docs/products.json#L7-L210)
+- [products.js:57-80](file://docs/js/products.js#L57-L80)
+
+### Strategic Image Source Selection
+
+The system employs a strategic approach to image sourcing based on reliability requirements and performance considerations:
+
+**Unsplash CDN Usage:**
+- Dynamic product images requiring consistent quality
+- Images benefiting from global CDN distribution
+- Content requiring automatic format optimization
+- Images needing responsive transformation capabilities
+
+**Local File Usage:**
+- Critical product images requiring guaranteed availability
+- High-value commercial imagery under direct control
+- Images with specific branding or proprietary content
+- Products requiring maximum loading reliability
 
 **Section sources**
-- [index.html:648-651](file://docs/index.html#L648-L651)
-- [index.html:1086-1327](file://docs/index.html#L1086-L1327)
+- [products.json:45-96](file://docs/products.json#L45-L96)
+- [products.js:57-80](file://docs/js/products.js#L57-L80)
 
 ## URL Structure and Parameters
 
-The Unsplash CDN URLs follow a standardized structure that enables dynamic image transformation and optimization based on client requirements.
+The image system supports two distinct URL patterns optimized for different delivery scenarios and performance requirements.
 
-### Base URL Pattern
+### Unsplash CDN URL Pattern
 
-All image URLs conform to the following pattern:
+External images follow the enhanced Unsplash CDN URL structure with explicit dual-dimension parameters:
 ```
-https://images.unsplash.com/[photo-id]?w=[width]&auto=format&fit=crop&q=[quality]
+https://images.unsplash.com/[photo-id]?h=[height]&w=[width]&auto=format&fit=crop&q=[quality]
+```
+
+### Local File URL Pattern
+
+Local images use simplified relative paths without transformation parameters:
+```
+./images/[filename].[extension]
 ```
 
 ### Parameter Breakdown
 
+#### Unsplash CDN Parameters
+
 | Parameter | Description | Current Usage | Impact |
 |-----------|-------------|---------------|---------|
-| `w=` | Width specification in pixels | 400px (hero), 600px (products) | Controls output resolution |
+| `h=` | Height specification in pixels | 800px (product images) | Controls vertical resolution and aspect ratio |
+| `w=` | Width specification in pixels | 600px (product images) | Controls horizontal resolution and display size |
 | `auto=format` | Automatic format detection | Enabled | Serves WebP/AVIF when supported |
 | `fit=crop` | Crop mode for aspect ratio | Enabled | Maintains consistent framing |
 | `q=` | Quality setting (1-100) | 80 | Balances quality vs file size |
 
-### Implementation Examples
+#### Implementation Examples
 
-The website uses two primary width specifications:
+The website uses two primary URL patterns:
 
-**Hero Section Images (400px width):**
+**Enhanced Product Images (800x600):**
+- Used for main product display cards
+- Explicit height ensures consistent aspect ratios
+- Higher resolution for better visual impact
+- Balanced quality for commercial presentation
+
+**Hero Section Images (400px width only):**
 - Used for decorative background elements
 - Optimized for faster initial page load
 - Lower bandwidth consumption for non-critical imagery
 
-**Product Gallery Images (600px width):**
-- Used for main product display cards
-- Higher resolution for better visual impact
-- Balanced quality for commercial presentation
-
 **Section sources**
-- [index.html:648-651](file://docs/index.html#L648-L651)
-- [index.html:1086-1327](file://docs/index.html#L1086-L1327)
+- [products.json:7-210](file://docs/products.json#L7-L210)
+- [index.html:467-470](file://docs/index.html#L467-L470)
 
 ## Image Tag Attributes and Accessibility
 
@@ -109,12 +154,12 @@ The implementation follows WCAG accessibility guidelines and modern HTML5 standa
 
 ### Core Image Attributes
 
-#### Alt Text Strategy
+#### Dynamic Alt Text Generation
 Each image includes descriptive alt text that adapts to the current language setting:
 
 ```javascript
-// Dynamic alt text generation
-alt="${currentLang === 'zh' ? product.name_zh : product.name}"
+// Dynamic alt text generation in product rendering
+alt="${name}" // where name is determined by current language
 ```
 
 **Accessibility Benefits:**
@@ -151,24 +196,23 @@ class="product-image w-full h-full object-cover"
 - `object-cover`: Maintains aspect ratio while covering area
 
 **Section sources**
-- [index.html:86-88](file://docs/index.html#L86-L88)
-- [index.html:1385](file://docs/index.html#L1385)
-- [index.html:1525](file://docs/index.html#L1525)
+- [products.js:61](file://docs/js/products.js#L61)
+- [styles.css:37-39](file://docs/styles.css#L37-L39)
 
 ## Loading Strategies and Performance
 
-The implementation employs several performance optimization techniques to ensure fast image loading while maintaining visual quality.
+The implementation employs several performance optimization techniques to ensure fast image loading while maintaining visual quality across both CDN and local sources.
 
 ### Native Lazy Loading Considerations
 
 While the current implementation doesn't use native `loading="lazy"` attributes, the JavaScript-based rendering system provides implicit lazy loading benefits:
 
 ```javascript
-function renderProductCard(product, index, badgeText, badgeColor) {
+function renderProductCard(product, index) {
     return `
         <div class="product-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl group fade-in relative" 
              style="animation-delay: ${index * 0.1}s">
-            <img src="${product.image}" alt="${currentLang === 'zh' ? product.name_zh : product.name}" 
+            <img src="${product.image}" alt="${name}" 
                  class="product-image w-full h-full object-cover">
         </div>
     `;
@@ -179,6 +223,7 @@ function renderProductCard(product, index, badgeText, badgeColor) {
 - Images only loaded when DOM elements are created
 - Staggered animation delays prevent simultaneous loading
 - Reduced initial page weight through deferred rendering
+- Mixed source loading optimizes overall performance
 
 ### Progressive Enhancement Strategy
 
@@ -187,24 +232,36 @@ The image loading follows a progressive enhancement approach:
 1. **HTML Structure**: Semantic markup with proper alt text
 2. **CSS Styling**: Visual presentation and responsive behavior
 3. **JavaScript Enhancement**: Dynamic content loading and interactivity
-4. **CDN Optimization**: Server-side image processing and caching
+4. **Hybrid CDN Optimization**: Server-side image processing and caching
 
 ### Critical Rendering Path Optimization
 
+**Updated** Enhanced with explicit height parameters for improved layout stability
+
 **Section sources**
-- [index.html:1376-1404](file://docs/index.html#L1376-L1404)
+- [products.js:57-80](file://docs/js/products.js#L57-L80)
 
 ## Image Optimization Techniques
 
-The Unsplash CDN integration leverages advanced optimization techniques to balance quality and performance across different devices and network conditions.
+The hybrid image system leverages advanced optimization techniques across both CDN and local delivery methods to balance quality and performance across different devices and network conditions.
+
+### Dual-Dimension Parameter Optimization
+
+The introduction of explicit height parameters (`h=800`) alongside width parameters (`w=600`) provides significant optimization benefits:
+
+```
+?h=800&w=600&auto=format&fit=crop&q=80
+```
+
+**Enhanced Benefits:**
+- **Precise Aspect Ratio Control**: Ensures consistent image proportions across all displays
+- **Improved Layout Stability**: Eliminates layout shifts during image loading
+- **Better Compression Efficiency**: Enables more efficient encoding with known dimensions
+- **Optimized Bandwidth Usage**: Delivers exact pixel dimensions needed for display
 
 ### Automatic Format Selection
 
-The `auto=format` parameter enables intelligent format selection:
-
-```
-?w=600&auto=format&fit=crop&q=80
-```
+The `auto=format` parameter enables intelligent format selection for CDN images:
 
 **Format Priority:**
 1. **WebP**: Modern format with superior compression (80% smaller than JPEG)
@@ -214,7 +271,7 @@ The `auto=format` parameter enables intelligent format selection:
 
 ### Adaptive Quality Settings
 
-Quality parameter `q=80` provides optimal balance:
+Quality parameter `q=80` provides optimal balance for product imagery:
 
 | Quality Setting | File Size Reduction | Visual Quality | Use Case |
 |----------------|-------------------|----------------|----------|
@@ -223,29 +280,24 @@ Quality parameter `q=80` provides optimal balance:
 | q=70 | 30% reduction | Good | Thumbnails, previews |
 | q=60 | 40% reduction | Acceptable | Background elements |
 
-### Cropping and Composition Control
+### Hybrid Caching Strategy
 
-The `fit=crop` parameter ensures consistent image composition:
+The mixed approach provides complementary caching benefits:
 
-**Benefits:**
-- Maintains focal points regardless of aspect ratio
-- Eliminates unnecessary whitespace
-- Provides consistent visual hierarchy
-- Reduces bandwidth by cropping unused areas
-
-### CDN Caching Benefits
-
-Unsplash CDN provides global edge caching:
-
-**Performance Advantages:**
-- Geographic proximity reduces latency
-- Persistent cache across visits
+**CDN Caching Advantages:**
+- Global edge distribution reduces latency
 - Automatic cache invalidation on source updates
 - HTTP/2 multiplexing support
+- Geographic proximity optimization
+
+**Local File Caching Benefits:**
+- Zero dependency on external services
+- Faster loading for repeat visitors
+- Reduced cross-origin requests
+- Complete control over cache headers
 
 **Section sources**
-- [index.html:648-651](file://docs/index.html#L648-L651)
-- [index.html:1086-1327](file://docs/index.html#L1086-L1327)
+- [products.json:7-210](file://docs/products.json#L7-L210)
 
 ## Responsive Image Handling
 
@@ -276,7 +328,7 @@ Images adapt to their container sizes through CSS:
 The responsive grid system automatically adjusts image display:
 
 ```html
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 ```
 
 **Breakpoint Behavior:**
@@ -284,25 +336,34 @@ The responsive grid system automatically adjusts image display:
 - **Tablet (2 cols)**: Balanced layout for medium screens
 - **Desktop (3 cols)**: Efficient space utilization
 
-### Device-Specific Optimizations
+### Fixed Dimension Loading Strategy
 
-**Current Implementation:**
-- Fixed width parameters (400px, 600px)
-- CSS-based responsive containers
-- Aspect ratio preservation
+**Updated** The current implementation uses fixed dimension parameters for optimal performance:
+
+**Current Approach:**
+- Fixed height (800px) and width (600px) parameters for CDN images
+- CSS-based responsive containers handle display scaling
+- Aspect ratio preservation through `object-cover`
+- Consistent loading experience across devices
+
+**Performance Implications:**
+- Predictable bandwidth usage per image
+- Elimination of layout shift during loading
+- Optimized server-side processing with known dimensions
+- Simplified caching strategies
 
 **Potential Enhancements:**
-- Implement `srcset` for device pixel density
+- Implement `srcset` for device pixel density optimization
 - Add `sizes` attribute for viewport-aware loading
-- Consider picture element for art direction
+- Consider picture element for art direction needs
 
 **Section sources**
-- [index.html:74-88](file://docs/index.html#L74-L88)
-- [index.html:417](file://docs/index.html#L417)
+- [products.js:60-61](file://docs/js/products.js#L60-L61)
+- [styles.css:33-39](file://docs/styles.css#L33-L39)
 
 ## Fallback Mechanisms
 
-The current implementation relies on browser-native error handling and CDN reliability rather than explicit JavaScript fallback mechanisms.
+The hybrid image system provides multiple layers of fallback protection to ensure reliable image delivery across different failure scenarios.
 
 ### Browser Error Handling
 
@@ -323,6 +384,16 @@ Unsplash CDN provides enterprise-grade reliability:
 - Health monitoring and routing
 - DDoS protection and security headers
 
+### Local File Dependencies
+
+**Updated** Local image files provide critical fallback scenarios:
+
+**Reliability Benefits:**
+- Guaranteed availability regardless of external service status
+- No cross-origin request failures
+- Immediate access without DNS resolution
+- Complete control over image hosting infrastructure
+
 ### Error State Management
 
 **Current Limitations:**
@@ -340,21 +411,25 @@ img.onerror = function() {
 ```
 
 **Section sources**
-- [index.html:1385](file://docs/index.html#L1385)
+- [products.js:61](file://docs/js/products.js#L61)
 
 ## Caching Strategies
 
-The multi-layered caching strategy ensures optimal performance through browser caching, CDN caching, and application-level optimizations.
+The multi-layered caching strategy ensures optimal performance through browser caching, CDN caching, and application-level optimizations across both image sources.
 
 ### Browser Cache Headers
 
-Unsplash CDN sets appropriate cache headers:
-
-**Cache Configuration:**
+**CDN Images:**
 - Long-term caching for immutable assets
 - ETag validation for cache freshness
 - Vary headers for format negotiation
 - Compression support (gzip, brotli)
+
+**Local Images:**
+- Standard static asset caching
+- Versioned filenames for cache busting
+- Simple cache-control policies
+- Direct origin server caching
 
 ### CDN Edge Caching
 
@@ -372,11 +447,13 @@ Global edge network provides distributed caching:
 - Static HTML with embedded image URLs
 - No client-side image caching
 - Repeated requests for same images
+- Mixed source caching strategies
 
 **Enhancement Opportunities:**
 - Implement Service Worker caching
 - Add localStorage for frequently accessed images
 - Create image preloading strategies
+- Implement intelligent prefetching
 
 ### Cache Invalidation Strategy
 
@@ -384,13 +461,14 @@ Global edge network provides distributed caching:
 - Source image changes trigger cache updates
 - Versioned URLs for cache busting
 - Gradual rollout of new image versions
+- Independent cache management per source type
 
 **Section sources**
-- [index.html:648-651](file://docs/index.html#L648-L651)
+- [products.json:7-210](file://docs/products.json#L7-L210)
 
 ## Best Practices and Recommendations
 
-Based on the analysis of the current implementation, here are recommendations for further optimization and enhancement.
+Based on the analysis of the current hybrid implementation, here are recommendations for further optimization and enhancement.
 
 ### Immediate Improvements
 
@@ -402,7 +480,7 @@ Add `loading="lazy"` attribute to product images:
 ```
 
 #### 2. Add Error Handling
-Implement JavaScript error handlers:
+Implement JavaScript error handlers for both CDN and local images:
 ```javascript
 document.querySelectorAll('.product-image').forEach(img => {
     img.addEventListener('error', function() {
@@ -452,7 +530,7 @@ const observer = new IntersectionObserver((entries) => {
 ### Performance Monitoring
 
 #### 7. Add Performance Metrics
-Track image loading performance:
+Track image loading performance across both sources:
 ```javascript
 performanceObserver.observe({ entryTypes: ['resource'] });
 ```
@@ -462,6 +540,7 @@ Test different optimization strategies:
 - Compare lazy loading vs eager loading
 - Test different quality settings
 - Evaluate format preferences (WebP vs JPEG)
+- Measure CDN vs local loading performance
 
 ### Accessibility Enhancements
 
@@ -481,14 +560,16 @@ Ensure keyboard navigation works properly:
 ```
 
 **Section sources**
-- [index.html:1376-1404](file://docs/index.html#L1376-L1404)
+- [products.js:57-80](file://docs/js/products.js#L57-L80)
 
 ## Conclusion
 
-The Unsplash CDN integration in the Fujian Florist website demonstrates a solid foundation for image delivery with good attention to accessibility and basic performance considerations. The implementation effectively balances visual quality with loading performance through strategic use of CDN parameters and responsive design patterns.
+The hybrid image loading system in the Fujian Florist website demonstrates a sophisticated approach to image delivery that effectively balances reliability, performance, and visual quality. The recent implementation of explicit height parameters alongside width parameters represents a significant optimization improvement, providing better aspect ratio control and layout stability.
 
-The current approach successfully delivers optimized images across multiple product categories while maintaining consistent visual presentation and accessibility standards. The use of automatic format selection, adaptive quality settings, and responsive containers provides a robust foundation for image delivery.
+The strategic combination of Unsplash CDN for dynamic content and local files for critical imagery creates a resilient architecture that maintains high availability while leveraging CDN benefits for broader distribution. The dual-dimension parameter approach enhances compression efficiency and eliminates layout shifts during loading.
+
+The current implementation successfully delivers optimized images across multiple product categories while maintaining consistent visual presentation and accessibility standards. The use of automatic format selection, adaptive quality settings, and responsive containers provides a robust foundation for image delivery.
 
 Future enhancements should focus on implementing native lazy loading, adding comprehensive error handling, and incorporating advanced responsive image techniques to further optimize performance and user experience. The modular architecture of the current implementation makes these improvements straightforward to implement without disrupting existing functionality.
 
-The integration serves as an excellent example of how to leverage third-party CDN services effectively while maintaining control over image presentation, accessibility, and performance characteristics.
+The hybrid approach serves as an excellent example of how to leverage multiple image delivery methods effectively while maintaining control over image presentation, accessibility, and performance characteristics.

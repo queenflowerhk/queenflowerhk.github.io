@@ -3,11 +3,11 @@ schema_version: 1
 locale: en-US
 branch: main
 nodes_managed: true
-exported_at: "2026-07-20T17:21:29Z"
+exported_at: "2026-07-20T17:51:28Z"
 modules:
     "":
-        dir_name: Fujian Florist Static Site (docs_)
-        title: Fujian Florist Static Site (docs/)
+        dir_name: Fujian Florist Static Site (GitHub Pages)
+        title: Fujian Florist Static Site (GitHub Pages)
         scope:
             - README.md
             - _serve.js
@@ -27,18 +27,19 @@ modules:
         depends_on: []
         related_to: []
     configuration_system:
-        dir_name: No configuration system — static single-page site
-        title: No configuration system — static single-page site
+        dir_name: No Configuration System — Static Single-Page Site
+        title: No Configuration System — Static Single-Page Site
         scope: []
         source_files: []
         children: []
         depends_on: []
         related_to: []
     dependency_management:
-        dir_name: No dependency management system
-        title: No dependency management system
+        dir_name: No Dependency Management System
+        title: No Dependency Management System
         scope: []
-        source_files: []
+        source_files:
+            - .qoder/repowiki/knowledge/en/No dependency management system/dependency_management.md
         children: []
         depends_on: []
         related_to: []
@@ -46,17 +47,17 @@ modules:
         dir_name: No error handling system (static site)_2
         title: No error handling system (static site)
         scope: []
-        source_files:
-            - _serve.js
-            - docs/js/cart.js
+        source_files: []
         children: []
         depends_on: []
         related_to: []
     frontend_style:
-        dir_name: No Frontend Style System — Static HTML Site
-        title: No Frontend Style System — Static HTML Site
+        dir_name: Tailwind Utility-First Styling with Custom Gold Theme
+        title: Tailwind Utility-First Styling with Custom Gold Theme
         scope: []
-        source_files: []
+        source_files:
+            - docs/index.html
+            - docs/css/styles.css
         children: []
         depends_on: []
         related_to: []
@@ -64,7 +65,8 @@ modules:
         dir_name: No logging system — static marketing site_2
         title: No logging system — static marketing site
         scope: []
-        source_files: []
+        source_files:
+            - _serve.js
         children: []
         depends_on: []
         related_to: []
