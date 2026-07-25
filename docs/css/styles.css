@@ -144,3 +144,22 @@ html {
 .hero-bg {
     background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 30%, #fde68a 100%);
 }
+
+/* Lightbox */
+#lightbox {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#lightbox:not(.hidden) {
+    opacity: 1;
+}
+
+#lightbox img {
+    animation: lightboxZoomIn 0.3s ease-out;
+}
+
+@keyframes lightboxZoomIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}

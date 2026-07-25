@@ -62,10 +62,41 @@ const Components = (() => {
         }
     }
 
-    return { showToast, toggleMobileMenu, toggleCart, initNavbarScroll, updateCartCount };
+    function openLightbox(src, alt) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+        if (!lightbox || !lightboxImg) return;
+
+        lightboxImg.src = src;
+        lightboxImg.alt = alt || '';
+        if (lightboxCaption) lightboxCaption.textContent = alt || '';
+
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        if (!lightbox) return;
+
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+
+    // Close lightbox on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
+    });
+
+    return { showToast, toggleMobileMenu, toggleCart, initNavbarScroll, updateCartCount, openLightbox, closeLightbox };
 })();
 
 // Expose globally for inline onclick handlers
 function toggleCart() { Components.toggleCart(); }
 function toggleMobileMenu() { Components.toggleMobileMenu(); }
 function setLanguage(lang) { Main.setLanguage(lang); }
+function openLightbox(src, alt) { Components.openLightbox(src, alt); }
+function closeLightbox() { Components.closeLightbox(); }
