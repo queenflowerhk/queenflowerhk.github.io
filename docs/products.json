@@ -1,12 +1,11 @@
 {
   "ceremonial": [],
   "funeral": [
-    
     {
       "id": 104,
       "name": "Heart Memorial Plaque - Eternal Love",
       "name_zh": "心型紀念花牌 - 永恆之愛",
-      "price": 980,
+      "price": 1200,
       "image": "./images/heart1200-2.webp",
       "description": "Heart-shaped memorial plaque with white roses and soft greenery",
       "description_zh": "心型紀念花牌，白玫瑰和柔和綠葉"
@@ -15,7 +14,7 @@
       "id": 105,
       "name": "Heart Memorial Plaque - Gentle Farewell",
       "name_zh": "心型紀念花牌 - 溫柔告別",
-      "price": 1080,
+      "price": 1200,
       "image": "./images/heart1200.webp",
       "description": "Heart-shaped memorial plaque with lilies and carnations",
       "description_zh": "心型紀念花牌，百合和康乃馨"
@@ -24,7 +23,7 @@
       "id": 106,
       "name": "Heart Memorial Plaque - Peaceful Rest",
       "name_zh": "心型紀念花牌 - 安息",
-      "price": 1180,
+      "price": 1300,
       "image": "./images/heart1300-3.webp",
       "description": "Heart-shaped memorial plaque with premium orchids and eucalyptus",
       "description_zh": "心型紀念花牌，頂級蘭花和尤加利葉"
@@ -33,7 +32,7 @@
       "id": 107,
       "name": "Heart Memorial Plaque - Serenity",
       "name_zh": "心型紀念花牌 - 寧靜",
-      "price": 1280,
+      "price": 1400,
       "image": "./images/heart1400.webp",
       "description": "Large heart-shaped memorial plaque with mixed white flowers",
       "description_zh": "大型心型紀念花牌，白色混合花卉"
@@ -42,7 +41,7 @@
       "id": 108,
       "name": "Heart Memorial Plaque - Remembrance",
       "name_zh": "心型紀念花牌 - 懷念",
-      "price": 880,
+      "price": 1500,
       "image": "./images/heart1500-2.webp",
       "description": "Heart-shaped memorial plaque with chrysanthemums and baby's breath",
       "description_zh": "心型紀念花牌，菊花和滿天星"
@@ -51,7 +50,7 @@
       "id": 109,
       "name": "Heart Memorial Plaque - Grace",
       "name_zh": "心型紀念花牌 - 恩典",
-      "price": 1380,
+      "price": 1500,
       "image": "./images/heart1500.webp",
       "description": "Deluxe heart-shaped memorial plaque with premium roses and ribbon",
       "description_zh": "豪華心型紀念花牌，頂級玫瑰和絲帶"
@@ -60,7 +59,7 @@
       "id": 110,
       "name": "Premium Casket Spray - Eternal Peace",
       "name_zh": "高級棺面花 - 永恆安寧",
-      "price": 1580,
+      "price": 500,
       "image": "./images/top500.webp",
       "description": "Full premium casket spray with white lilies, roses and cascading greenery",
       "description_zh": "全高級棺面花飾，白百合、玫瑰和垂掛綠葉"
@@ -69,7 +68,7 @@
       "id": 111,
       "name": "Western Circular Plaque - Purity",
       "name_zh": "西圈花牌 - 純潔",
-      "price": 680,
+      "price": 1600,
       "image": "./images/circle-1600-2.webp",
       "description": "Western circular plaque with white chrysanthemums and ribbon",
       "description_zh": "西圈花牌，白菊花和絲帶"
@@ -78,7 +77,7 @@
       "id": 112,
       "name": "Western Circular Plaque - Serenity",
       "name_zh": "西圈花牌 - 寧靜",
-      "price": 780,
+      "price": 1300,
       "image": "./images/circle1300-2.webp",
       "description": "Western circular plaque with mixed white flowers and eucalyptus",
       "description_zh": "西圈花牌，白色混合花卉和尤加利葉"
@@ -87,7 +86,7 @@
       "id": 113,
       "name": "Western Circular Plaque - Remembrance",
       "name_zh": "西圈花牌 - 懷念",
-      "price": 880,
+      "price": 1300,
       "image": "./images/circle1300-3.webp",
       "description": "Western circular plaque with premium lilies and orchids",
       "description_zh": "西圈花牌，頂級百合和蘭花"
@@ -96,7 +95,7 @@
       "id": 114,
       "name": "Western Circular Plaque - Grace",
       "name_zh": "西圈花牌 - 恩典",
-      "price": 980,
+      "price": 1300,
       "image": "./images/circle1300.webp",
       "description": "Western circular plaque with roses and cascading greenery",
       "description_zh": "西圈花牌，玫瑰和垂掛綠葉"
@@ -105,7 +104,7 @@
       "id": 115,
       "name": "Western Circular Plaque - Eternal",
       "name_zh": "西圈花牌 - 永恆",
-      "price": 1080,
+      "price": 1400,
       "image": "./images/circle1400-2.webp",
       "description": "Large western circular plaque with premium mixed flowers",
       "description_zh": "大型西圈花牌，頂級混合花卉"
@@ -114,7 +113,7 @@
       "id": 116,
       "name": "Western Circular Plaque - Peace",
       "name_zh": "西圈花牌 - 平安",
-      "price": 680,
+      "price": 1400,
       "image": "./images/circle1400.webp",
       "description": "Western circular plaque with white chrysanthemums and ferns",
       "description_zh": "西圈花牌，白菊花和蕨葉"
@@ -123,7 +122,7 @@
       "id": 117,
       "name": "Western Circular Plaque - Sympathy",
       "name_zh": "西圈花牌 - 慰問",
-      "price": 780,
+      "price": 1500,
       "image": "./images/circle1500.webp",
       "description": "Western circular plaque with carnations and baby's breath",
       "description_zh": "西圈花牌，康乃馨和滿天星"
@@ -132,7 +131,7 @@
       "id": 118,
       "name": "Western Circular Plaque - Honor",
       "name_zh": "西圈花牌 - 敬意",
-      "price": 880,
+      "price": 1600,
       "image": "./images/circle1600-3.webp",
       "description": "Western circular plaque with gladiolus and lilies",
       "description_zh": "西圈花牌，劍蘭和百合"
@@ -141,7 +140,7 @@
       "id": 119,
       "name": "Western Circular Plaque - Comfort",
       "name_zh": "西圈花牌 - 安慰",
-      "price": 980,
+      "price": 1600,
       "image": "./images/circle1600.webp",
       "description": "Western circular plaque with premium roses and greenery",
       "description_zh": "西圈花牌，頂級玫瑰和綠葉"
@@ -150,7 +149,7 @@
       "id": 120,
       "name": "Western Circular Plaque - Tribute",
       "name_zh": "西圈花牌 - 致敬",
-      "price": 1080,
+      "price": 1800,
       "image": "./images/circle1800.webp",
       "description": "Large western circular plaque with orchids and eucalyptus",
       "description_zh": "大型西圈花牌，蘭花和尤加利葉"
@@ -159,7 +158,7 @@
       "id": 121,
       "name": "Western Circular Plaque - Devotion",
       "name_zh": "西圈花牌 - 奉獻",
-      "price": 1180,
+      "price": 2000,
       "image": "./images/circle2000-2.webp",
       "description": "Premium western circular plaque with deluxe mixed flowers",
       "description_zh": "高級西圈花牌，豪華混合花卉"
@@ -168,7 +167,7 @@
       "id": 122,
       "name": "Western Circular Plaque - Solace",
       "name_zh": "西圈花牌 - 慰藉",
-      "price": 1280,
+      "price": 2000,
       "image": "./images/circle2000.webp",
       "description": "Deluxe western circular plaque with premium lilies, roses and ribbon",
       "description_zh": "豪華西圈花牌，頂級百合、玫瑰和絲帶"
@@ -177,7 +176,7 @@
       "id": 123,
       "name": "Western Basket - Gentle Memory",
       "name_zh": "西籃 - 溫柔回憶",
-      "price": 580,
+      "price": 700,
       "image": "./images/bag700.webp",
       "description": "Western standing basket with white chrysanthemums and greenery",
       "description_zh": "西式立式花籃，白菊花和綠葉"
@@ -186,7 +185,7 @@
       "id": 124,
       "name": "Western Basket - Peaceful Tribute",
       "name_zh": "西籃 - 寧靜致敬",
-      "price": 680,
+      "price": 800,
       "image": "./images/bag800.webp",
       "description": "Western standing basket with mixed white flowers and eucalyptus",
       "description_zh": "西式立式花籃，白色混合花卉和尤加利葉"
@@ -195,7 +194,7 @@
       "id": 125,
       "name": "Double-Layer Western Basket - Eternal Rest",
       "name_zh": "雙層西籃 - 永恆安息",
-      "price": 1080,
+      "price": 1200,
       "image": "./images/double1200-2.webp",
       "description": "Double-layer western basket with premium lilies and roses",
       "description_zh": "雙層西式花籃，頂級百合和玫瑰"
@@ -204,7 +203,7 @@
       "id": 126,
       "name": "Double-Layer Western Basket - Serene Farewell",
       "name_zh": "雙層西籃 - 寧靜告別",
-      "price": 1180,
+      "price": 1200,
       "image": "./images/double1200.webp",
       "description": "Double-layer western basket with orchids and cascading greenery",
       "description_zh": "雙層西式花籃，蘭花和垂掛綠葉"
@@ -213,7 +212,7 @@
       "id": 127,
       "name": "Double-Layer Western Basket - Grace Memorial",
       "name_zh": "雙層西籃 - 恩典紀念",
-      "price": 1280,
+      "price": 1400,
       "image": "./images/double1400-2.webp",
       "description": "Double-layer western basket with premium mixed flowers",
       "description_zh": "雙層西式花籃，頂級混合花卉"
@@ -222,7 +221,7 @@
       "id": 128,
       "name": "Double-Layer Western Basket - Peaceful Garden",
       "name_zh": "雙層西籃 - 寧靜花園",
-      "price": 1380,
+      "price": 1400,
       "image": "./images/double1400-3.webp",
       "description": "Double-layer western basket with roses, lilies and eucalyptus",
       "description_zh": "雙層西式花籃，玫瑰、百合和尤加利葉"
@@ -231,19 +230,10 @@
       "id": 129,
       "name": "Double-Layer Western Basket - Remembrance",
       "name_zh": "雙層西籃 - 懷念",
-      "price": 1480,
+      "price": 1400,
       "image": "./images/double1400.webp",
       "description": "Deluxe double-layer western basket with premium orchids and ribbon",
       "description_zh": "豪華雙層西式花籃，頂級蘭花和絲帶"
-    },
-    {
-      "id": 130,
-      "name": "Double-Layer Western Basket - Eternal Tribute",
-      "name_zh": "雙層西籃 - 永恆致敬",
-      "price": 1580,
-      "image": "./images/double700.webp",
-      "description": "Premium deluxe double-layer western basket with full floral arrangement",
-      "description_zh": "高級豪華雙層西式花籃，全花卉佈置"
     }
   ],
   "wreath": [
@@ -258,12 +248,11 @@
     }
   ],
   "opening": [
-    
     {
       "id": 406,
       "name": "Opening Western Basket - Grand Business",
       "name_zh": "開張西籃 - 宏圖大展",
-      "price": 788,
+      "price": 600,
       "image": "./images/opening600.webp",
       "description": "Opening western basket with lilies and sunflowers",
       "description_zh": "開張西籃，百合和向日葵"
@@ -272,7 +261,7 @@
       "id": 407,
       "name": "Opening Western Basket - Fortune",
       "name_zh": "開張西籃 - 財源廣進",
-      "price": 888,
+      "price": 700,
       "image": "./images/opening700-2.webp",
       "description": "Opening western basket with premium orchids and red roses",
       "description_zh": "開張西籃，頂級蘭花和紅玫瑰"
@@ -281,7 +270,7 @@
       "id": 408,
       "name": "Opening Western Basket - Success",
       "name_zh": "開張西籃 - 馬到成功",
-      "price": 988,
+      "price": 700,
       "image": "./images/opening700-3.webp",
       "description": "Opening western basket with anthuriums and mixed tropical flowers",
       "description_zh": "開張西籃，紅掌和熱帶混合花卉"
@@ -290,7 +279,7 @@
       "id": 409,
       "name": "Opening Western Basket - Abundance",
       "name_zh": "開張西籃 - 豐收",
-      "price": 1088,
+      "price": 700,
       "image": "./images/opening700-4.webp",
       "description": "Large opening western basket with premium lilies and golden decorations",
       "description_zh": "大型開張西籃，頂級百合和金色裝飾"
@@ -299,7 +288,7 @@
       "id": 410,
       "name": "Opening Western Basket - Thriving",
       "name_zh": "開張西籃 - 蓬勃發展",
-      "price": 688,
+      "price": 700,
       "image": "./images/opening700.webp",
       "description": "Opening western basket with sunflowers and gerberas",
       "description_zh": "開張西籃，向日葵和非洲菊"
@@ -308,7 +297,7 @@
       "id": 411,
       "name": "Opening Western Basket - Flourish",
       "name_zh": "開張西籃 - 欣欣向榮",
-      "price": 788,
+      "price": 800,
       "image": "./images/opening800-2.webp",
       "description": "Opening western basket with mixed red and gold flowers",
       "description_zh": "開張西籃，紅金混合花卉"
@@ -317,7 +306,7 @@
       "id": 412,
       "name": "Opening Western Basket - Glory",
       "name_zh": "開張西籃 - 光輝",
-      "price": 888,
+      "price": 800,
       "image": "./images/opening800-3.webp",
       "description": "Opening western basket with premium roses and orchids",
       "description_zh": "開張西籃，頂級玫瑰和蘭花"
@@ -326,7 +315,7 @@
       "id": 413,
       "name": "Opening Western Basket - Harmony",
       "name_zh": "開張西籃 - 和氣生財",
-      "price": 988,
+      "price": 800,
       "image": "./images/opening800-4.webp",
       "description": "Opening western basket with lilies, anthuriums and greenery",
       "description_zh": "開張西籃，百合、紅掌和綠葉"
@@ -335,7 +324,7 @@
       "id": 414,
       "name": "Opening Western Basket - Triumph",
       "name_zh": "開張西籃 - 勝利",
-      "price": 1088,
+      "price": 800,
       "image": "./images/opening800.webp",
       "description": "Large opening western basket with premium tropical flowers",
       "description_zh": "大型開張西籃，頂級熱帶花卉"
@@ -344,7 +333,7 @@
       "id": 415,
       "name": "Opening Western Basket - Blessing",
       "name_zh": "開張西籃 - 祝福",
-      "price": 1188,
+      "price": 650,
       "image": "./images/opening_bag650.webp",
       "description": "Premium opening western basket with deluxe floral arrangement",
       "description_zh": "高級開張西籃，豪華花卉佈置"
@@ -353,7 +342,7 @@
       "id": 416,
       "name": "Opening Western Basket - Golden Age",
       "name_zh": "開張西籃 - 黃金時代",
-      "price": 1288,
+      "price": 700,
       "image": "./images/opening_bag700.webp",
       "description": "Premium opening western basket with gold accents and orchids",
       "description_zh": "高級開張西籃，金色裝飾和蘭花"
@@ -362,7 +351,7 @@
       "id": 417,
       "name": "Opening Western Basket - Celebration",
       "name_zh": "開張西籃 - 誌慶",
-      "price": 1388,
+      "price": 800,
       "image": "./images/opening_bag800-2.webp",
       "description": "Deluxe opening western basket with full premium floral display",
       "description_zh": "豪華開張西籃，全頂級花卉展示"
@@ -371,7 +360,7 @@
       "id": 418,
       "name": "Opening Western Basket - Prestige",
       "name_zh": "開張西籃 - 尊貴",
-      "price": 1488,
+      "price": 800,
       "image": "./images/opening_bag800-3.webp",
       "description": "Deluxe opening western basket with premium orchids and roses",
       "description_zh": "豪華開張西籃，頂級蘭花和玫瑰"
@@ -380,7 +369,7 @@
       "id": 419,
       "name": "Opening Western Basket - Supreme",
       "name_zh": "開張西籃 - 至尊",
-      "price": 1688,
+      "price": 800,
       "image": "./images/opening_bag800.webp",
       "description": "Supreme deluxe opening western basket with full premium arrangement and golden decorations",
       "description_zh": "至尊豪華開張西籃，全頂級花卉佈置和金色裝飾"
