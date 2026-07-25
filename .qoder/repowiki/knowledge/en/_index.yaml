@@ -3,7 +3,7 @@ schema_version: 1
 locale: en-US
 branch: main
 nodes_managed: true
-exported_at: "2026-07-20T17:51:28Z"
+exported_at: "2026-07-25T15:59:12Z"
 modules:
     "":
         dir_name: Fujian Florist Static Site (GitHub Pages)
@@ -47,7 +47,9 @@ modules:
         dir_name: No error handling system (static site)_2
         title: No error handling system (static site)
         scope: []
-        source_files: []
+        source_files:
+            - _serve.js
+            - docs/js/cart.js
         children: []
         depends_on: []
         related_to: []
@@ -65,8 +67,7 @@ modules:
         dir_name: No logging system — static marketing site_2
         title: No logging system — static marketing site
         scope: []
-        source_files:
-            - _serve.js
+        source_files: []
         children: []
         depends_on: []
         related_to: []

@@ -1,8 +1,7 @@
 schema_version: 1
 module_path: dependency_management
-title: No Dependency Management System
+title: No dependency management system
 scope: []
-source_files:
-    - .qoder/repowiki/knowledge/en/No dependency management system/dependency_management.md
+source_files: []
 depends_on: []
 related_to: []
