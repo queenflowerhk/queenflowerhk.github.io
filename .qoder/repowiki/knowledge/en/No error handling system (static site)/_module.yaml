@@ -2,6 +2,8 @@ schema_version: 1
 module_path: error_handling
 title: No error handling system (static site)
 scope: []
-source_files: []
+source_files:
+    - _serve.js
+    - docs/js/cart.js
 depends_on: []
 related_to: []

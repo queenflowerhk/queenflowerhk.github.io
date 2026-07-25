@@ -2,6 +2,7 @@ schema_version: 1
 module_path: logging_system
 title: No logging system — static marketing site
 scope: []
-source_files: []
+source_files:
+    - _serve.js
 depends_on: []
 related_to: []

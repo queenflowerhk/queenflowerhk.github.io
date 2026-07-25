@@ -3,7 +3,7 @@ module_path: build_system
 title: No build system — static site served directly from docs/
 scope: []
 source_files:
-    - _serve.js
     - docs/index.html
+    - docs/.nojekyll
 depends_on: []
 related_to: []

@@ -10,11 +10,11 @@
 
 ## Update Summary
 **Changes Made**
-- Updated URL structure section to document explicit height parameters (h=800) alongside width parameters
-- Added new section on mixed image source strategy (Unsplash CDN vs local files)
-- Enhanced image optimization techniques section with dual-dimension parameter benefits
-- Updated responsive image handling to address fixed dimension loading patterns
-- Revised fallback mechanisms to account for local file dependencies
+- Updated image format section to document WebP format implementation for local images
+- Added new section on WebP vs JPEG performance benefits
+- Enhanced image optimization techniques with WebP-specific considerations
+- Updated fallback mechanisms to account for WebP browser compatibility
+- Revised caching strategies to include WebP-specific cache headers
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -30,13 +30,13 @@
 
 ## Introduction
 
-This document provides comprehensive technical documentation for the hybrid image loading system used throughout the Fujian Florist website. The implementation combines external Unsplash CDN integration with local image files to deliver optimized product images with consistent quality and performance across all device types. The system is designed to balance visual quality with loading speed while maintaining accessibility standards and providing robust fallback mechanisms.
+This document provides comprehensive technical documentation for the hybrid image loading system used throughout the Fujian Florist website. The implementation combines external Unsplash CDN integration with locally hosted WebP images to deliver optimized product images with consistent quality and performance across all device types. The system is designed to balance visual quality with loading speed while maintaining accessibility standards and providing robust fallback mechanisms.
 
-The integration covers static hero images, dynamic product gallery images, and responsive image handling across multiple sections including ceremonial plaques, funeral arrangements, wreaths, opening celebrations, association events, graduation ceremonies, and pet memorials.
+The integration covers static hero images, dynamic product gallery images, and responsive image handling across multiple sections including ceremonial plaques, funeral arrangements, wreaths, opening celebrations, association events, graduation ceremonies, and pet memorials. **Updated** Local images have been migrated from JPEG to WebP format for improved performance and reduced file sizes.
 
 ## Image Source Strategy Overview
 
-The website implements a sophisticated hybrid image loading strategy that strategically combines Unsplash's CDN service with locally hosted images to optimize reliability and performance. This approach leverages the strengths of both delivery methods while mitigating their individual limitations.
+The website implements a sophisticated hybrid image loading strategy that strategically combines Unsplash's CDN service with locally hosted WebP images to optimize reliability and performance. This approach leverages the strengths of both delivery methods while mitigating their individual limitations.
 
 ### Core Architecture Components
 
@@ -53,7 +53,7 @@ EdgeCache[Edge Cache Nodes]
 Origin[Origin Server]
 end
 subgraph "Local Storage"
-LocalImages[Local Image Files]
+WebPImages[WebP Image Files]
 StaticAssets[Static Assets]
 end
 subgraph "Processing Pipeline"
@@ -64,13 +64,13 @@ end
 Browser --> DOM
 DOM --> JS
 JS --> Unsplash
-JS --> LocalImages
+JS --> WebPImages
 Unsplash --> EdgeCache
 EdgeCache --> Transform
 Transform --> Optimize
 Optimize --> Format
 Format --> Browser
-LocalImages --> StaticAssets
+WebPImages --> StaticAssets
 StaticAssets --> Browser
 EdgeCache -.->|Cache Miss| Origin
 ```
@@ -89,11 +89,11 @@ The system employs a strategic approach to image sourcing based on reliability r
 - Content requiring automatic format optimization
 - Images needing responsive transformation capabilities
 
-**Local File Usage:**
+**Local WebP File Usage:**
 - Critical product images requiring guaranteed availability
 - High-value commercial imagery under direct control
 - Images with specific branding or proprietary content
-- Products requiring maximum loading reliability
+- Products requiring maximum loading reliability with WebP optimization
 
 **Section sources**
 - [products.json:45-96](file://docs/products.json#L45-L96)
@@ -110,11 +110,11 @@ External images follow the enhanced Unsplash CDN URL structure with explicit dua
 https://images.unsplash.com/[photo-id]?h=[height]&w=[width]&auto=format&fit=crop&q=[quality]
 ```
 
-### Local File URL Pattern
+### Local WebP File URL Pattern
 
-Local images use simplified relative paths without transformation parameters:
+Local images use simplified relative paths with WebP extension:
 ```
-./images/[filename].[extension]
+./images/[filename].webp
 ```
 
 ### Parameter Breakdown
@@ -201,7 +201,7 @@ class="product-image w-full h-full object-cover"
 
 ## Loading Strategies and Performance
 
-The implementation employs several performance optimization techniques to ensure fast image loading while maintaining visual quality across both CDN and local sources.
+The implementation employs several performance optimization techniques to ensure fast image loading while maintaining visual quality across both CDN and WebP sources.
 
 ### Native Lazy Loading Considerations
 
@@ -236,14 +236,30 @@ The image loading follows a progressive enhancement approach:
 
 ### Critical Rendering Path Optimization
 
-**Updated** Enhanced with explicit height parameters for improved layout stability
+**Updated** Enhanced with explicit height parameters for improved layout stability and WebP format support
 
 **Section sources**
 - [products.js:57-80](file://docs/js/products.js#L57-L80)
 
 ## Image Optimization Techniques
 
-The hybrid image system leverages advanced optimization techniques across both CDN and local delivery methods to balance quality and performance across different devices and network conditions.
+The hybrid image system leverages advanced optimization techniques across both CDN and WebP delivery methods to balance quality and performance across different devices and network conditions.
+
+### WebP Format Implementation
+
+**Updated** All local product images have been migrated from JPEG to WebP format for significant performance improvements:
+
+```
+./images/circle-101.webp
+./images/heart-304.webp  
+./images/double-503.webp
+```
+
+**WebP Advantages:**
+- **Superior Compression**: 25-35% smaller file sizes compared to JPEG at equivalent quality
+- **Faster Loading**: Reduced bandwidth consumption improves page load times
+- **Better Quality**: Superior compression algorithms maintain visual fidelity
+- **Modern Browser Support**: Excellent compatibility with modern browsers
 
 ### Dual-Dimension Parameter Optimization
 
@@ -290,11 +306,12 @@ The mixed approach provides complementary caching benefits:
 - HTTP/2 multiplexing support
 - Geographic proximity optimization
 
-**Local File Caching Benefits:**
+**WebP File Caching Benefits:**
 - Zero dependency on external services
 - Faster loading for repeat visitors
 - Reduced cross-origin requests
 - Complete control over cache headers
+- Smaller file sizes reduce bandwidth costs
 
 **Section sources**
 - [products.json:7-210](file://docs/products.json#L7-L210)
@@ -338,10 +355,11 @@ The responsive grid system automatically adjusts image display:
 
 ### Fixed Dimension Loading Strategy
 
-**Updated** The current implementation uses fixed dimension parameters for optimal performance:
+**Updated** The current implementation uses fixed dimension parameters for optimal performance with WebP optimization:
 
 **Current Approach:**
 - Fixed height (800px) and width (600px) parameters for CDN images
+- WebP format for local images provides superior compression
 - CSS-based responsive containers handle display scaling
 - Aspect ratio preservation through `object-cover`
 - Consistent loading experience across devices
@@ -351,6 +369,7 @@ The responsive grid system automatically adjusts image display:
 - Elimination of layout shift during loading
 - Optimized server-side processing with known dimensions
 - Simplified caching strategies
+- Reduced file sizes with WebP format
 
 **Potential Enhancements:**
 - Implement `srcset` for device pixel density optimization
@@ -363,7 +382,7 @@ The responsive grid system automatically adjusts image display:
 
 ## Fallback Mechanisms
 
-The hybrid image system provides multiple layers of fallback protection to ensure reliable image delivery across different failure scenarios.
+The hybrid image system provides multiple layers of fallback protection to ensure reliable image delivery across different failure scenarios and browser compatibility issues.
 
 ### Browser Error Handling
 
@@ -384,15 +403,26 @@ Unsplash CDN provides enterprise-grade reliability:
 - Health monitoring and routing
 - DDoS protection and security headers
 
-### Local File Dependencies
+### Local WebP File Dependencies
 
-**Updated** Local image files provide critical fallback scenarios:
+**Updated** Local WebP image files provide critical fallback scenarios:
 
 **Reliability Benefits:**
 - Guaranteed availability regardless of external service status
 - No cross-origin request failures
 - Immediate access without DNS resolution
 - Complete control over image hosting infrastructure
+- Superior compression reduces bandwidth requirements
+
+### WebP Browser Compatibility
+
+**Updated** WebP format requires compatibility considerations:
+
+**Browser Support:**
+- Chrome 56+, Firefox 65+, Safari 14+ support WebP
+- Older browsers may require JPEG fallback
+- CDN auto-format handles format negotiation
+- Local WebP files benefit from modern browser optimization
 
 ### Error State Management
 
@@ -425,11 +455,12 @@ The multi-layered caching strategy ensures optimal performance through browser c
 - Vary headers for format negotiation
 - Compression support (gzip, brotli)
 
-**Local Images:**
+**WebP Images:**
 - Standard static asset caching
 - Versioned filenames for cache busting
 - Simple cache-control policies
 - Direct origin server caching
+- Optimized for smaller file sizes
 
 ### CDN Edge Caching
 
@@ -468,7 +499,7 @@ Global edge network provides distributed caching:
 
 ## Best Practices and Recommendations
 
-Based on the analysis of the current hybrid implementation, here are recommendations for further optimization and enhancement.
+Based on the analysis of the current hybrid implementation with WebP optimization, here are recommendations for further optimization and enhancement.
 
 ### Immediate Improvements
 
@@ -480,7 +511,7 @@ Add `loading="lazy"` attribute to product images:
 ```
 
 #### 2. Add Error Handling
-Implement JavaScript error handlers for both CDN and local images:
+Implement JavaScript error handlers for both CDN and WebP images:
 ```javascript
 document.querySelectorAll('.product-image').forEach(img => {
     img.addEventListener('error', function() {
@@ -502,9 +533,9 @@ Use `fetchpriority="high"` for above-the-fold images:
 #### 4. Implement Responsive Images
 Add `srcset` for device-specific optimization:
 ```html
-<img srcset="image-400w.jpg 400w, image-800w.jpg 800w" 
+<img srcset="image-400w.webp 400w, image-800w.webp 800w" 
      sizes="(max-width: 768px) 100vw, 50vw"
-     src="image-600w.jpg" alt="${altText}">
+     src="image-600w.webp" alt="${altText}">
 ```
 
 #### 5. Add Preloading for Critical Resources
@@ -564,12 +595,12 @@ Ensure keyboard navigation works properly:
 
 ## Conclusion
 
-The hybrid image loading system in the Fujian Florist website demonstrates a sophisticated approach to image delivery that effectively balances reliability, performance, and visual quality. The recent implementation of explicit height parameters alongside width parameters represents a significant optimization improvement, providing better aspect ratio control and layout stability.
+The hybrid image loading system in the Fujian Florist website demonstrates a sophisticated approach to image delivery that effectively balances reliability, performance, and visual quality. **Updated** The recent migration to WebP format for local images represents a significant performance optimization, providing 25-35% smaller file sizes while maintaining excellent visual quality.
 
-The strategic combination of Unsplash CDN for dynamic content and local files for critical imagery creates a resilient architecture that maintains high availability while leveraging CDN benefits for broader distribution. The dual-dimension parameter approach enhances compression efficiency and eliminates layout shifts during loading.
+The strategic combination of Unsplash CDN for dynamic content and local WebP files for critical imagery creates a resilient architecture that maintains high availability while leveraging CDN benefits for broader distribution. The dual-dimension parameter approach enhances compression efficiency and eliminates layout shifts during loading, while the WebP format adoption significantly reduces bandwidth requirements.
 
-The current implementation successfully delivers optimized images across multiple product categories while maintaining consistent visual presentation and accessibility standards. The use of automatic format selection, adaptive quality settings, and responsive containers provides a robust foundation for image delivery.
+The current implementation successfully delivers optimized images across multiple product categories while maintaining consistent visual presentation and accessibility standards. The use of automatic format selection, adaptive quality settings, responsive containers, and WebP optimization provides a robust foundation for image delivery.
 
 Future enhancements should focus on implementing native lazy loading, adding comprehensive error handling, and incorporating advanced responsive image techniques to further optimize performance and user experience. The modular architecture of the current implementation makes these improvements straightforward to implement without disrupting existing functionality.
 
-The hybrid approach serves as an excellent example of how to leverage multiple image delivery methods effectively while maintaining control over image presentation, accessibility, and performance characteristics.
+The hybrid approach serves as an excellent example of how to leverage multiple image delivery methods effectively while maintaining control over image presentation, accessibility, and performance characteristics. The WebP format migration demonstrates the importance of staying current with modern image optimization techniques to deliver the best possible user experience.
