@@ -43,7 +43,7 @@
       "name": "Premium Traditional White Wreath",
       "name_zh": "高級傳統白花圈",
       "price": 1300,
-      "image": "./images/circle-101.jpg",
+      "image": "./images/circle-101.webp",
       "description": "Premium white chrysanthemum wreath with calligraphy eulogy ribbon",
       "description_zh": "高級白菊花花圈，附書法輓聯帶"
     },
@@ -90,7 +90,7 @@
       "name": "Deluxe Heart-Shaped Wreath",
       "name_zh": "豪華心型悼念花圈",
       "price": 3000,
-      "image": "./images/heart-304.jpg",
+      "image": "./images/heart-304.webp",
       "description": "Deluxe heart-shaped memorial wreath with premium roses and carnations",
       "description_zh": "豪華心型紀念花圈，頂級玫瑰和康乃馨"
     }
@@ -148,7 +148,7 @@
       "name": "Grand Clan Association Plaque",
       "name_zh": "大型宗親會祭祖花牌",
       "price": 1400,
-      "image": "./images/double-503.jpg",
+      "image": "./images/double-503.webp",
       "description": "Grand traditional plaque for clan association ancestor worship",
       "description_zh": "大型宗親會祭祖傳統花牌，莊重肅穆"
     }
