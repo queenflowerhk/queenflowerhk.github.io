@@ -1,0 +1,5 @@
+- Each JavaScript feature is encapsulated as an IIFE exposing a named namespace object (e.g., `const Main = (() => {...})()`, `const Cart = (() => {...})()`, `const Products = (() => {...})()`, `const Components = (() => {...})()`) with only necessary methods returned.
+- User-facing text uses `data-i18n` attributes on HTML elements and is resolved at runtime by the `Translations` module via `Translations.t(key)`, supporting both `zh` and `en` locales defined in `translations.json`.
+- Product cards are rendered as template literal strings injected into grid containers by ID (`renderCategory(category, gridId)`), with category-specific badge colors and somber vs celebratory styling determined by product category.
+- Module dependencies are enforced through script tag load order in `index.html`: cart → translations → products → components → main, ensuring each module's dependencies are available before execution.
+- Inline `onclick` handlers call globally exposed functions (e.g., `toggleCart()`, `setLanguage()`, `openLightbox()`) that delegate to the corresponding module's method, keeping event bindings out of the module scope.

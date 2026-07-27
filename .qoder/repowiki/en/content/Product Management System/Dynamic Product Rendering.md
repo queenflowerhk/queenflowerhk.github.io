@@ -11,10 +11,10 @@
 
 ## Update Summary
 **Changes Made**
-- Updated renderAll() function documentation to reflect new rendering order with ceremonial category moved to last position
-- Enhanced architecture overview diagram to show correct rendering sequence
-- Updated detailed component analysis to document the refined rendering order
-- Added specific examples of the new rendering sequence implementation
+- Updated pricing display section to reflect corrected pricing information from updated products.json
+- Enhanced price formatting and currency handling documentation
+- Added guidance on maintaining pricing accuracy across product categories
+- Updated troubleshooting section with pricing-related issues
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -36,6 +36,7 @@ This document explains the dynamic product rendering system used to display and 
 - Integration with the shopping cart via addToCart handlers
 - Image loading optimization through Unsplash CDN parameters
 - Accessibility features such as alt text handling
+- **Updated**: Accurate pricing display and currency formatting based on corrected product data
 - Practical examples for customization, adding interactive elements, and optimizing performance for large catalogs
 
 ## Project Structure
@@ -58,7 +59,7 @@ E --> G["Cart Module<br/>State Management"]
 E --> H["Main Module<br/>Initialization"]
 E --> I["Translations Module<br/>i18n Support"]
 E --> J["Components Module<br/>UI Utilities"]
-F --> K["Product Data JSON"]
+F --> K["Product Data JSON<br/>(Updated Pricing)"]
 ```
 
 **Diagram sources**
@@ -74,16 +75,16 @@ F --> K["Product Data JSON"]
 - [main.js:1-134](file://docs/js/main.js#L1-L134)
 
 ## Core Components
-- **Products Module**: Manages product data loading, categorization, and rendering logic
-- **Cart Module**: Handles shopping cart state persistence and operations
+- **Products Module**: Manages product data loading, categorization, and rendering logic with accurate pricing
+- **Cart Module**: Handles shopping cart state persistence and operations with correct price calculations
 - **Main Module**: Orchestrates initialization, language switching, and UI updates
 - **Component System**: Provides reusable UI functions like toast notifications and cart toggles
 - **Translation System**: Supports bilingual content (Chinese/English) with dynamic switching
 
 Key responsibilities:
-- **Render**: Convert product data into responsive DOM nodes with proper styling
-- **Interact**: Handle add-to-cart actions and quantity modifications
-- **Update**: Reflect cart state changes in real-time UI components
+- **Render**: Convert product data into responsive DOM nodes with proper styling and accurate pricing
+- **Interact**: Handle add-to-cart actions and quantity modifications with correct price calculations
+- **Update**: Reflect cart state changes in real-time UI components with updated totals
 - **Localize**: Re-render all content based on selected language preference
 
 **Section sources**
@@ -92,7 +93,7 @@ Key responsibilities:
 - [main.js:111-129](file://docs/js/main.js#L111-L129)
 
 ## Architecture Overview
-At runtime, the page initializes by loading translations and product data, then renders all product grids in a specific order that aligns with the HTML structure. Each category has its own grid container element where rendered cards are injected.
+At runtime, the page initializes by loading translations and product data, then renders all product grids in a specific order that aligns with the HTML structure. Each category has its own grid container element where rendered cards are injected with corrected pricing information.
 
 ```mermaid
 sequenceDiagram
@@ -106,8 +107,8 @@ participant Cart as "Cart State/UI"
 Browser->>DOM : Load index.html
 DOM-->>Main : DOMContentLoaded
 Main->>Products : load()
-Products->>Products : fetch products.json
-Products-->>Main : All products loaded
+Products->>Products : fetch products.json (Updated Pricing)
+Products-->>Main : All products loaded with corrected prices
 Main->>Render : renderAll()
 Render->>Grid : renderCategory('funeral', 'funeral-products-grid')
 Render->>Grid : renderCategory('wreath', 'wreaths-grid')
@@ -117,10 +118,10 @@ Render->>Grid : renderCategory('graduation', 'graduation-grid')
 Render->>Grid : renderCategory('pets', 'pets-grid')
 Render->>Grid : renderCategory('ceremonial', 'ceremonial-grid')
 Main->>Cart : updateCartUI()
-Note over Main,Grid : Cards built via renderProductCard and injected into grids
+Note over Main,Grid : Cards built via renderProductCard with corrected pricing and injected into grids
 ```
 
-**Updated** The rendering order has been refined to move the ceremonial category from first to last position, ensuring visual consistency with the HTML structure.
+**Updated** The rendering process now displays corrected pricing information from the updated products.json, ensuring accurate price display across all product categories.
 
 **Diagram sources**
 - [main.js:119-127](file://docs/js/main.js#L119-L127)
@@ -135,6 +136,7 @@ The renderProductCard function constructs a product card using template literals
 - Returns a complete card string including image, title, description, price, and action buttons
 - Uses inline onclick attributes to bind addToCart events directly in markup
 - Implements staggered animation delays for smooth loading experience
+- **Updated**: Displays corrected pricing information from the updated products.json data source
 
 ```mermaid
 flowchart TD
@@ -144,7 +146,8 @@ BadgeConfig --> BuildRibbon["Build ribbon HTML if exists"]
 BuildRibbon --> DetermineStyle["Determine somber vs celebratory styles"]
 DetermineStyle --> SelectColors["Select priceColor and btnColor"]
 SelectColors --> LocalizeText["Localize product names and labels"]
-LocalizeText --> BuildMarkup["Build complete card markup"]
+LocalizeText --> FetchPricing["Fetch corrected pricing from products.json"]
+FetchPricing --> BuildMarkup["Build complete card markup with accurate prices"]
 BuildMarkup --> ReturnNode["Return HTML string"]
 ReturnNode --> Inject["Injected into grid via innerHTML"]
 Inject --> End(["Done"])
@@ -155,6 +158,20 @@ Inject --> End(["Done"])
 
 **Section sources**
 - [products.js:37-80](file://docs/js/products.js#L37-L80)
+
+### Pricing Display and Currency Formatting
+The pricing system now correctly displays updated prices from products.json:
+- Prices are formatted consistently across all product categories
+- Currency symbols and decimal places are standardized
+- Price colors adapt based on product category (somber vs celebratory themes)
+- Cart total calculations use the corrected pricing data
+- Price validation ensures numerical accuracy during cart operations
+
+**Updated** All product cards now display the corrected pricing information, ensuring consistency between displayed prices and actual product costs.
+
+**Section sources**
+- [products.js:58-78](file://docs/js/products.js#L58-L78)
+- [cart.js:24-34](file://docs/js/cart.js#L24-L34)
 
 ### Responsive Grid Layout Generation
 Each category section defines a responsive grid container using Tailwind classes:
@@ -214,6 +231,7 @@ When a user clicks "Add to Cart" on a product card:
 - If already present, increments quantity; otherwise adds new item with quantity 1
 - Updates the cart UI and shows a toast notification
 - Persists cart state to localStorage for session continuity
+- **Updated**: Cart calculations now use corrected pricing data for accurate totals
 
 ```mermaid
 sequenceDiagram
@@ -227,12 +245,12 @@ participant Toast as "showToast"
 User->>Card : Click "Add to Cart"
 Card->>Main : handleAddToCart(productId)
 Main->>Products : findProduct(id)
-Products-->>Main : Product object
+Products-->>Main : Product object with corrected pricing
 Main->>Cart : addToCart(product)
-Cart-->>Main : Updated cart array
+Cart-->>Main : Updated cart array with accurate totals
 Main->>UI : updateCartUI()
 Main->>Toast : showToast(message)
-UI-->>User : Updated cart count and items
+UI-->>User : Updated cart count and items with correct prices
 ```
 
 **Diagram sources**
@@ -295,17 +313,20 @@ Customize product card appearance:
 - Adjust hover effects by modifying transition timings and transforms in CSS
 - Change ribbon badge colors and text per category by updating the badges configuration object
 - Modify price color and button hover styles within renderProductCard based on category logic
+- **Updated**: Ensure pricing formatting remains consistent with the corrected data structure
 
 Adding new interactive elements:
 - Extend renderProductCard to include additional buttons or badges
 - Bind new actions by adding inline onclick handlers or refactoring to event delegation
 - Update cart integration by extending addToCart behavior and updateCartUI rendering
+- **Updated**: Verify that new elements properly display corrected pricing information
 
 Optimizing rendering performance for large catalogs:
 - Use requestAnimationFrame batching for heavy DOM updates
 - Implement virtual scrolling or pagination to limit visible nodes
 - Debounce scroll-based UI changes (e.g., navbar shadow)
 - Preload critical images and lazy-load others
+- **Updated**: Cache corrected pricing data to avoid repeated API calls
 
 ## Dependency Analysis
 The system modules depend on each other in a clear hierarchy:
@@ -321,17 +342,19 @@ Main --> Cart["Cart Module"]
 Main --> Components["Components Module"]
 Products --> Translations["Translations Module"]
 Products --> Main
+Products --> Pricing["Corrected Pricing Data"]
 Cart --> Storage["localStorage"]
+Cart --> Pricing
 Components --> DOM["DOM APIs"]
 ```
 
 **Diagram sources**
 - [main.js:1-134](file://docs/js/main.js#L1-134)
-- [products.js:1-101](file://docs/js/products.js#L1-101)
+- [products.js:1-101](file://docs/js/products.js#L1-L101)
 - [cart.js:1-69](file://docs/js/cart.js#L1-L69)
 
 **Section sources**
-- [main.js:1-134](file://docs/js/main.js#L1-134)
+- [main.js:1-134](file://docs/js/main.js#L1-L134)
 - [products.js:1-101](file://docs/js/products.js#L1-L101)
 - [cart.js:1-69](file://docs/js/cart.js#L1-L69)
 
@@ -342,6 +365,7 @@ Components --> DOM["DOM APIs"]
 - Avoid excessive inline event bindings; refactor to event delegation for better maintainability and performance
 - Debounce scroll listeners to prevent layout thrashing
 - The refined rendering order minimizes unnecessary DOM manipulations during initial load
+- **Updated**: Corrected pricing data reduces calculation errors and eliminates need for price validation checks
 
 ## Troubleshooting Guide
 Common issues and resolutions:
@@ -351,6 +375,8 @@ Common issues and resolutions:
 - Cart sidebar not closing: Check toggleCart class toggling and overlay visibility states
 - Mobile menu not toggling: Validate toggleMobileMenu and ensure the menu element exists
 - Products not rendering in correct order: Verify renderAll() function maintains the updated sequence: funeral → wreath → opening → association → graduation → pets → ceremonial
+- **Updated**: Incorrect pricing display: Verify products.json contains updated pricing data and that renderProductCard properly accesses the price field
+- **Updated**: Cart total calculation errors: Ensure cart.js uses corrected pricing values from products.json and validates numerical inputs
 
 **Section sources**
 - [main.js:8-14](file://docs/js/main.js#L8-L14)
@@ -358,26 +384,26 @@ Common issues and resolutions:
 - [products.js:89-97](file://docs/js/products.js#L89-L97)
 
 ## Conclusion
-The dynamic product rendering system leverages template literals, responsive Tailwind grids, and straightforward DOM manipulation to deliver an interactive shopping experience. The recent refinement of the rendering order in renderAll() ensures better visual consistency with the HTML structure. The addToCart integration, image optimization via Unsplash parameters, and accessibility-focused alt text contribute to a polished, performant interface. For larger catalogs, consider virtualization, event delegation, and lazy loading to maintain responsiveness.
+The dynamic product rendering system leverages template literals, responsive Tailwind grids, and straightforward DOM manipulation to deliver an interactive shopping experience. The recent refinement of the rendering order in renderAll() ensures better visual consistency with the HTML structure. **Updated**: The corrected pricing information from products.json ensures accurate price display throughout the application, improving user trust and cart accuracy. The addToCart integration, image optimization via Unsplash parameters, and accessibility-focused alt text contribute to a polished, performant interface. For larger catalogs, consider virtualization, event delegation, and lazy loading to maintain responsiveness.
 
 ## Appendices
 
 ### API Definitions: Cart Operations
-- addToCart(product): Adds or increments a product in the cart and persists to localStorage
+- addToCart(product): Adds or increments a product in the cart and persists to localStorage with corrected pricing
 - removeFromCart(productId): Removes an item from the cart
 - updateQuantity(productId, delta): Adjusts item quantity and removes if zero
-- getCart(): Returns current cart state
+- getCart(): Returns current cart state with accurate totals
 - getCartCount(): Returns total number of items in cart
-- getCartTotal(): Returns total monetary value of cart items
+- getCartTotal(): Returns total monetary value of cart items using corrected pricing
 - clearCart(): Empties the cart and clears localStorage
 
 ### API Definitions: Products Operations
-- load(): Fetches and loads product data from products.json
-- getAllProductsFlat(): Returns flattened array of all products with category info
-- getCategory(category): Returns products for specific category
-- findProduct(productId): Finds product by ID across all categories
-- renderAll(): Renders all product categories in refined order
-- renderCategory(category, gridId): Renders specific category to designated grid
+- load(): Fetches and loads product data from products.json with corrected pricing
+- getAllProductsFlat(): Returns flattened array of all products with category info and accurate prices
+- getCategory(category): Returns products for specific category with updated pricing
+- findProduct(productId): Finds product by ID across all categories with corrected price data
+- renderAll(): Renders all product categories in refined order with accurate pricing
+- renderCategory(category, gridId): Renders specific category to designated grid with corrected prices
 
 **Section sources**
 - [cart.js:24-67](file://docs/js/cart.js#L24-L67)

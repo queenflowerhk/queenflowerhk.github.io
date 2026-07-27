@@ -1,0 +1,1 @@
+Deployed directly to GitHub Pages — place files under `docs/` and enable GitHub Pages with the `/docs` folder as source. No build or test commands required; just push changes to trigger redeployment. The `.nojekyll` file ensures raw HTML is served without Jekyll processing.

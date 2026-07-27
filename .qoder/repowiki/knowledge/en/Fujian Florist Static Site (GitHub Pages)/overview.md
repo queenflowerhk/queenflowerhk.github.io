@@ -1,1 +1,0 @@
-Static marketing and ordering site for Fujian Florist, serving a single-page product catalogue with cart and WhatsApp checkout on GitHub Pages.

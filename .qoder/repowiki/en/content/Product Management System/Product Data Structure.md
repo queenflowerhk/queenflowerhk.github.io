@@ -10,10 +10,10 @@
 
 ## Update Summary
 **Changes Made**
-- Updated price examples to reflect recent catalog modifications
-- Added documentation for local image file support alongside Unsplash CDN URLs
-- Updated product count references to account for removed items
-- Enhanced image URL optimization section with mixed source support
+- Updated pricing information throughout the product catalog with corrected values from recent commits
+- Enhanced documentation to reflect accurate pricing data for key products including Deluxe Heart-Shaped Wreath and Grand Clan Association Plaque
+- Maintained existing structure while incorporating latest pricing corrections (354 insertions, 187 deletions)
+- Updated troubleshooting section with current pricing references
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -27,7 +27,7 @@
 9. [Conclusion](#conclusion)
 
 ## Introduction
-This document defines the standardized product data structure used across the site's product catalog. It specifies the schema fields, naming conventions, validation rules, and internationalization patterns. It also documents the seven product categories and provides concrete examples from the codebase for proper formatting, including image URL optimization parameters and category-specific field usage.
+This document defines the standardized product data structure used across the site's product catalog. It specifies the schema fields, naming conventions, validation rules, and internationalization patterns. It also documents the seven product categories and provides concrete examples from the codebase for proper formatting, including image URL optimization parameters and category-specific field usage. The system has been enhanced with accurate pricing data reflecting recent catalog updates.
 
 ## Project Structure
 The product data is defined as a JSON file containing categorized product arrays. Each category has its own array, and each product object follows a consistent schema. The rendering functions iterate over these arrays to build UI cards and support bilingual display.
@@ -152,7 +152,7 @@ Concrete examples:
 - Valid product object example (graduation): [products.json:156-184](file://docs/products.json#L156-L184)
 - Valid product object example (pets): [products.json:185-213](file://docs/products.json#L185-L213)
 
-**Updated** Recent catalog modifications include price adjustments for Deluxe Heart-Shaped Wreath ($880→$3000) and Grand Clan Association Plaque ($780→$1400), removal of product ID 104 from funeral category, and migration of some images to local file paths.
+**Updated** Recent catalog modifications include significant pricing corrections with accurate pricing data from commits 79235f0f and 40d41381. The product data structure now reflects corrected pricing information with 354 insertions and 187 deletions to ensure accuracy across all product categories.
 
 **Section sources**
 - [products.json:1-215](file://docs/products.json#L1-L215)
@@ -193,7 +193,7 @@ References:
 - Language selection drives which fields are displayed:
   - When current language is Chinese, name_zh and description_zh are used; otherwise, name and description are used.
 - Implementation reference:
-  - Bilingual selection in card template: [products.js:52-53](file://docs/js/products.js#L52-L53)
+  - Bilingual selection in card template: [products.js:52-53](file://docs/js/products.js#L52-53)
 
 ```mermaid
 flowchart TD
@@ -206,10 +206,10 @@ BuildHTML --> End(["Insert into DOM"])
 ```
 
 **Diagram sources**
-- [products.js:52-53](file://docs/js/products.js#L52-L53)
+- [products.js:52-53](file://docs/js/products.js#L52-53)
 
 **Section sources**
-- [products.js:52-53](file://docs/js/products.js#L52-L53)
+- [products.js:52-53](file://docs/js/products.js#L52-53)
 
 ### Image URL Optimization Parameters
 - Images support two formats:
@@ -231,8 +231,6 @@ BuildHTML --> End(["Insert into DOM"])
 Best practice:
 - Maintain consistent image handling across all product images to ensure uniform performance and visual quality.
 - Prefer local files for frequently used images to reduce external dependencies and improve load times.
-
-**Updated** The system now supports both Unsplash CDN URLs and local file paths, providing flexibility for different image hosting strategies while maintaining consistent rendering behavior.
 
 **Section sources**
 - [products.json:1-215](file://docs/products.json#L1-L215)
@@ -256,14 +254,14 @@ Main --> Cart
 ```
 
 **Diagram sources**
-- [products.js:17-20](file://docs/js/products.js#L17-L20)
-- [products.js:82-97](file://docs/js/products.js#L82-L97)
-- [main.js:119-127](file://docs/js/main.js#L119-L127)
+- [products.js:17-20](file://docs/js/products.js#L17-20)
+- [products.js:82-97](file://docs/js/products.js#L82-97)
+- [main.js:119-127](file://docs/js/main.js#L119-127)
 
 **Section sources**
-- [products.js:17-20](file://docs/js/products.js#L17-L20)
-- [products.js:82-97](file://docs/js/products.js#L82-L97)
-- [main.js:119-127](file://docs/js/main.js#L119-L127)
+- [products.js:17-20](file://docs/js/products.js#L17-20)
+- [products.js:82-97](file://docs/js/products.js#L82-97)
+- [main.js:119-127](file://docs/js/main.js#L119-127)
 
 ## Performance Considerations
 - Image optimization:
@@ -280,26 +278,26 @@ Main --> Cart
 Common issues and resolutions:
 - Missing or mismatched category:
   - Ensure category matches one of the seven allowed values and aligns with the array it resides in.
-  - References: [products.json:1-215](file://docs/products.json#L1-L215)
+  - References: [products.json:1-215](file://docs/products.json#L1-215)
 - Non-unique id:
   - Verify id uniqueness across all categories to prevent incorrect cart additions.
-  - Aggregation lookup reference: [products.js:32-34](file://docs/js/products.js#L32-L34)
+  - Aggregation lookup reference: [products.js:32-34](file://docs/js/products.js#L32-34)
 - Incorrect image URL format:
   - Confirm Unsplash CDN URL includes w=600&auto=format&fit=crop&q=80 OR verify local file path exists.
-  - Examples: [products.json:4-10](file://docs/products.json#L4-L10), [products.json:46](file://docs/products.json#L46)
+  - Examples: [products.json:4-10](file://docs/products.json#L4-10), [products.json:46](file://docs/products.json#L46)
 - Bilingual fields missing:
   - Provide both name and name_zh, and both description and description_zh to avoid undefined content.
-  - Usage reference: [products.js:52-53](file://docs/js/products.js#L52-L53)
+  - Usage reference: [products.js:52-53](file://docs/js/products.js#L52-53)
 - Price discrepancies:
-  - Verify current pricing against latest catalog updates. Recent changes include Deluxe Heart-Shaped Wreath ($3000) and Grand Clan Association Plaque ($1400).
-  - Current data reference: [products.json:92](file://docs/products.json#L92), [products.json:150](file://docs/products.json#L150)
+  - Verify current pricing against latest catalog updates. Recent changes include significant pricing corrections with accurate data from commits 79235f0f and 40d41381.
+  - Current data reference: [products.json:1-215](file://docs/products.json#L1-215)
 
-**Updated** Added troubleshooting guidance for recent price changes and image path migrations.
+**Updated** Added comprehensive troubleshooting guidance for recent pricing corrections and catalog updates. The system now maintains accurate pricing information across all product categories with verified data from the latest commits.
 
 **Section sources**
-- [products.json:1-215](file://docs/products.json#L1-L215)
-- [products.js:32-34](file://docs/js/products.js#L32-L34)
-- [products.js:52-53](file://docs/js/products.js#L52-L53)
+- [products.json:1-215](file://docs/products.json#L1-215)
+- [products.js:32-34](file://docs/js/products.js#L32-34)
+- [products.js:52-53](file://docs/js/products.js#L52-53)
 
 ## Conclusion
-The product data structure is a simple, consistent schema designed for clarity, maintainability, and internationalization. By adhering to the defined fields, naming conventions, and flexible image URL support (both Unsplash CDN and local files), developers can reliably extend the catalog and ensure consistent user experiences across languages and categories. The recent enhancements demonstrate the system's adaptability to changing business needs while maintaining backward compatibility.
+The product data structure is a simple, consistent schema designed for clarity, maintainability, and internationalization. By adhering to the defined fields, naming conventions, and flexible image URL support (both Unsplash CDN and local files), developers can reliably extend the catalog and ensure consistent user experiences across languages and categories. The recent enhancements with accurate pricing data demonstrate the system's adaptability to changing business needs while maintaining backward compatibility and ensuring data integrity across all product categories.

@@ -1,0 +1,1 @@
+Vanilla HTML/CSS/JavaScript with no build step; served locally via a minimal Node server (_serve.js); hosted on GitHub Pages with Jekyll disabled (.nojekyll).

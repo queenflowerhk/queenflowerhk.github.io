@@ -1,0 +1,1 @@
+Run `node _serve.js` from the repo root to serve the site locally; deploy by pushing to the configured branch on GitHub Pages.

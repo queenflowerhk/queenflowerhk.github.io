@@ -1,0 +1,1 @@
+Static website assets for Fujian Florist, a Hong Kong ceremonial and funeral flower shop, built as a single-page HTML with modular JavaScript modules for products, cart, translations, and shared UI components.

@@ -1,1 +1,0 @@
-Vanilla ES modules (IIFE pattern) + Tailwind CSS via CDN + Google Fonts + Font Awesome; products and translations are plain JSON fetched at runtime; development served by a custom Node `http.Server` in `_serve.js`.

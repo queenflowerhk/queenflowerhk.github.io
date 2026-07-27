@@ -1,0 +1,4 @@
+- UI fragments are defined as reusable functions in components.js and injected into pages via fetch + DOM insertion rather than server-side includes.
+- Product data is modeled as a JSON array in products.json consumed by products.js, keeping content separate from presentation logic.
+- All user-facing strings go through translations.js lookup instead of being hardcoded in HTML or JS.
+- Each page is a self-contained HTML file that bootstraps its own module scripts while importing shared components at runtime.

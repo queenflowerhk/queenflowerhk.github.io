@@ -1,1 +1,0 @@
-This repository is a minimal GitHub Pages site for Fujian Florist. The root contains only `docs/.nojekyll` and `docs/index.html`, with no CSS, SCSS, Tailwind config, design tokens, or component library files present. There is no frontend styling system, theme, or visual consistency framework to analyze.

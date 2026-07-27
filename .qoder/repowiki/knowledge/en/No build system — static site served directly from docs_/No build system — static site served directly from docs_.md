@@ -1,0 +1,16 @@
+---
+kind: build_system
+name: No build system — static site served directly from docs/
+category: build_system
+scope:
+    - '**'
+source_files:
+    - _serve.js
+    - docs/index.html
+---
+
+This repository is a pure static site with no build pipeline. There are no Makefiles, Dockerfiles, CI configuration files (GitHub Actions, Travis, CircleCI), package manifests (package.json), or any build/compilation tooling. The site is served directly from the `docs/` directory, which is the standard layout for GitHub Pages to serve Jekyll-free static content.
+
+The only runtime helper is `_serve.js`, a minimal Node.js HTTP server that serves files from `docs/` on `localhost:8080` for local development. It maps file extensions to MIME types and rewrites `/` to `/index.html`. This is purely a convenience script for previewing the site locally; it is not part of any automated build or deployment process.
+
+Deployment is handled entirely by GitHub Pages reading the `docs/` folder as-is. No versioning, bundling, minification, asset optimization, or cross-compilation steps exist.

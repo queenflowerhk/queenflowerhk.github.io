@@ -3,68 +3,24 @@ schema_version: 1
 locale: en-US
 branch: main
 nodes_managed: true
-exported_at: "2026-07-25T18:00:49Z"
+exported_at: "2026-07-27T01:29:25Z"
 modules:
     "":
-        dir_name: Fujian Florist Static Site (GitHub Pages)
-        title: Fujian Florist Static Site (GitHub Pages)
+        dir_name: Fujian Florist Static Site
+        title: Fujian Florist Static Site
+        scope: []
+        source_files: []
+        children:
+            - docs
+        depends_on: []
+        related_to: []
+    docs:
+        dir_name: Fujian Florist Static Site Assets
+        title: Fujian Florist Static Site Assets
         scope:
-            - README.md
-            - _serve.js
             - docs/
+            - docs/products.json
         source_files: []
-        children: []
-        depends_on: []
-        related_to: []
-    build_system:
-        dir_name: No build system — static site served directly from docs__2
-        title: No build system — static site served directly from docs/
-        scope: []
-        source_files:
-            - _serve.js
-            - docs/index.html
-        children: []
-        depends_on: []
-        related_to: []
-    configuration_system:
-        dir_name: No configuration system — static single-page site
-        title: No configuration system — static single-page site
-        scope: []
-        source_files: []
-        children: []
-        depends_on: []
-        related_to: []
-    dependency_management:
-        dir_name: No Dependency Management System
-        title: No Dependency Management System
-        scope: []
-        source_files:
-            - .qoder/repowiki/knowledge/en/No dependency management system/dependency_management.md
-        children: []
-        depends_on: []
-        related_to: []
-    error_handling:
-        dir_name: No error handling system (static site)_2
-        title: No error handling system (static site)
-        scope: []
-        source_files: []
-        children: []
-        depends_on: []
-        related_to: []
-    frontend_style:
-        dir_name: No Frontend Style System — Static HTML Site
-        title: No Frontend Style System — Static HTML Site
-        scope: []
-        source_files: []
-        children: []
-        depends_on: []
-        related_to: []
-    logging_system:
-        dir_name: No logging system — static marketing site_2
-        title: No logging system — static marketing site
-        scope: []
-        source_files:
-            - _serve.js
         children: []
         depends_on: []
         related_to: []

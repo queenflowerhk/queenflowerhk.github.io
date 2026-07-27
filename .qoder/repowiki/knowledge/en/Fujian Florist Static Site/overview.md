@@ -1,0 +1,1 @@
+Static website for Fujian Florist, a Hong Kong ceremonial flower shop, organized as a multi-page site with shared JS components, JSON-driven product data, and localized translations.

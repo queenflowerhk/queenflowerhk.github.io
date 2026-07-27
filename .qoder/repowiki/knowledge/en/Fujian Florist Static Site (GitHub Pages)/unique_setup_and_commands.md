@@ -1,1 +1,0 @@
-Run the local dev server with `node _serve.js` and open http://localhost:8080; this is required because the site uses `fetch('products.json')` and `fetch('translations.json')`, which do not work when opening `index.html` directly via `file://`.
