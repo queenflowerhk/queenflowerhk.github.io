@@ -239,12 +239,12 @@
   "wreath": [
     {
       "id": 304,
-      "name": "Deluxe Heart-Shaped Wreath",
-      "name_zh": "豪華心型悼念花圈",
+      "name": "Luxury Chinese-style memorial floral plaque",
+      "name_zh": "豪華中式悼念花牌",
       "price": 3000,
       "image": "./images/chinese3000.webp",
-      "description": "Deluxe heart-shaped memorial wreath with premium roses and carnations",
-      "description_zh": "豪華心型紀念花圈，頂級玫瑰和康乃馨"
+      "description": "Luxury Chinese-style memorial floral plaque",
+      "description_zh": "豪華中式悼念花牌"
     }
   ],
   "opening": [
